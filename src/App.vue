@@ -1,7 +1,7 @@
 <template>
   <v-app v-if="status === 'loggedIn'">
     <Navbar/>
-    <v-content class="mx-4 mb-4">
+    <v-content>
       <router-view/>
     </v-content>
   </v-app>
