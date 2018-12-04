@@ -28,7 +28,7 @@ function getInfoForNavbar(req,res){
         username:req.session.user.username
     })
 }
-module.exports = {
+module.exports = { 
     checkStatus,
     addUser,
     getInfoForNavbar
