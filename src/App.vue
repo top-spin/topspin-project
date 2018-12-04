@@ -30,14 +30,14 @@ export default {
   },
   data() {
     return {
-      status: ""
+      status: "loggedIn"
     };
-  },
-  mounted(){
-      axios.get("/api/status").then(res=>{
-        console.log(res.data)
-        this.status = res.data;
-      }).catch(err=>{console.log(err)})
-    }
+  }
+  // mounted(){
+  //     axios.get("/api/status").then(res=>{
+  //       console.log(res.data)
+  //       this.status = res.data;
+  //     }).catch(err=>{console.log(err)})
+  //   }
 };
 </script>
