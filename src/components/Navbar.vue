@@ -42,7 +42,7 @@
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title class="white--text">{{av.name}}</v-list-tile-title>
+            <v-list-tile-title class="white--text">{{av.username}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -71,7 +72,7 @@ export default {
         {
           // need to make image dynamic
           image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Jerry Berry",
+          username: "Jerry Berry",
           route: "/profile"
         }
       ],
@@ -89,6 +90,15 @@ export default {
         { icon: "account_circle", text: "Account ", route: "/account" }
       ]
     };
+  },
+  mounted(){
+    axios.get("/api/navbar-info").then(res=>{
+      this.avatar = [{
+        image:res.data.image,
+        username:res.data.username,
+        route:"/profile/"+res.data.username
+      }]
+    }).catch(err=>console.log(err))
   }
 };
 </script>
