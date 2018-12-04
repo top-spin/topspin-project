@@ -6,9 +6,13 @@
     </v-content>
   </v-app>
 
-  <v-app v-else-if="status === 'needsInfo'"></v-app>
+  <v-app v-else-if="status === 'needsInfo'">
+    <MoreInfo></MoreInfo>
+  </v-app>
 
-  <v-app v-else></v-app>
+  <v-app v-else>
+    <LandingPage></LandingPage>
+  </v-app>
 </template>
 
 <script>
@@ -26,14 +30,14 @@ export default {
   },
   data() {
     return {
-      status: "loggedIn"
+      status: ""
     };
-  }
-  // mounted(){
-  //     axios.get("/api/status").then(res=>{
-  //       console.log(res.data)
-  //       this.status = res.data;
-  //     }).catch(err=>{console.log(err)})
-  //   }
+  },
+  mounted(){
+      axios.get("/api/status").then(res=>{
+        console.log(res.data)
+        this.status = res.data;
+      }).catch(err=>{console.log(err)})
+    }
 };
 </script>
