@@ -11,7 +11,7 @@
     </div>
     <router-view/>
   </div>
-  <div v-else-if="status === 'moreInfo'" id="app">
+  <div v-else-if="status === 'needsInfo'" id="app">
     <MoreInfo></MoreInfo>
   </div>
   <div v-else id="app">
