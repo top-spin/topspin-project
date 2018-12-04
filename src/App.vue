@@ -1,15 +1,7 @@
 <template>
   <v-app v-if="status === 'loggedIn'">
-    <!-- <router-link to="/">Home</router-link>| -->
-    <router-link to="/">Dashboard</router-link>
-    <router-link to="/friends">Friends</router-link>
-    <router-link to="/players">Players</router-link>
-    <router-link to="/chat">Chat</router-link>
-    <router-link to="/tournaments">Tournaments</router-link>
-    <router-link to="/account">Account</router-link>
-
+    <Navbar/>
     <v-content>
-      <!-- <HelloWorld/> -->
       <router-view/>
     </v-content>
   </v-app>
@@ -23,11 +15,14 @@
 import LandingPage from "./views/LandingPage.vue";
 import MoreInfo from "./views/MoreInfo.vue";
 import axios from "axios";
+import Navbar from "@/components/Navbar";
+
 export default {
   name: "App",
   components: {
     LandingPage,
-    MoreInfo
+    MoreInfo,
+    Navbar
   },
   data() {
     return {

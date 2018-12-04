@@ -49,6 +49,13 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Players.vue")
+    },
+    {
+      path: "/profile",
+      name: "profile",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Profile.vue")
     }
   ]
 });
