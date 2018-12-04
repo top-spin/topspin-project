@@ -7,7 +7,7 @@
   </v-app>
 
   <v-app v-else-if="status === 'needsInfo'">
-    <MoreInfo></MoreInfo>
+    <NewUser></NewUser>
   </v-app>
 
   <v-app v-else>
@@ -17,7 +17,7 @@
 
 <script>
 import LandingPage from "./views/LandingPage.vue";
-import MoreInfo from "./views/MoreInfo.vue";
+import NewUser from "./views/NewUser.vue";
 import axios from "axios";
 import Navbar from "@/components/Navbar";
 
@@ -25,7 +25,7 @@ export default {
   name: "App",
   components: {
     LandingPage,
-    MoreInfo,
+    NewUser,
     Navbar
   },
   data() {
