@@ -38,7 +38,16 @@ function searchPlayers(req,res){
         res.status(200).json(results)
     }).catch(err=>(console.log(err)))
 }
+function getAllPlayers(req,res){
+    const db = req.app.get('db')
+    db.query(`
+        select * from topspin_user
+    `).then(results=>{
+        res.status(200).json(results)
+    }).catch(err=>(console.log(err)))
+}
 module.exports = {
     profileInfo,
-    searchPlayers
+    searchPlayers,
+    getAllPlayers
 }

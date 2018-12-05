@@ -31,7 +31,35 @@
         </v-layout>
       </v-container>
     </v-form>
-      <h1 class="text-xs-center" v-if="search_value === null || search_value.length!==0" v-for="player in players" :key="player.user_id">{{player.name}}</h1>
+      <div class="text-xs-center" v-if="search_value === null || search_value.length!==0" v-for="player in players" :key="player.user_id">
+            <v-divider
+              :inset="player.inset"
+            ></v-divider>
+            <v-subheader
+              :key="player.username"
+            >
+              {{ player.username }}
+            </v-subheader>
+
+
+            <v-list-tile
+              :key="player.title"
+              avatar
+               @click="viewProfile(player.username)"
+            >
+              <v-list-tile-avatar>
+                <img :src="player.avatar">
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title v-html="player.name"></v-list-tile-title>
+                <v-list-tile-sub-title v-html="player.email"></v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+              <v-list-tile-sub-title v-if="player.rating">Rank: #{{player.rating}}</v-list-tile-sub-title>
+              </v-list-tile-action>
+              </v-list-tile>
+    </div>
       <Map v-if="search_value === null || search_value.length===0"/>
   </div>
 </template>
@@ -59,6 +87,9 @@ export default {
         // console.log(res.data);
         this.players = res.data;
       }).catch(err=>console.log(err))
+    },
+    viewProfile(username){
+      this.$router.push("/profile/"+username)
     }
   }
 }
