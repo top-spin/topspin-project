@@ -6,11 +6,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    status:""
+    status:"",
+    avatar:"https://www.w3schools.com/howto/img_avatar.png"
   },
   mutations: {
     SET_STATUS(state,status){
       state.status = status;
+    },
+    SET_AVATAR(state,avatar){
+      state.avatar = avatar;
     }
   },
   actions: {
