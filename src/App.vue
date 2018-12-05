@@ -1,12 +1,12 @@
 <template>
-  <v-app v-if="status === 'loggedIn'">
+  <v-app v-if="this.$store.state.status === 'loggedIn'">
     <Navbar/>
     <v-content>
       <router-view/>
     </v-content>
   </v-app>
 
-  <v-app v-else-if="status === 'needsInfo'">
+  <v-app v-else-if="this.$store.state.status === 'needsInfo'">
     <NewUser></NewUser>
   </v-app>
 
@@ -28,16 +28,8 @@ export default {
     NewUser,
     Navbar
   },
-  data() {
-    return {
-      status: "loggedIn"
-    };
-  }
-  // mounted(){
-  //     axios.get("/api/status").then(res=>{
-  //       console.log(res.data)
-  //       this.status = res.data;
-  //     }).catch(err=>{console.log(err)})
-  //   }
+  mounted(){
+      this.$store.dispatch('getStatus')
+    }
 };
 </script>

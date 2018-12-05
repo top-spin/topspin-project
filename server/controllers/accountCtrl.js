@@ -22,7 +22,19 @@ function addUser(req,res){
         res.status(200).send(newUser)
     }).catch(console.log)
 }
-module.exports = {
+function getInfoForNavbar(req,res){
+    res.status(200).json({
+        image:req.session.user.avatar,
+        username:req.session.user.username
+    })
+}
+function logout(req,res){
+    req.session.destroy();
+    res.status(200).json("OK")
+}
+module.exports = { 
     checkStatus,
-    addUser
+    addUser,
+    getInfoForNavbar,
+    logout
 }
