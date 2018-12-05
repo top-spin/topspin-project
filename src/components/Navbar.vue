@@ -23,7 +23,7 @@
       <v-spacer></v-spacer>
 
       <!-- sign out button -->
-      <v-btn flat color="grey">
+      <v-btn @click="logout" flat color="grey">
         <span>Sign Out</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>
@@ -99,6 +99,14 @@ export default {
         route:"/profile/"+res.data.username
       }]
     }).catch(err=>console.log(err))
+  },
+  methods:{
+    logout(){
+      console.log(this.$store.state.status)
+      axios.delete("/api/logout").then(res=>{
+        this.$store.dispatch("getStatus");
+      }).catch(err=>console.log(err))
+    }
   }
 };
 </script>

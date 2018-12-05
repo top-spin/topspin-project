@@ -28,8 +28,13 @@ function getInfoForNavbar(req,res){
         username:req.session.user.username
     })
 }
+function logout(req,res){
+    req.session.destroy();
+    res.status(200).json("OK")
+}
 module.exports = { 
     checkStatus,
     addUser,
-    getInfoForNavbar
+    getInfoForNavbar,
+    logout
 }
