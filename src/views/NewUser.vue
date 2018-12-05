@@ -33,21 +33,33 @@
               <v-radio color="primary" label="Left handed player" value="Left"></v-radio>
             </v-radio-group>
           </v-form>
+
+
+              <dropzone></dropzone>
+      
           <!-- </v-flex> -->
           <div class="text-xs-center">
             <v-btn @click="createUser" color="success">Submit</v-btn>
+
           </div>
         </div>
       </v-container>
     </div>
   </div>
+  
 </template>
 
 <script>
 import axios from "axios";
 import Geocoder from "@pderas/vue2-geocoder";
 import Vue from "vue";
+import dropzone from '../components/Dropzone';
+
 export default {
+  name: 'NewUser',
+  components: {
+    dropzone
+    },
   data: () => ({
     valid: false,
     name: "",
@@ -57,7 +69,6 @@ export default {
     organization: "",
     city: "",
     dominant_hand: "",
-    avatar: "https://www.w3schools.com/howto/img_avatar.png",
     lat: "",
     lng: "",
     nameRules: [
@@ -100,7 +111,7 @@ export default {
             city: this.city,
             state: this.state,
             dominant_hand: this.dominant_hand,
-            avatar: this.avatar,
+            avatar: this.$store.state.avatar,
             lat: this.lat,
             lng: this.lng
           })
@@ -112,6 +123,8 @@ export default {
     }
   }
 };
+
+
 </script>
  <style>
 .enter_profile_background {
