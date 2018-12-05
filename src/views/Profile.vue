@@ -1,12 +1,13 @@
 <template>
+
   <div class="profile">
-    <h1>Jerryasdfusername - (Player Profile Page)</h1>
+    <h1>{{username}}</h1>
 
     <v-container>
       <!-- pic and add friend button -->
       <v-layout row wrap>
         <v-flex xs12 sm3 md3>
-          <img src="https://randomuser.me/api/portraits/men/85.jpg">
+          <img height="128" width="128" :src="avatar">
         </v-flex>
         <v-flex xs6 sm3 md3>
           <v-btn flat class="success">Add Friend</v-btn>
@@ -19,7 +20,7 @@
           <h3>Ranking</h3>
         </v-flex>
         <v-flex xs12 md2>
-          <h3 class="grey--text">#21</h3>
+          <h3 class="grey--text">#{{rank}}</h3>
         </v-flex>
       </v-layout>
 
@@ -28,27 +29,27 @@
         <v-layout row wrap>
           <v-flex xs12 sm4 md4 my-1>
             <div>Name</div>
-            <div class="caption grey--text">Jerry Berry</div>
+            <div class="caption grey--text">{{name}}</div>
           </v-flex>
           <v-flex xs12 sm4 md4 my-1>
             <div>Hometown</div>
-            <div class="caption grey--text">Los Angeles</div>
+            <div class="caption grey--text">{{city}}, {{state}}</div>
           </v-flex>
           <v-flex xs12 sm4 md4 my-1>
-            <div>Left/Right Handedness</div>
-            <div class="caption grey--text">Right</div>
+            <div>Playing Hand</div>
+            <div class="caption grey--text">{{dominantHand}}</div>
           </v-flex>
           <v-flex xs12 sm4 md4 my-1>
             <div>Organization</div>
-            <div class="caption grey--text">DevM</div>
+            <div class="caption grey--text">{{organization}}</div>
           </v-flex>
           <v-flex xs12 sm4 md4 my-1>
             <div>Win Rate</div>
-            <div class="caption grey--text">67%</div>
+            <div class="caption grey--text">{{winPercent}}%</div>
           </v-flex>
           <v-flex xs12 sm4 md4 my-1>
             <div>Win Count</div>
-            <v-chip class="success white--text">216</v-chip>
+            <v-chip class="success white--text">{{winCount}}</v-chip>
           </v-flex>
         </v-layout>
       </v-card>
@@ -57,7 +58,39 @@
 </template>
 
 <script>
-export default {};
+import Axios from 'axios';
+export default {
+  name:"Profile",
+  data(){
+    return{
+      rank:"",
+      name:"",
+      username:"",
+      organization:"",
+      city:"",
+      state:"",
+      dominantHand:"",
+      winCount:"",
+      winPercent:"",
+      avatar:""
+    }
+  },
+  mounted(){
+    Axios.get("/api/profile/"+this.$route.params.username).then(res=>{
+      console.log(res.data)
+      this.rank = res.data.rank,
+      this.name = res.data.user.name,
+      this.username = res.data.user.username,
+      this.organization = res.data.user.organization,
+      this.city = res.data.user.city,
+      this.state = res.data.user.state,
+      this.dominantHand = res.data.user.dominant_hand,
+      this.winCount = res.data.winCount,
+      this.winPercent = res.data.winPercent,
+      this.avatar = res.data.user.avatar
+    }).catch(err=>{console.log(err)})
+  }
+};
 </script>
 
 <style>

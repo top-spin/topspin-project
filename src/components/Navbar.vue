@@ -102,7 +102,7 @@ export default {
   },
   methods:{
     logout(){
-      console.log(this.$store.state.status)
+      // console.log(this.$store.state.status)
       axios.delete("/api/logout").then(res=>{
         this.$store.dispatch("getStatus");
       }).catch(err=>console.log(err))
