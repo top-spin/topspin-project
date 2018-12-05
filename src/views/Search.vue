@@ -39,6 +39,7 @@
 <script>
 import Map from "../components/Map.vue";
 import axios from "axios";
+
 export default {
   name:"Search",
   components:{
