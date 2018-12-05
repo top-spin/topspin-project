@@ -85,9 +85,10 @@ export default {
         { icon: "dashboard", text: "Dashboard", route: "/" },
         { icon: "equalizer", text: "Tournaments", route: "/tournaments" },
         { icon: "star", text: "Friends", route: "/friends" },
-        { icon: "people", text: "Players", route: "/players" },
+        // { icon: "account_circle", text: "Account ", route: "/account" },
+        { icon: "assessment", text: "Standings ", route: "/standings" },
         { icon: "question_answer", text: "Chat", route: "/chat" },
-        { icon: "account_circle", text: "Account ", route: "/account" }
+        { icon: "search", text: "Search", route: "/search" }
       ]
     };
   },

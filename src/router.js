@@ -44,11 +44,11 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/Tournaments.vue")
     },
     {
-      path: "/players",
-      name: "players",
+      path: "/search",
+      name: "search",
 
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Players.vue")
+        import(/* webpackChunkName: "about" */ "./views/Search.vue")
     },
     {
       path: "/profile/:username",
@@ -56,6 +56,13 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Profile.vue")
+    },
+    {
+      path: "/standings",
+      name: "standings",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Standings.vue")
     }
   ]
 });

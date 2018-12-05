@@ -2,7 +2,7 @@
   <div class="hero_img_background">
     <div class = "title_container">
       <h1 class="project_title">Top<span class="success--text">Spin</span></h1>
-      <v-btn class= "text-capitalize" flat color="success" @click="login">Login/Signup</v-btn>
+      <v-btn class= "text-capitalize" large color="success" @click="login">Login/Signup</v-btn>
       </div>
 
   </div>

@@ -27,6 +27,18 @@ function profileInfo(req,res){
         }).catch(console.log())
     }).catch(console.log())
 }
+function searchPlayers(req,res){
+    const db = req.app.get('db')
+    db.query(`
+    select * from topspin_user
+        where upper(username) like '%${req.query.value.toUpperCase()}%' or
+        upper(name) like '%${req.query.value.toUpperCase()}%' or upper(email) like '%${req.query.value.toUpperCase()}%' or
+        upper(organization) like '%${req.query.value.toUpperCase()}%';
+    `).then(results=>{
+        res.status(200).json(results)
+    }).catch(err=>(console.log(err)))
+}
 module.exports = {
-    profileInfo
+    profileInfo,
+    searchPlayers
 }
