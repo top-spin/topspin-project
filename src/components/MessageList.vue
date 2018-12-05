@@ -15,6 +15,7 @@
     </v-list>
 
     <div class="conversation">
+      <BasicVueChat :new-message="message"/>
       <!-- might want to move this to its own component -->
       <!-- https://vuejsexamples.com/tag/chat/ -->
     </div>
@@ -22,7 +23,13 @@
 </template>
 
 <script>
+// import BasicVueChat from "../components/basicvuechat/BasicVueChat.vue";
+import BasicVueChat from "./basicvuechat/BasicVueChat.vue";
+
 export default {
+  components: {
+    BasicVueChat
+  },
   data() {
     return {
       avatars: [
@@ -44,16 +51,6 @@ export default {
         },
         {
           image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
           name: "One Punch Man",
           route: "/messages/profile"
         },
@@ -74,12 +71,7 @@ export default {
         },
         {
           image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
+          name: "One Punch Man",
           route: "/messages/profile"
         },
         {
@@ -100,41 +92,6 @@ export default {
         {
           image: "https://randomuser.me/api/portraits/men/85.jpg",
           name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
           route: "/messages/profile"
         }
       ]
@@ -145,16 +102,19 @@ export default {
 
 <style>
 .convocontainer {
+  /* height: 500px; */
   display: flex;
   /* border: 1px #424242 solid; */
 }
 .allconversations {
-  width: 36%;
+  width: 35%;
+  overflow: auto;
   /* border: 1px #424242 solid; */
 }
 .conversation {
-  width: 60%;
-  /* border: 1px #424242 solid; */
-  margin-left: 5px;
+  width: 65%;
+  height: 100%;
+  /* border: 1px pink solid; */
+  margin-left: 3px;
 }
 </style>
