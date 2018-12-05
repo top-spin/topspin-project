@@ -8,17 +8,17 @@
         <span class="font-weight-light">Top</span>
         <span class="orange--text">Spin</span>
       </v-toolbar-title>
-      <!-- title option 2 -->
+
+      <!-- title option 2
       <v-toolbar-title>
         <span class="font-weight-light">Top</span>
         <span>Spin</span>
       </v-toolbar-title>
-      <!-- title option 3 -->
+      title option 3
       <v-toolbar-title class="text-uppercase grey--text">
         <span class="font-weight-light">Top</span>
         <span>Spin</span>
-      </v-toolbar-title>
-
+      </v-toolbar-title>-->
       <!-- spaces left and right -->
       <v-spacer></v-spacer>
 
@@ -92,3 +92,4 @@ export default {
   }
 };
 </script>
+     
