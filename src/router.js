@@ -70,6 +70,20 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/TournamentView.vue")
+    },
+    {
+      path: "/newtournament",
+      name: "newtournament",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./components/NewTournament.vue")
+    },
+    {
+      path: "/addtournamentplayers",
+      name: "addtournamentplayers",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./components/AddTournamentPlayers.vue")
     }
   ]
 });
