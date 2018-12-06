@@ -32,7 +32,7 @@
         >
 
             <v-list-tile-content>
-              <v-list-tile-title class="xs-text-center">No Upcoming Tournaments</v-list-tile-title>
+              <v-list-tile-title class="xs-text-center">No Previous Tournaments</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
               <!-- <v-list-tile-sub-title>Created By: {{tournament.creator}}</v-list-tile-sub-title> -->

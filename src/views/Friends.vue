@@ -7,7 +7,10 @@
     <h1 v-if="showfollowing" class="text-xs-left">Following</h1>
     <Followinglist v-if="showfollowing"/>
 
-    <h1 v-if="showfollowers" class="text-xs-left">Followers</h1>
+    
+        <h1 v-if="!showfollowing" class="text-xs-left">Followers</h1>
+
+        <Followerslist v-if="!showfollowing"  />
 
     <Followerslist v-if="showfollowers"/>
   </div>
@@ -25,8 +28,7 @@ export default {
   },
   data() {
     return {
-      showfollowing: true,
-      showfollowers: true
+      showfollowing:true
     };
   }
 };
