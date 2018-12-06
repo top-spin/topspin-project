@@ -1,7 +1,7 @@
 <template>
   <div class="following">
     <v-list class="allfollowing">
-      <v-list-tile v-for="avatar in avatars" :key="avatar.name" router :to="avatar.route">
+      <v-list-tile v-for="avatar in avatars" :key="avatar.name" router :to="avatar.route" @click="viewProfile(avatar.username)">
         <v-list-tile-avatar>
           <img :src="avatar.avatar">
         </v-list-tile-avatar>
@@ -10,7 +10,7 @@
           <v-list-tile-title>{{avatar.username}}</v-list-tile-title>
         </v-list-tile-content>
                 <v-list-tile-content>
-          <v-list-tile-title>{{avatar.rating}}</v-list-tile-title>
+          <v-list-tile-title>Rating: {{avatar.rating}}</v-list-tile-title>
         </v-list-tile-content>
         
         <!-- <v-btn small fab dark color="orange" depressed>x</v-btn> -->
@@ -30,11 +30,14 @@ export default {
    data(){
     return{
       avatars:[]
-         
-      
-     
+        
     }
-      
+  
+  },
+    methods:{
+    viewProfile(username){
+      this.$router.push("/profile/"+username)
+    }
   },
   mounted(){
     Axios.get("/api/following/").then(res=>{

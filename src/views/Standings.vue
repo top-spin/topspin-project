@@ -41,6 +41,11 @@ export default {
             players:[]
         }
     },
+        methods:{
+    viewProfile(username){
+      this.$router.push("/profile/"+username)
+    }
+  },
     mounted(){
         axios.get("/api/all-players").then(res=>{
             this.players = res.data;

@@ -8,9 +8,9 @@
     <Followinglist v-if="showfollowing"/>
 
     
-        <h1 v-if="!showfollowing" class="text-xs-left">Followers</h1>
+   <h1 v-if="!showfollowing" class="text-xs-left">Followers</h1>
 
-        <Followerslist v-if="!showfollowing"  />
+   <Followerslist v-if="!showfollowing"  />
 
     <Followerslist v-if="showfollowers"/>
   </div>
