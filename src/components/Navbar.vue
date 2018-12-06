@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       notificationItems: [
-        { title: "Click Me" },
+        { title: "Pending Acceptance on Tournament FlipFlop" },
         { title: "Click Me" },
         { title: "Click Me" },
         { title: "Click Me 2" }

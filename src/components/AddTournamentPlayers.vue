@@ -50,7 +50,7 @@
       </div>
 
       <!-- suggested players pulled from friends list -->
-      <!-- need to add @click="addPlayer(player.username)" to each player -->
+      <!-- TODO: need to add @click="addPlayer(player.username)" to each player -->
       <div>
         <h2>Suggested Players to Add</h2>
         <Followinglist/>
@@ -60,7 +60,7 @@
       <h2 class="playerslist">Tournament Players (8)</h2>
 
       <v-list>
-        <v-list-tile v-for="player in playersList" :key="player.username">
+        <v-list-tile v-for="(player, i) in playersList" :key="player.username">
           <v-list-tile-avatar>
             <img :src="player.avatar">
           </v-list-tile-avatar>
@@ -69,7 +69,7 @@
             <v-list-tile-title>{{player.username}}</v-list-tile-title>
           </v-list-tile-content>
 
-          <v-btn @click="removePlayer(player.username)" flat color="primary">x</v-btn>
+          <v-btn @click="removePlayer(player, i)" flat color="primary">x</v-btn>
         </v-list-tile>
       </v-list>
 
@@ -116,20 +116,17 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    // viewProfile(username) {
-    //   this.$router.push("/profile/" + username);
-    // },
-
-    // add a player to the list - **fix**
+    // add a player to the list
     addPlayer(player) {
       console.log(this.playersList);
       if (this.playersList.length === 8) return;
+      if (this.playersList.includes(player)) return;
       this.playersList.push(player);
       console.log(this.playersList);
     },
-    // remove a player from the list - **fix**
-    removePlayer(player) {
-      // this.playersList.pop(player);
+    // remove a player from the list
+    removePlayer(player, index) {
+      this.playersList.splice(index, 1);
     },
     submitTournament() {}
   }
