@@ -60,6 +60,7 @@ import axios from "axios";
 import Geocoder from "@pderas/vue2-geocoder";
 import Vue from "vue";
 import dropzone from "../components/Dropzone";
+import moment from "moment";
 
 export default {
   name: "NewTournament",
@@ -89,8 +90,8 @@ export default {
       this.$store.commit("SET_TOURNAMENT",{
         name:this.tournamentname,
         description:this.description,
-        count:this.count,
-        date:+this.picker
+        count:+this.count,
+        date:moment(this.picker).format("MM-DD-YYYY")
       })
       // console.log(this.$store.state)
     }

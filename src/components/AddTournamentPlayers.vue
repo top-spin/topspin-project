@@ -50,7 +50,6 @@
       </div>
 
       <!-- suggested players pulled from friends list -->
-      <!-- TODO: need to add @click="addPlayer(player.username)" to each player -->
       <div>
         <h2>Suggested Players to Add</h2>
         <Followinglist :addPlayer="addPlayer"/>
@@ -130,7 +129,14 @@ export default {
     removePlayer(player, index) {
       this.playersList.splice(index, 1);
     },
-    submitTournament() {}
+    submitTournament() {
+      Axios.post("/api/tournament",{
+        players:this.playersList,
+        tournament:this.$store.state.pending_tournament
+      }).then(res=>{
+        console.log(res.data)
+      }).catch(err=>console.log(err))
+    }
   }
 };
 </script>
