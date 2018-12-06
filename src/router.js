@@ -64,21 +64,12 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Standings.vue")
     },
-    /////////////Below 2 paths will be removed.
-    /////////////Put into Tournaments. Conditional render.
     {
-      path: "/newtournament",
-      name: "newtournament",
+      path: "/tournament/view/:id",
+      name: "tournamentView",
 
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/NewTournament.vue")
-    },
-    {
-      path: "/addtournamentplayers",
-      name: "addtournamentplayers",
-
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./components/AddTournamentPlayers.vue")
+        import(/* webpackChunkName: "about" */ "./views/TournamentView.vue")
     }
   ]
 });

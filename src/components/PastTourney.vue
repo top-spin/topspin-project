@@ -1,12 +1,12 @@
 <template>
   <div>
     <span class="title">
-      <span class="font-weight-light">Upcoming</span>
+      <span class="font-weight-light">Previous</span>
       <span class="orange--text">Tournaments</span>
     </span>
-      <!-- <h1 v-for="tournament in tournaments" :key="tournament.id">{{tournament.name}}</h1> -->
-      <div subheader v-if="tournaments.length!==0">
-        <v-list>
+    <div v-if="tournaments.length!==0">
+    <!-- <h1 v-for="tournament in tournaments" :key="tournament.id">{{tournament.name}}</h1> -->
+        <v-list subheader>
           <!-- <v-subheader>Recent chat</v-subheader> -->
           <v-list-tile
              v-for="(tournament,i) in tournaments" 
@@ -26,7 +26,7 @@
 
       <v-divider></v-divider>
       </div>
-      <v-list subheader v-else>
+        <v-list subheader v-else>
           <!-- <v-subheader>Recent chat</v-subheader> -->
         <v-list-tile
         >
@@ -42,18 +42,18 @@
       </v-list>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 export default {
-    name:"UpcomingTourney",
+    name:"PastTourney",
     data(){
         return{
             tournaments:[]
         }
     },
     mounted(){
-        axios.get("/api/upcoming-tournaments").then(res=>{
-            console.log(res.data)
+        axios.get("/api/past-tournaments").then(res=>{
             this.tournaments = res.data;
         }).catch(err=>console.log(err))
     },
