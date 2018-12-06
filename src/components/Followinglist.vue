@@ -1,16 +1,16 @@
 <template>
   <div class="following">
     <v-list class="allfollowing">
-      <v-list-tile v-for="avatar in avatars" :key="avatar.name" router :to="avatar.route" @click="viewProfile(avatar.username)">
+      <v-list-tile v-for="profile in profiles" :key="profile.name" router :to="profile.route" @click="viewProfile(profile)">
         <v-list-tile-avatar>
-          <img :src="avatar.avatar">
+          <img :src="profile.avatar">
         </v-list-tile-avatar>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{avatar.username}}</v-list-tile-title>
+          <v-list-tile-title>{{profile.username}}</v-list-tile-title>
         </v-list-tile-content>
                 <v-list-tile-content>
-          <v-list-tile-title>Rating: {{avatar.rating}}</v-list-tile-title>
+          <v-list-tile-title>Rating: {{profile.rating}}</v-list-tile-title>
         </v-list-tile-content>
         
         <!-- <v-btn small fab dark color="orange" depressed>x</v-btn> -->
@@ -29,20 +29,25 @@ import Axios from 'axios';
 export default {
    data(){
     return{
-      avatars:[]
-        
+      profiles:[]
     }
-  
+  },
+  props: {
+    addPlayer:Function
   },
     methods:{
-    viewProfile(username){
-      this.$router.push("/profile/"+username)
+    viewProfile(player){
+      if(this.addPlayer){
+        this.addPlayer(player)
+        return
+      }
+      this.$router.push("/profile/"+player.username)
     }
   },
   mounted(){
     Axios.get("/api/following/").then(res=>{
       console.log(res.data)
-      this.avatars=res.data
+      this.profiles=res.data
       // this.rank = res.data.rank,
       // this.username = res.data.user.username,
       // this.avatar = res.data.user.avatar

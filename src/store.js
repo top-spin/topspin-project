@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     status:"",
-    avatar:"https://www.w3schools.com/howto/img_avatar.png"
+    avatar:"https://www.w3schools.com/howto/img_avatar.png",
+    pending_tournament:{}
   },
   mutations: {
     SET_STATUS(state,status){
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     SET_AVATAR(state,avatar){
       state.avatar = avatar;
+    },
+    SET_TOURNAMENT(state,pending_tournament){
+      state.pending_tournament = pending_tournament;
     }
   },
   actions: {

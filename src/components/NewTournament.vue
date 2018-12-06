@@ -30,6 +30,7 @@
           label="Number of Players"
           required
           box
+          v-model="count"
         ></v-select>
 
         <!-- Select Date -->
@@ -69,11 +70,9 @@ export default {
     valid: false,
     tournamentname: "",
     description: "",
-
     playercount: ["2", "4", "8", "16"],
-
+    count:["2", "4", "8", "16"],
     picker: new Date().toISOString().substr(0, 10),
-
     tournamentnameRules: [
       v => !!v || "Name is required",
       v => v.length <= 40 || "Name must be less than 40 characters"
@@ -86,7 +85,15 @@ export default {
     stateRules: [v => !!v || "Start date is required"]
   }),
   methods: {
-    createTournament() {}
+    createTournament() {
+      this.$store.commit("SET_TOURNAMENT",{
+        name:this.tournamentname,
+        description:this.description,
+        count:this.count,
+        date:+this.picker
+      })
+      // console.log(this.$store.state)
+    }
   }
 };
 </script>
