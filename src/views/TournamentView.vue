@@ -71,7 +71,7 @@ export default {
   },
   mounted(){
     axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
-      // console.log(res.data)
+      console.log(res.data)
       if(res.data.length === 15){
         this.rounds = [
           {
@@ -118,7 +118,7 @@ export default {
           }
         ]
       }
-      console.log(this.rounds)
+      // console.log(this.rounds)
       this.matches = res.data
     }).catch(err=>console.log(err))
   },
