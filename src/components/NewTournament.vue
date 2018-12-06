@@ -3,6 +3,7 @@
     <h1 class="text-xs-center">Enter Tournament Info</h1>
     <v-container class="newtournamentcontainer">
       <div>
+        <!-- Tournament Name and Desciption -->
         <v-form v-model="valid">
           <v-text-field
             v-model="tournamentname"
@@ -22,6 +23,16 @@
           ></v-text-field>
         </v-form>
 
+        <!-- Dropdown for Number of Players -->
+        <v-select
+          :items="playercount"
+          :rules="playercountRules"
+          label="Number of Players"
+          required
+          box
+        ></v-select>
+
+        <!-- Select Date -->
         <v-layout>
           <v-date-picker
             v-model="picker"
@@ -32,9 +43,12 @@
           ></v-date-picker>
         </v-layout>
 
-        <div class="text-xs-center">
-          <v-btn @click="createTournament" color="success">Create New Tournament</v-btn>
-        </div>
+        <!-- Button for the next page -->
+        <router-link to="/addtournamentplayers">
+          <div class="text-xs-center">
+            <v-btn @click="createTournament" color="success">Next</v-btn>
+          </div>
+        </router-link>
       </div>
     </v-container>
   </div>
@@ -55,8 +69,8 @@ export default {
     valid: false,
     tournamentname: "",
     description: "",
-    email: "",
-    username: "",
+
+    playercount: ["2", "4", "8", "16"],
 
     picker: new Date().toISOString().substr(0, 10),
 
@@ -68,6 +82,7 @@ export default {
       v => !!v || "Description is required",
       v => v.length <= 100 || "Name must be less than 100 characters"
     ],
+    playercountRules: [v => !!v || "Player count is required"],
     stateRules: [v => !!v || "Start date is required"]
   }),
   methods: {

@@ -3,11 +3,13 @@
     <v-toolbar flat app>
       <!-- hamburger menu -->
       <v-toolbar-side-icon class="grey--text" @click="drawer=!drawer"></v-toolbar-side-icon>
-      <!-- title option 1 -->
-      <v-toolbar-title>
-        <span class="font-weight-light">Top</span>
-        <span class="orange--text">Spin</span>
-      </v-toolbar-title>
+      <!-- title -->
+      <router-link to="/">
+        <v-toolbar-title>
+          <span class="font-weight-light">Top</span>
+          <span class="orange--text">Spin</span>
+        </v-toolbar-title>
+      </router-link>
 
       <!-- title option 2
       <v-toolbar-title>
@@ -22,6 +24,22 @@
       <!-- spaces left and right -->
       <v-spacer></v-spacer>
 
+      <!-- notifications bell -->
+      <v-menu bottom left>
+        <v-btn slot="activator" dark icon>
+          <v-badge overlap color="orange">
+            <span slot="badge">5</span>
+            <v-icon large color="grey">notifications</v-icon>
+          </v-badge>
+        </v-btn>
+
+        <v-list>
+          <v-list-tile v-for="(item, i) in notificationItems" :key="i" @click="notificationActions">
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+
       <!-- sign out button -->
       <v-btn @click="logout" flat color="grey">
         <span>Sign Out</span>
@@ -30,11 +48,10 @@
     </v-toolbar>
 
     <!-- Side Navigation -->
-    <!-- Note: we can add temporary. Temporary = click away to close side nav. -->
+    <!-- Note: temporary prop allows click away to close side nav. -->
     <v-navigation-drawer v-model="drawer" app class="primary">
       <!-- LIST tiles, good for sidenav and pages -->
       <v-list>
-        <!-- // need to figure out router for this tile. -->
         <!-- // avatar tile on top -->
         <v-list-tile v-for="av in avatar" :key="av.name" router :to="av.route">
           <v-list-tile-avatar>
@@ -67,6 +84,12 @@ import axios from "axios";
 export default {
   data() {
     return {
+      notificationItems: [
+        { title: "Pending Acceptance on Tournament FlipFlop" },
+        { title: "Click Me" },
+        { title: "Click Me" },
+        { title: "Click Me 2" }
+      ],
       drawer: true,
       avatar: [
         {
@@ -85,30 +108,45 @@ export default {
         { icon: "dashboard", text: "Dashboard", route: "/" },
         { icon: "equalizer", text: "Tournaments", route: "/tournaments" },
         { icon: "star", text: "Friends", route: "/friends" },
-        // { icon: "account_circle", text: "Account ", route: "/account" },
         { icon: "assessment", text: "Standings ", route: "/standings" },
         { icon: "question_answer", text: "Chat", route: "/chat" },
         { icon: "search", text: "Search", route: "/search" }
       ]
     };
   },
-  mounted(){
-    axios.get("/api/navbar-info").then(res=>{
-      this.avatar = [{
-        image:res.data.image,
-        username:res.data.username,
-        route:"/profile/"+res.data.username
-      }]
-    }).catch(err=>console.log(err))
+  mounted() {
+    axios
+      .get("/api/navbar-info")
+      .then(res => {
+        this.avatar = [
+          {
+            image: res.data.image,
+            username: res.data.username,
+            route: "/profile/" + res.data.username
+          }
+        ];
+      })
+      .catch(err => console.log(err));
   },
-  methods:{
-    logout(){
+  methods: {
+    logout() {
       // console.log(this.$store.state.status)
-      axios.delete("/api/logout").then(res=>{
-        this.$store.dispatch("getStatus");
-      }).catch(err=>console.log(err))
+      axios
+        .delete("/api/logout")
+        .then(res => {
+          this.$store.dispatch("getStatus");
+        })
+        .catch(err => console.log(err));
+    },
+    notificationActions() {
+      console.log(this.avatar);
     }
   }
 };
 </script>
      
+<style>
+a {
+  text-decoration: none;
+}
+</style>

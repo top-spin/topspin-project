@@ -1,15 +1,17 @@
 <template>
-    <div>
-        <div class="tournaments_container">
-            <UpcomingTourney/>
-        </div>
-        <div class="tournaments_container">
-            <PastTourney/>
-        </div>
-        <div class="text-xs-center mt-5">
-            <v-btn large color="success">Create New Tournament</v-btn>
-        </div>
+  <div>
+    <div class="tournaments_container">
+      <UpcomingTourney/>
     </div>
+    <div class="tournaments_container">
+      <PastTourney/>
+    </div>
+    <router-link to="/newtournament">
+      <div class="text-xs-center mt-5">
+        <v-btn large color="success">Create New Tournament</v-btn>
+      </div>
+    </router-link>
+  </div>
 </template>
 
 <script>
@@ -32,11 +34,11 @@ export default {
 </script>
 
 <style>
-.tournaments_container{
-    width: 80%;
-    height: 40%;
-    border: 1px solid black;
-    margin: auto;
-    margin-top: 50px;
+.tournaments_container {
+  width: 80%;
+  height: 40%;
+  border: 1px solid black;
+  margin: auto;
+  margin-top: 50px;
 }
 </style>
