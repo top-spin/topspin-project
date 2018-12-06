@@ -1,23 +1,24 @@
 <template>
   <div>
     <span class="title">
-      <span class="font-weight-light">Upcoming</span>
+      <span class="font-weight-light">Previous</span>
       <span class="orange--text">Tournaments</span>
     </span>
-      <h1 v-for="tournament in tournaments" :key="tournament.id">{{tournament.name}}</h1>
+    <h1 v-for="tournament in tournaments" :key="tournament.id">{{tournament.name}}</h1>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 export default {
-    name:"UpcomingTourney",
+    name:"PastTourney",
     data(){
         return{
             tournaments:[]
         }
     },
     mounted(){
-        axios.get("/api/upcoming-tournaments").then(res=>{
+        axios.get("/api/past-tournaments").then(res=>{
             this.tournaments = res.data;
         }).catch(err=>console.log(err))
     }

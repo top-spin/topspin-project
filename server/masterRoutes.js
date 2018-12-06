@@ -1,5 +1,6 @@
 const {checkStatus, addUser,getInfoForNavbar,logout} = require("./controllers/accountCtrl");
 const { profileInfo , searchPlayers , getAllPlayers} = require("./controllers/playerCtrl");
+const { pastTournament , upcomingTournament} = require("./controllers/tournamentCtrl");
 module.exports = app =>{
     app.get("/api/test",(req,res)=>{
         res.status(200).json(req.session)
@@ -11,4 +12,6 @@ module.exports = app =>{
     app.get("/api/profile/:username",profileInfo)
     app.get("/api/players",searchPlayers);
     app.get("/api/all-players",getAllPlayers)
+    app.get("/api/past-tournaments",pastTournament)
+    app.get("/api/upcoming-tournaments",upcomingTournament)
 }
