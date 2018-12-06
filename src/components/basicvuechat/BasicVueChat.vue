@@ -3,7 +3,7 @@
     <!-- <section class="window"> -->
     <!-- show the name of the person you are talking to -->
     <header class="window__header__container">
-      <slot name="header">chat with {{ title }}</slot>
+      <slot name="header">Chat with {{ title }}</slot>
     </header>
 
     <!-- show messages -->
@@ -38,7 +38,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Team Maczan",
+      default: "Player",
       required: false
     },
     initialAuthorId: {
@@ -128,7 +128,7 @@ export default {
 /* } */
 .window__header__container {
   /* border: 5px orange solid; */
-  background: linear-gradient(90deg, purple, blue);
+  background: linear-gradient(90deg, orange, seashell);
   padding: 10px 5px;
   color: seashell;
   font-weight: bold;
