@@ -7,23 +7,23 @@
         <v-flex xs3>
           <v-btn class="success">Start Round</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
+            <MatchBox :match="matches[0]"/>
+            <MatchBox :match="matches[1]"/>
+            <MatchBox :match="matches[2]"/>
+            <MatchBox :match="matches[3]"/>
           </v-layout>
         </v-flex>
         <v-flex xs3 ml-2>
           <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
-            <MatchBox/>
+            <MatchBox :match="matches[4]"/>
+            <MatchBox :match="matches[5]"/>
           </v-layout>
         </v-flex>
         <v-flex xs3 ml-2>
           <v-btn flat color="success">Round 2 Done</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
+            <MatchBox :match="matches[6]"/>
           </v-layout>
         </v-flex>
         <v-flex xs2 ml-2>
@@ -40,23 +40,23 @@
         <v-flex xs3>
           <v-btn class="success">Start Round</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
+            <MatchBox :match="matches[0]"/>
+            <MatchBox :match="matches[1]"/>
+            <MatchBox :match="matches[2]"/>
+            <MatchBox :match="matches[3]"/>
           </v-layout>
         </v-flex>
         <v-flex xs3 ml-2>
           <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
-            <MatchBox/>
+            <MatchBox :match="matches[4]"/>
+            <MatchBox :match="matches[5]"/>
           </v-layout>
         </v-flex>
         <v-flex xs3 ml-2>
           <v-btn flat color="success">Round 2 Done</v-btn>
           <v-layout class="vertical_align">
-            <MatchBox/>
+            <MatchBox :match="matches[6]"/>
           </v-layout>
         </v-flex>
         <v-flex xs2 ml-2>
@@ -73,6 +73,7 @@
 <script>
 import MatchBox from "@/components/MatchBox.vue";
 import WinnerBox from "@/components/WinnerBox.vue";
+import axios from "axios";
 
 export default {
   name: "TournamentView",
@@ -82,9 +83,14 @@ export default {
   },
   data() {
     return {
-      player1: "Jerry",
-      player2: "Ethan"
+      matches:[]
     };
+  },
+  mounted(){
+    axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
+      // console.log(res.data)
+      this.matches = res.data
+    }).catch(err=>console.log(err))
   }
 };
 </script>
