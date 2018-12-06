@@ -44,5 +44,7 @@ export default {
   background-color: pink;
   color: white;
   padding: 3px 5px;
+  width: 60%;
+  float: left;
 }
 </style>

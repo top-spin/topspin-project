@@ -1,25 +1,25 @@
 <template>
   <div class="basicvuechat">
-    <section class="window">
-      <!-- show the name of the person you are talking to -->
-      <header class="window__header__container">
-        <slot name="header">chat with {{ title }}</slot>
-      </header>
+    <!-- <section class="window"> -->
+    <!-- show the name of the person you are talking to -->
+    <header class="window__header__container">
+      <slot name="header">chat with {{ title }}</slot>
+    </header>
 
-      <!-- show messages -->
-      <section id="window__messages__container" class="window__messages__container">
-        <slot>
-          <messages-list :feed="feed" :author-id="authorId" class="messages-list"/>
-        </slot>
-      </section>
-
-      <!-- input container: input field and submit button -->
-      <div class="window__input__container">
-        <slot name="input-container">
-          <input-container @newOwnMessage="onNewOwnMessage"/>
-        </slot>
-      </div>
+    <!-- show messages -->
+    <section id="window__messages__container" class="window__messages__container">
+      <slot>
+        <messages-list :feed="feed" :author-id="authorId" class="messages-list"/>
+      </slot>
     </section>
+
+    <!-- input container: input field and submit button -->
+    <div class="window__input__container">
+      <slot name="input-container">
+        <input-container @newOwnMessage="onNewOwnMessage"/>
+      </slot>
+    </div>
+    <!-- </section> -->
   </div>
 </template>
 
@@ -119,10 +119,13 @@ export default {
 </script>
 
 <style>
-.window {
-  /* height: 100%; */
-  /* border: 5px red solid; */
+.basicvuechat {
+  height: 100%;
 }
+/* .window { */
+/* height: 100%; */
+/* border: 5px red solid; */
+/* } */
 .window__header__container {
   /* border: 5px orange solid; */
   background: linear-gradient(90deg, purple, blue);
@@ -132,8 +135,9 @@ export default {
   z-index: 1;
 }
 .window__messages__container {
-  height: 420px;
+  width: 100%;
   overflow: auto;
+  height: 420px;
   /* border: 5px green solid; */
 }
 .messages-list {
