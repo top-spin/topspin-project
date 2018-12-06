@@ -10,7 +10,7 @@
           <img height="128" width="128" :src="avatar">
         </v-flex>
         <v-flex xs6 sm3 md3>
-          <v-btn flat class="success">Add Friend</v-btn>
+          <v-btn flat class="success" @click ="addFriend">Add Friend </v-btn>
         </v-flex>
       </v-layout>
 
@@ -72,7 +72,8 @@ export default {
       dominantHand:"",
       winCount:"",
       winPercent:"",
-      avatar:""
+      avatar:"",
+      user_id:""
     }
   },
   mounted(){
@@ -87,8 +88,17 @@ export default {
       this.dominantHand = res.data.user.dominant_hand,
       this.winCount = res.data.winCount,
       this.winPercent = res.data.winPercent,
-      this.avatar = res.data.user.avatar
+      this.avatar = res.data.user.avatar,
+      this.user_id = res.data.user.user_id
     }).catch(err=>{console.log(err)})
+  },
+  method:{
+    addFriend(){
+      Axios.post("/api/friend")
+    },
+    deleteFriend(){
+      Axios.delete("/api/friend")
+    }
   }
 };
 </script>

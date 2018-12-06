@@ -19,7 +19,25 @@ function getAllFollowers(req,res){
         res.status(200).json(results)
     }).catch(err=>(console.log(err)))
 }
+// function deleteFollowing(req,res){
+//     const db = req.app.get('db')
+//     db.query(`
+//     delete from friend 
+//     where friend='${}' and user_id='${req.session.user.user_id}'   `).then(results=>{
+//         res.status(200).json(results)
+//     }).catch(err=>(console.log(err)))
+// }
+// function addFollowing(req,res){
+//     const db = req.app.get("db");
+//      db.friend.insert({
+//         user_id:req.session.user.user.id,
+//         friend: friends id
+//     }) 
+//     .catch(console.log)
+// }
 module.exports = {
     getAllFollowers,
     getAllFollowing
+    // deleteFollowing,
+    // addFollowing
 }
