@@ -2,159 +2,72 @@
 <template>
   <div class="convocontainer">
     <v-list class="allconversations">
-      <v-list-tile v-for="avatar in avatars" :key="avatar.name" router :to="avatar.route">
+      <v-list-tile
+        v-for="player in players"
+        :key="player.username"
+        @click="getConversationNames('Jery',  player.username)"
+      >
         <v-list-tile-avatar>
-          <img :src="avatar.image">
+          <img :src="player.avatar">
         </v-list-tile-avatar>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{avatar.name}}</v-list-tile-title>
+          <v-list-tile-title>{{player.username}}</v-list-tile-title>
         </v-list-tile-content>
-        <v-btn small fab dark color="orange" depressed>x</v-btn>
       </v-list-tile>
     </v-list>
 
     <div class="conversation">
-      <!-- might want to move this to its own component -->
-      <!-- https://vuejsexamples.com/tag/chat/ -->
+      <BasicVueChat :new-message="message"/>
     </div>
   </div>
 </template>
 
 <script>
+import BasicVueChat from "./basicvuechat/BasicVueChat.vue";
+import Axios from "axios";
+
 export default {
+  components: {
+    BasicVueChat
+  },
   data() {
     return {
-      avatars: [
-        {
-          // need to make image dynamic
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Jerry Berry",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Homer Simpson",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "One Punch Man",
-          route: "/messages/profile"
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          name: "Master Splinter",
-          route: "/messages/profile"
-        }
-      ]
+      players: []
     };
+  },
+  mounted() {
+    Axios.get("/api/all-players")
+      .then(res => {
+        this.players = res.data;
+        console.log(this.players);
+      })
+      .catch(err => console.log(err));
+  },
+  methods: {
+    getConversationNames(currentUsername, clickedUsername) {
+      // get user endpoint
+      console.log(currentUsername, clickedUsername);
+    }
   }
 };
 </script>
 
 <style>
 .convocontainer {
+  /* height: 500px; */
   display: flex;
   /* border: 1px #424242 solid; */
 }
 .allconversations {
-  width: 36%;
+  width: 35%;
+  overflow: auto;
   /* border: 1px #424242 solid; */
 }
 .conversation {
-  width: 60%;
-  /* border: 1px #424242 solid; */
-  margin-left: 5px;
+  width: 65%;
+  height: 100%;
+  /* border: 1px pink solid; */
+  margin-left: 3px;
 }
 </style>

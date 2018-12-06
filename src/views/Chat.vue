@@ -2,7 +2,7 @@
   <div>
     <h1 class="text-xs-center">Chat (might change to Messages)</h1>
     <!-- <v-container> -->
-    <MessageList/>
+    <MessageList class="messagelist"/>
     <!-- </v-container> -->
   </div>
 </template>
@@ -23,5 +23,8 @@ export default {
 </script>
 
 <style>
+.messagelist {
+  height: 75vh;
+}
 </style>
 
