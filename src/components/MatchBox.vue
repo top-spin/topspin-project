@@ -7,7 +7,7 @@
       router
       :to="'/profile/'+match.match_winner.username"
     >
-      <v-list-tile-avatar>
+      <v-list-tile-avatar class="hidden-md-only">
         <img :src="match.match_winner.avatar">
       </v-list-tile-avatar>
 
@@ -23,7 +23,7 @@
       router
       :to="'/profile/'+match.match_loser.username"
     >
-      <v-list-tile-avatar>
+      <v-list-tile-avatar class="hidden-md-only">
         <img :src="match.match_loser.avatar">
       </v-list-tile-avatar>
 
