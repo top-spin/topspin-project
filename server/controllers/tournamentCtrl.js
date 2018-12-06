@@ -26,7 +26,29 @@ function upcomingTournament(req,res){
         res.status(200).json(tournaments)
     }).catch(err=>console.log(err))
 }
+function tournamentMatches(req,res){
+    const db = req.app.get('db');
+    db.query(`
+    select * from match m
+        join topspin_user uw
+        on uw.user_id = m.match_winner
+        where m.tournament_id = ${req.params.id}
+        order by m.round;
+    `).then(winner=>{
+        db.query(`
+        select * from match m
+            join topspin_user uw
+            on uw.user_id = m.match_loser
+            where m.tournament_id = ${req.params.id}
+            order by m.round;
+        `).then(loser=>{
+            res.status(200).json(winner.concat(loser))
+        }).catch(err=>console.log(err))
+    }).catch(err=>console.log(err))
+}
+
 module.exports = {
     pastTournament,
-    upcomingTournament
+    upcomingTournament,
+    tournamentMatches
 }
