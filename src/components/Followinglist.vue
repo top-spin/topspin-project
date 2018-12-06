@@ -1,18 +1,18 @@
-
 <template>
-  <div class="friends">
-    <v-list class="allfriends">
+  <div class="following">
+    <v-list class="allfollowing">
       <v-list-tile v-for="avatar in avatars" :key="avatar.name" router :to="avatar.route">
         <v-list-tile-avatar>
-          <img :src="avatar.image">
+          <img :src="avatar.avatar">
         </v-list-tile-avatar>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{avatar.name}}</v-list-tile-title>
+          <v-list-tile-title>{{avatar.username}}</v-list-tile-title>
         </v-list-tile-content>
                 <v-list-tile-content>
           <v-list-tile-title>{{avatar.rating}}</v-list-tile-title>
         </v-list-tile-content>
+        
         <!-- <v-btn small fab dark color="orange" depressed>x</v-btn> -->
       </v-list-tile>
     </v-list>
@@ -24,36 +24,37 @@
   </div>
 </template>
 
-<script>
+<script> 
+import Axios from 'axios';
 export default {
-  data() {
-    return {
-      avatars: [
-        {
-          // need to make image dynamic
-          image: "https://randomuser.me/api/portraits/men/82.jpg",
-          name: "Melvin Gibbs",
-           rating: "Rank:"+ 1
-        },
-        {
-          image: "https://randomuser.me/api/portraits/men/81.jpg",
-          name: "Trevor Black",
-          rating: "Rank:"+2
-
+   data(){
+    return{
+      avatars:[]
          
-        }
-      ]
-    };
+      
+     
+    }
+      
+  },
+  mounted(){
+    Axios.get("/api/following/").then(res=>{
+      console.log(res.data)
+      this.avatars=res.data
+      // this.rank = res.data.rank,
+      // this.username = res.data.user.username,
+      // this.avatar = res.data.user.avatar
+    }).catch(err=>{console.log(err)})
   }
 };
 </script>
 
+
 <style>
-.friends {
+.followers {
   display: flex;
   /* border: 1px #424242 solid; */
 }
-.allfriends {
+.allfollowers {
   width: 36%;
   /* border: 1px #424242 solid; */
 }
