@@ -53,11 +53,11 @@
       <!-- TODO: need to add @click="addPlayer(player.username)" to each player -->
       <div>
         <h2>Suggested Players to Add</h2>
-        <Followinglist/>
+        <Followinglist :addPlayer="addPlayer"/>
       </div>
 
       <!-- players in tournament -->
-      <h2 class="playerslist">Tournament Players (8)</h2>
+      <h2 class="playerslist">Tournament Players ({{this.$store.state.pending_tournament.count}})</h2>
 
       <v-list>
         <v-list-tile v-for="(player, i) in playersList" :key="player.username">
@@ -119,7 +119,9 @@ export default {
     // add a player to the list
     addPlayer(player) {
       console.log(this.playersList);
-      if (this.playersList.length === 8) return;
+      if (+this.playersList.length == +this.$store.state.pending_tournament.count) {
+        return;
+      }
       if (this.playersList.includes(player)) return;
       this.playersList.push(player);
       console.log(this.playersList);
