@@ -11,10 +11,16 @@
     v-for="(m, index) in markers"
     :position="m.position"
     :clickable="true"
-    :draggable="true"
-    @click="center=m.position"
+    :draggable="false"
+    @click="toggleInfoWindow(m,index)"
   />
+
+        <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
+        {{infoContent}}
+      </gmap-info-window>
 </GmapMap>
+ 
+
   </div>
 </template>
 <style>
@@ -41,8 +47,38 @@ export default {
         }
         
         ],
+ infoContent: '',
+          infoWindowPos: null,
+          infoWinOpen: false,
+          currentMidx: null,
+          //optional: offset infowindow so it visually sits nicely on top of our marker
+          infoOptions: {
+            pixelOffset: {
+              width: 0,
+              height: -35
+            }
+          }
+
     }
     },
+       methods: {
+          toggleInfoWindow: function(marker, idx) {
+            this.infoWindowPos = marker.position;
+            this.infoContent = marker.infoText;
+
+            //check if its the same marker that was selected if yes toggle
+            if (this.currentMidx == idx) {
+              this.infoWinOpen = !this.infoWinOpen;
+            }
+            //if different marker set infowindow to open and reset current marker index
+            else {
+              this.infoWinOpen = true;
+              this.currentMidx = idx;
+
+            }
+          }
+
+        },
     mounted(){
         axios.get("/api/all-players").then(res=>{
             this.markers = res.data.map(player=>{
@@ -50,9 +86,14 @@ export default {
                    position:{
                        lat:+player.lat,
                        lng:+player.lng
-                   }
+                   },
+                   infoText:player.username
+
+                   
                 }
+                  
             });
+            console.log(this.markers)
         }).catch(err=>console.log(err))
     }
 }
