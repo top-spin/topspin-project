@@ -30,19 +30,40 @@ function tournamentMatches(req,res){
     const db = req.app.get('db');
     db.query(`
     select * from match m
-        join topspin_user uw
-        on uw.user_id = m.match_winner
         where m.tournament_id = ${req.params.id}
         order by m.round;
-    `).then(winner=>{
+    `).then(matches=>{
         db.query(`
-        select * from match m
-            join topspin_user uw
-            on uw.user_id = m.match_loser
-            where m.tournament_id = ${req.params.id}
-            order by m.round;
-        `).then(loser=>{
-            res.status(200).json(winner.concat(loser))
+        select * from topspin_user
+        `).then(players=>{
+            let response = matches.map((obj,i)=>{
+                return {
+                  match_id:obj.match_id,
+                  tournament_id:obj.tournament_id,
+                  winning_score:obj.winning_score,
+                  losing_score:obj.losing_score,
+                  match_winner:players.filter(e=>{
+                    // console.log(e)
+                    if(e.user_id===obj.match_winner){
+                      return true
+                    }
+                    else{
+                      return false
+                    }
+                  })[0],
+                  match_loser:players.filter(e=>{
+                    // console.log(e)
+                    if(e.user_id===obj.match_loser){
+                      return true
+                    }
+                    else{
+                      return false
+                    }
+                  })[0],
+                  round:obj.round
+                }
+              })
+            res.status(200).json(response)
         }).catch(err=>console.log(err))
     }).catch(err=>console.log(err))
 }
