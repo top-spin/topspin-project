@@ -1,84 +1,26 @@
 <template>
-  <div>
-    <h1 class="text-xs-center">Tournament</h1>
-
-    <v-container class="hidden-sm-and-down">
-      <v-layout row wrap>
-        <v-flex xs3>
-          <v-btn class="success">Start Round</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 ml-2>
-          <v-btn>Round 3 Done</v-btn>
-          <v-layout class="verticlealign">
-            <WinnerBox/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container>
-
-    <v-container class="hidden-md-and-up">
-      <v-layout column wrap>
-        <v-flex xs3>
-          <v-btn class="success">Start Round</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="verticlealign">
-            <MatchBox/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 ml-2>
-          <v-btn>Round 3 Done</v-btn>
-          <v-layout class="verticlealign">
-            <WinnerBox/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+    <div>
+        <div class="tournaments_container">
+            <UpcomingTourney/>
+        </div>
+        <div class="tournaments_container">
+            <PastTourney/>
+        </div>
+        <div class="text-xs-center mt-5">
+            <v-btn large color="success">Create New Tournament</v-btn>
+        </div>
+    </div>
 </template>
 
 <script>
-import MatchBox from "@/components/MatchBox.vue";
-import WinnerBox from "@/components/WinnerBox.vue";
+import PastTourney from "@/components/PastTourney.vue";
+import UpcomingTourney from "@/components/UpcomingTourney.vue";
 
 export default {
-  name: "Tournaments",
+  name: "TournamentView",
   components: {
-    MatchBox,
-    WinnerBox
+    PastTourney,
+    UpcomingTourney
   },
   data() {
     return {
@@ -90,15 +32,11 @@ export default {
 </script>
 
 <style>
-/* .horizonalalign{
-  
-} */
-.verticlealign {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-content: center;
+.tournaments_container{
+    width: 80%;
+    height: 40%;
+    border: 1px solid black;
+    margin: auto;
+    margin-top: 50px;
 }
 </style>
