@@ -67,9 +67,42 @@ function tournamentMatches(req,res){
         }).catch(err=>console.log(err))
     }).catch(err=>console.log(err))
 }
+function addTournament(req,res){
+    const db = req.app.get("db");
+    const {name,description,count,date} = req.body.tournament;
+    db.tournament.insert({
+        name,
+        user_id:req.session.user.user_id,
+        description,
+        size:count,
+        start_date:date
+    }).then(newTournament=>{
+        // console.log(newTournament)
+        let toInsert = req.body.players.filter(player=>player.user_id!==req.session.user.user_id).reduce((prev,player,i)=>{
+            if(i===0){
+              return prev+"('"+newTournament.tournament_id+"','"+player.user_id+"')"
+            }
+            else{
+              return prev+",('"+newTournament.tournament_id+"','"+player.user_id+"')"
+            }
+          },"")
+        db.query(`
+        insert into pending_users_in_tournament(tournament_id,user_id)
+            values ${toInsert};
+        `).then(players=>{
+            db.users_in_tournament.insert({
+                tournament_id:newTournament.tournament_id,
+                user_id:req.session.user.user_id
+            }).then(creator=>{
+                res.status(200).json({newTournament,players,creator})
+            })
+        }).catch(console.log)
+    }).catch(console.log)
+}
 
 module.exports = {
     pastTournament,
     upcomingTournament,
-    tournamentMatches
+    tournamentMatches,
+    addTournament
 }

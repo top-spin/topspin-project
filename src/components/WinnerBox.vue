@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="match">
     <h4>Winner</h4>
     <v-list-tile
       class="box"
