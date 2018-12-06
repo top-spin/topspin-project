@@ -1,7 +1,7 @@
 const {checkStatus, addUser,getInfoForNavbar,logout} = require("./controllers/accountCtrl");
 const { profileInfo , searchPlayers , getAllPlayers} = require("./controllers/playerCtrl");
 const { pastTournament , upcomingTournament , tournamentMatches} = require("./controllers/tournamentCtrl");
-const { getAllFollowers, getAllFollowing,addFollowing} = require("./controllers/friendCtrl")
+const { getAllFollowers, getAllFollowing} = require("./controllers/friendCtrl")
 module.exports = app =>{
     app.get("/api/test",(req,res)=>{
         res.status(200).json(req.session)
@@ -18,5 +18,5 @@ module.exports = app =>{
     app.get("/api/tournament-matches/:id",tournamentMatches)
     app.get("/api/followers",getAllFollowers)
     app.get("/api/following",getAllFollowing)
-    app.post("/api/friend",addFollowing)
+    // app.post("/api/friend",addFollowing)
 }
