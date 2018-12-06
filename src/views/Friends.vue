@@ -1,17 +1,15 @@
 <template>
   <div>
-                <v-radio-group light v-model="showfollowing" :mandatory="false">
-              <v-radio color="primary" label="Following" :value="true"></v-radio>
-              <v-radio color="primary" label="Followers" :value="false"></v-radio>
-            </v-radio-group>
-        <h1 v-if="showfollowing"  class="text-xs-left">Following</h1>
+    <v-radio-group light v-model="showfollowing" :mandatory="false">
+      <v-radio color="primary" label="Following" :value="true"></v-radio>
+      <v-radio color="primary" label="Followers" :value="false"></v-radio>
+    </v-radio-group>
+    <h1 v-if="showfollowing" class="text-xs-left">Following</h1>
     <Followinglist v-if="showfollowing"/>
 
-    
-        <h1 v-if="showfollowers" class="text-xs-left">Followers</h1>
+    <h1 v-if="showfollowers" class="text-xs-left">Followers</h1>
 
-        <Followerslist v-if="showfollowers"  />
-
+    <Followerslist v-if="showfollowers"/>
   </div>
 </template>
 
@@ -27,8 +25,8 @@ export default {
   },
   data() {
     return {
-      showfollowing:true,
-      showfollowers:true
+      showfollowing: true,
+      showfollowers: true
     };
   }
 };
