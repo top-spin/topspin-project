@@ -63,6 +63,13 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Standings.vue")
+    },
+    {
+      path: "/tournament/view/:id",
+      name: "tournamentView",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/TournamentView.vue")
     }
   ]
 });
