@@ -53,7 +53,7 @@ export default {
     },
     mounted(){
         axios.get("/api/upcoming-tournaments").then(res=>{
-            console.log(res.data)
+            // console.log(res.data)
             this.tournaments = res.data;
         }).catch(err=>console.log(err))
     },
