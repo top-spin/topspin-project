@@ -49,8 +49,9 @@ export default {
 
 <style>
 .dashboardcontainer {
-  height: 80vh;
-  /* border: 1px red solid; */
+  /* height: 80vh; */
+  height: 500px;
+  border: 1px red solid;
 }
 .toprow {
   height: 60%;

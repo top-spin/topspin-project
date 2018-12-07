@@ -5,20 +5,26 @@
       <span class="orange--text">Statistics</span>
     </span>
     <span class="hidden-sm-and-down">
-      <chartjs-doughnut v-if="datasets[0].data.length!==0"  class="donutchart" :labels="labels" :datasets="datasets" :option="option"></chartjs-doughnut>
+      <chartjs-doughnut
+        v-if="datasets[0].data.length!==0"
+        class="donutchart"
+        :labels="labels"
+        :datasets="datasets"
+        :option="option"
+      ></chartjs-doughnut>
     </span>
 
     <!-- horizontal-bars for smaller screen size -->
     <!-- TODO: Note. NOGO: datalabel -->
     <span class="hidden-md-and-up">
-      <chartjs-horizontal-bar 
+      <chartjs-horizontal-bar
         class="barchart"
         :labels="labels"
         :datasets="datasets"
         :datalabel="datalabel"
         :option="option"
       ></chartjs-horizontal-bar>
-    </span>
+    </span>-->
   </div>
 </template>
 
@@ -28,7 +34,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-       
       labels: ["Tournament Wins", "Wins", "Losses"],
       datalabel: "Games Played",
       datasets: [
@@ -46,14 +51,16 @@ export default {
       }
     };
   },
-      mounted(){
-        axios.get("/api/get-my-stats").then(res=>{
-          console.log("before==> ",this.datasets)
-          this.datasets[0].data=res.data 
-          console.log("after==> ",this.datasets)
-        }).catch(err=>console.log(err))
- 
-    }  
+  mounted() {
+    axios
+      .get("/api/get-my-stats")
+      .then(res => {
+        console.log("before==> ", this.datasets);
+        this.datasets[0].data = res.data;
+        console.log("after==> ", this.datasets);
+      })
+      .catch(err => console.log(err));
+  }
 };
 </script>
  
@@ -63,14 +70,15 @@ export default {
   margin-top: 5px;
   display: flex;
   justify-content: center;
-  /* border: blue 1px solid; */
+  /* border: blue 3px solid; */
 }
 .donutchart {
   height: 90%;
-  /* border: green 1px solid; */
+  /* border: green 3px solid; */
+  background-color: rgb(170, 238, 247);
 }
 .barchart {
   height: 80%;
-  /* border: red 1px solid; */
+  border: red 3px solid;
 }
 </style>
