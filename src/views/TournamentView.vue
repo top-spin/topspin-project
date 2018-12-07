@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 class="text-xs-center">{{tournament[0].name}}</h1>
+    <h1 v-if="tournament[0]" class="text-xs-center">{{tournament[0].name}}</h1>
+    <h1 v-else class="text-xs-center">Tournament</h1>
 
    <v-container v-if="finished" class="hidden-sm-and-down">
       <v-layout row wrap>

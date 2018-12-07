@@ -32,9 +32,18 @@ function logout(req,res){
     req.session.destroy();
     res.status(200).json("OK")
 }
+function getCurrentUser(req,res){
+    if(req.session.user){
+        res.status(200).json(req.session.user);
+    }
+    else{
+        res.status(200).json("No User Logged In!")
+    }
+}
 module.exports = { 
     checkStatus,
     addUser,
     getInfoForNavbar,
-    logout
+    logout,
+    getCurrentUser
 }
