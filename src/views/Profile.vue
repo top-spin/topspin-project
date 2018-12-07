@@ -3,14 +3,17 @@
   <div class="profile">
     <h1>{{username}}</h1>
 
-    <v-container>
+    <v-container v-for="p in profile" :key="p.user_id">
       <!-- pic and add friend button -->
       <v-layout row wrap>
         <v-flex xs12 sm3 md3>
           <img height="128" width="128" :src="avatar">
         </v-flex>
         <v-flex xs6 sm3 md3>
-          <v-btn flat class="success" @click ="addFriend">Add Friend </v-btn>
+          <v-btn flat class="success" @click="addFriend(p.user_id)">Add Friend </v-btn>
+        </v-flex>
+        <v-flex xs6 sm3 md3>
+          <v-btn flat class="success" @click="deleteFriend(p.user_id)">Remove Friend </v-btn>
         </v-flex>
       </v-layout>
 
@@ -63,6 +66,7 @@ export default {
   name:"Profile",
   data(){
     return{
+      profile:[],
       rank:"",
       name:"",
       username:"",
@@ -89,15 +93,19 @@ export default {
       this.winCount = res.data.winCount,
       this.winPercent = res.data.winPercent,
       this.avatar = res.data.user.avatar,
-      this.user_id = res.data.user.user_id
+      this.user_id = res.data.user.user_id,
+      this.profile=res.data
+console.log(this.profile)
     }).catch(err=>{console.log(err)})
+    
   },
-  method:{
-    addFriend(){
-      Axios.post("/api/friend")
+  methods:{
+    addFriend(id){
+      Axios.post(`/api/friend/${id}`)
+      console.log(id)
     },
-    deleteFriend(){
-      Axios.delete("/api/friend")
+    deleteFriend(id){
+      Axios.delete(`/api/deletefriend/${id}`)
     }
   }
 };

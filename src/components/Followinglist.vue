@@ -5,7 +5,7 @@
       <v-divider :inset="player.inset"></v-divider>
       <v-subheader :key="player.username">{{ player.username }}</v-subheader>
 
-      <v-list-tile :key="player.title" avatar @click="viewProfile(player.username)">
+      <v-list-tile :key="player.title" avatar @click="viewProfile(player)">
         <v-list-tile-avatar>
           <img :src="player.avatar">
         </v-list-tile-avatar>
