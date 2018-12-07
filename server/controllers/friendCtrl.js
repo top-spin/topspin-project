@@ -34,11 +34,28 @@ function addFollowing(req,res){
 
     values ('${req.session.user.user_id}', '${req.params.id}')  `)
     .catch(console.log)
+}
+function getFriendCount(req,res){
+    const db = req.app.get('db')
+    db.query(`
+    select count (friend) from friend where user_id = '${req.session.user.user_id}'
+          `).then(following => {
+    const db = req.app.get('db')
+    db.query(`
+    select count (user_id) from friend where friend = '${req.session.user.user_id}'
+          `).then(followers =>{
+    
+        res.status(200).json( 
+            [+following[0].count, +followers[0].count]
+         )
+    }).catch(err=>(console.log(err)))
+    }).catch(err=>(console.log(err)))
 
 }
 module.exports = {
     getAllFollowers,
     getAllFollowing,
     deleteFollowing,
-    addFollowing
+    addFollowing,
+    getFriendCount
 }
