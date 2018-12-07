@@ -27,6 +27,7 @@
       <!-- notifications bell -->
       <v-menu bottom left>
         <v-btn slot="activator" dark icon>
+          <!-- <span class="orange--text">accept tournaments</span> -->
           <v-badge overlap color="orange">
             <span slot="badge">5</span>
             <v-icon large color="grey">notifications</v-icon>
@@ -36,6 +37,8 @@
         <v-list>
           <v-list-tile v-for="(item, i) in notificationItems" :key="i" @click="notificationActions">
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-btn small depressed @click="accept" color="light-green accent-3">accept &#10004</v-btn>/
+            <v-btn small flat @click="decline" color="red darken-3">decline x</v-btn>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -127,7 +130,7 @@ export default {
         ];
       })
       .catch(err => console.log(err));
-    this.$store.dispatch("getUser")
+    this.$store.dispatch("getUser");
   },
   methods: {
     logout() {
@@ -141,6 +144,13 @@ export default {
     },
     notificationActions() {
       console.log(this.avatar);
+      // TODO: this should route to tournament, by tournament id
+    },
+    accept() {
+      axios.get();
+    },
+    decline() {
+      axios.get();
     }
   }
 };
