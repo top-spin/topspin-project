@@ -70,7 +70,7 @@ function getMyStats(req,res){
     select count (tournament_winner) from tournament where tournament_winner =  '${req.session.user.user_id}'
           `).then(twinner=>{
         res.status(200).json( 
-            [+wins[0].count,+losses[0].count,+twinner[0].count]
+            [+twinner[0].count, +wins[0].count,+losses[0].count ]
          )
     }).catch(err=>(console.log(err)))
     }).catch(err=>(console.log(err)))

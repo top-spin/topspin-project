@@ -5,13 +5,13 @@
       <span class="orange--text">Statistics</span>
     </span>
     <span class="hidden-sm-and-down">
-      <chartjs-doughnut class="donutchart" :labels="labels" :datasets="datasets" :option="option"></chartjs-doughnut>
+      <chartjs-doughnut v-if="datasets[0].data.length!==0"  class="donutchart" :labels="labels" :datasets="datasets" :option="option"></chartjs-doughnut>
     </span>
 
     <!-- horizontal-bars for smaller screen size -->
     <!-- TODO: Note. NOGO: datalabel -->
     <span class="hidden-md-and-up">
-      <chartjs-horizontal-bar
+      <chartjs-horizontal-bar 
         class="barchart"
         :labels="labels"
         :datasets="datasets"
@@ -34,7 +34,7 @@ export default {
       datasets: [
         {
           backgroundColor: ["#D32F2F", "#F57C00", "#FFD54F"],
-          data: [2,0,5]
+          data: []
         }
       ],
       option: {
@@ -48,9 +48,9 @@ export default {
   },
       mounted(){
         axios.get("/api/get-my-stats").then(res=>{
-          console.log(res.data )
+          console.log("before==> ",this.datasets)
           this.datasets[0].data=res.data 
-          console.log(this.datasets)
+          console.log("after==> ",this.datasets)
         }).catch(err=>console.log(err))
  
     }  
