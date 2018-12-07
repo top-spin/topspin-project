@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 v-if="tournament[0]" class="text-xs-center">{{tournament[0].name}}</h1>
+    <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
     <h1 v-else class="text-xs-center">Tournament</h1>
 
    <v-container v-if="finished" class="hidden-sm-and-down">
@@ -54,7 +54,8 @@
        <v-container v-if="!finished" class="hidden-sm-and-down">
       <v-layout row wrap>
         <v-flex v-bind:class="classObject">
-          <v-btn class="success">Start Round</v-btn>
+          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Round</v-btn>
+          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
           <v-layout class="vertical_align">
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
@@ -143,8 +144,8 @@ export default {
         })
         let allPlayers = accepted.concat(pending)
         let newArray = []
-        console.log("testing",res.data.tournament[0].size/2)
-        for(let i = 0;(res.data.tournament[0].size)>i;i=i+2){
+        console.log("testing",res.data.tournament.size/2)
+        for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
           newArray.push({
             player1:allPlayers[i],

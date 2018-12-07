@@ -82,7 +82,7 @@ function tournamentMatches(req,res){
                                 where p.tournament_id = '${req.params.id}';
                             `).then(acceptedPlayers=>{
                                 res.status(200).json({
-                                    tournament,
+                                    tournament:tournament[0],
                                     pendingPlayers,
                                     acceptedPlayers,
                                     finished:false
@@ -93,7 +93,7 @@ function tournamentMatches(req,res){
                 else{
                     res.status(200).json({
                         matches:response,
-                        tournament
+                        tournamet:tournament[0]
                     })
                 }
             }).catch(err=>console.log(err))
