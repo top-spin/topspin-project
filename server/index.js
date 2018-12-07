@@ -4,6 +4,7 @@ const {json} = require("body-parser");
 const cors = require("cors");
 const massive = require("massive");
 const masterRoutes = require("./masterRoutes");
+const ethanRoutes = require("./ethanRoutes");
 const session = require('express-session');
 const authCtrl = require("./controllers/authCtrl");
 const path = require("path");
@@ -25,6 +26,7 @@ massive(process.env.CONNECTION_STRING).then(dbInstance=>{
 }).catch(err=>console.log(err));
 
 masterRoutes(app);
+ethanRoutes(app);
 authCtrl(app);
 
 // var port = process.env.PORT || 3999;
