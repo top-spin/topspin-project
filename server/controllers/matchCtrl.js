@@ -57,8 +57,28 @@ function getMyMatches(req,res){
         }).catch(err=>console.log(err))
     }).catch(err=>console.log(err))
 }
+function getMyStats(req,res){
+    const db = req.app.get('db')
+    db.query(`
+    select count (match_winner) from match where match_winner = '${req.session.user.user_id}'
+          `).then(wins => {
+    const db = req.app.get('db')
+    db.query(`
+    select count (match_winner) from match where match_loser = '${req.session.user.user_id}'
+          `).then(losses =>{
+    db.query(`
+    select count (tournament_winner) from tournament where tournament_winner =  '${req.session.user.user_id}'
+          `).then(twinner=>{
+        res.status(200).json( 
+            [+wins[0].count,+losses[0].count,+twinner[0].count]
+         )
+    }).catch(err=>(console.log(err)))
+    }).catch(err=>(console.log(err)))
+    }).catch(err=>(console.log(err)))
+}
 module.exports = {
     getMatchLoser,
     getMatchWinner,
-    getMyMatches
+    getMyMatches,
+    getMyStats
 }
