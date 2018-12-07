@@ -63,7 +63,36 @@ function tournamentMatches(req,res){
                   round:obj.round
                 }
               })
-            res.status(200).json(response)
+              if(response.length === 0){
+                db.query(`
+                select * from tournament
+                    where tournament_id = ${req.params.id};
+                `).then(tournament=>{
+                    db.query(`
+                    select * from pending_users_in_tournament p
+                        join topspin_user u
+                        on u.user_id = p.user_id
+                        where p.tournament_id = '${req.params.id}';
+                    `).then(pendingPlayers=>{
+                        db.query(`
+                        select * from users_in_tournament p
+                            join topspin_user u
+                            on u.user_id = p.user_id
+                            where p.tournament_id = '${req.params.id}';
+                        `).then(acceptedPlayers=>{
+                              res.status(200).json({
+                                  tournament,
+                                  pendingPlayers,
+                                  acceptedPlayers,
+                                  finished:false
+                              })
+                        }).catch(err=>console.log(err))
+                    }).catch(err=>console.log(err))
+                }).catch(err=>console.log(err))
+              }
+              else{
+                  res.status(200).json(response)
+              }
         }).catch(err=>console.log(err))
     }).catch(err=>console.log(err))
 }
