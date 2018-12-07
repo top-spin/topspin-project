@@ -48,11 +48,6 @@ export default {
 </script>
 
 <style>
-.dashboardcontainer {
-  /* height: 80vh; */
-  height: 500px;
-  border: 1px red solid;
-}
 .toprow {
   height: 60%;
   /* border: 1px red solid; */
@@ -87,8 +82,7 @@ export default {
   /* border: 1px purple solid; */
 }
 .smallcontainers {
-  height: 30vh;
-  border: 3px #424242 solid;
+  border: 2px #424242 solid;
   margin-bottom: 5px;
 }
 </style>

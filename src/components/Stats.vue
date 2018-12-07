@@ -24,7 +24,7 @@
         :datalabel="datalabel"
         :option="option"
       ></chartjs-horizontal-bar>
-    </span>-->
+    </span>
   </div>
 </template>
 
@@ -75,10 +75,9 @@ export default {
 .donutchart {
   height: 90%;
   /* border: green 3px solid; */
-  background-color: rgb(170, 238, 247);
 }
 .barchart {
   height: 80%;
-  border: red 3px solid;
+  /* border: red 3px solid; */
 }
 </style>
