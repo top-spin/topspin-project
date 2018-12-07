@@ -84,6 +84,13 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./components/AddTournamentPlayers.vue")
+    },
+    {
+      path: "/tournament/edit/:id",
+      name: "tournamentEdit",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/EditTournament.vue")
     }
   ]
 });

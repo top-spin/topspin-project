@@ -132,10 +132,35 @@ function addTournament(req,res){
         }).catch(console.log)
     }).catch(console.log)
 }
+function editPlayers(req,res){
+    console.log(req.body.players)
+    const db = req.app.get("db");
+    db.query(`
+    select * from pending_users_in_tournament p
+        join topspin_user u
+        on u.user_id = p.user_id
+        where p.tournament_id = '${req.body.players[0].tournament_id}';
+    `).then(pendingPlayers=>{
+        db.query(`
+        select * from users_in_tournament p
+            join topspin_user u
+            on u.user_id = p.user_id
+            where p.tournament_id = '${req.body.players[0].tournament_id}';
+        `).then(acceptedPlayers=>{
+            // console.log(pendingPlayers.concat(acceptedPlayers))
+            res.status(200).json({
+                pendingPlayers,
+                acceptedPlayers
+            })
+            // res.status(200).json(req.body.players)
+    }).catch(err=>console.log(err))
+}).catch(err=>console.log(err))
+}
 
 module.exports = {
     pastTournament,
     upcomingTournament,
     tournamentMatches,
-    addTournament
+    addTournament,
+    editPlayers
 }
