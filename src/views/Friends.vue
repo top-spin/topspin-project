@@ -49,6 +49,7 @@
 
 
 <script>
+import axios from "axios";
 import Followinglist from "@/components/Followinglist";
 import Followerslist from "@/components/Followerslist";
 export default {
@@ -60,12 +61,16 @@ export default {
   data() {
     return {
       showfollowing: true,
-      followingCount: "89",
-      followersCount: "43"
+      followingCount: "" ,
+      followersCount: ""
     };
   },
   mounted() {
-    console.log(this.showfollowing);
+          axios.get("/api/friendcount").then(res=>{
+            let counts=res.data 
+            this.followingCount = counts[0]
+            this.followersCount = counts[1]
+         }).catch(err=>console.log(err))
   },
   methods: {
     followingbutton() {
@@ -82,3 +87,5 @@ export default {
 /* .players */
 </style>
 
+ 
+ 
