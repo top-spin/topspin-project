@@ -23,15 +23,18 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
+       
       labels: ["Tournament Wins", "Wins", "Losses"],
       datalabel: "Games Played",
       datasets: [
         {
           backgroundColor: ["#D32F2F", "#F57C00", "#FFD54F"],
-          data: [4, 40, 30]
+          data: [2,0,5]
         }
       ],
       option: {
@@ -42,9 +45,18 @@ export default {
         }
       }
     };
-  }
+  },
+      mounted(){
+        axios.get("/api/get-my-stats").then(res=>{
+          console.log(res.data )
+          this.datasets[0].data=res.data 
+          console.log(this.datasets)
+        }).catch(err=>console.log(err))
+ 
+    }  
 };
 </script>
+ 
 
 <style>
 .title {

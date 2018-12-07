@@ -2,7 +2,7 @@ const {checkStatus, addUser,getInfoForNavbar,logout} = require("./controllers/ac
 const { profileInfo , searchPlayers , getAllPlayers} = require("./controllers/playerCtrl");
 const { pastTournament , upcomingTournament , tournamentMatches , addTournament} = require("./controllers/tournamentCtrl");
 const { getAllFollowers, getAllFollowing} = require("./controllers/friendCtrl")
-const { getMatchWinner, getMatchLoser,getMyMatches} = require("./controllers/matchCtrl")
+const { getMatchWinner, getMatchLoser,getMyMatches,getMyStats} = require("./controllers/matchCtrl")
 
 module.exports = app =>{
     app.get("/api/test",(req,res)=>{
@@ -25,4 +25,7 @@ module.exports = app =>{
     app.get("/api/winmatches",getMatchWinner)
     app.get("/api/losematches",getMatchLoser)
     app.get("/api/get-my-matches",getMyMatches)
+    app.get("/api/get-my-stats",getMyStats)
+ 
+
 }
