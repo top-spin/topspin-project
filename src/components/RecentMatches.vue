@@ -5,19 +5,19 @@
       <span class="orange--text">Matches</span>
     </span>
          <v-list>
-           <v-list-tile>
+           <v-list-tile v-for="match in matches" :key="match.match_id">
 
             <v-list-tile-content>
-              <v-list-tile-title>Winner: {{wmatches.username}} </v-list-tile-title>
+              <v-list-tile-title>Winner: {{match.match_winner.username}} </v-list-tile-title>
             </v-list-tile-content>
                         <v-list-tile-content>
-              <v-list-tile-title>Score: {{wmatches.winning_score}} </v-list-tile-title>
+              <v-list-tile-title>Score: {{match.winning_score}} </v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-content>
-              <v-list-tile-sub-title>Loser: {{lmatches.username}}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>Loser: {{match.match_loser.username}}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-content>
-              <v-list-tile-title>Score: {{lmatches.losing_score}} </v-list-tile-title>
+              <v-list-tile-title>Score: {{match.losing_score}} </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
  
@@ -32,21 +32,15 @@ export default {
     name:"RecentMatches",
     data(){
         return{
-            wmatches: { username:"ethan" ,
-            winning_score: 21}           ,
-            lmatches: { username:"jerry",
-             losing_score:20} 
+            matches:[]
         }
-    }
-    // mounted(){
-    //     axios.get("/api/winmatches").then(res=>{
-    //         console.log(res.data)
-    //         this.wmatches = res.data;
-    //     }).catch(err=>console.log(err))
-    //       axios.get("/api/losematches").then(res=>{
-    //         console.log(res.data)
-    //         this.lmatches = res.data;
-    //     }).catch(err=>console.log(err))
-    // } 
+    },
+    mounted(){
+        axios.get("/api/get-my-matches").then(res=>{
+          console.log(res.data)
+          this.matches = res.data.slice(0,3)
+        }).catch(err=>console.log(err))
+
+    } 
 }
 </script>

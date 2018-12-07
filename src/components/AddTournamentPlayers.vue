@@ -117,7 +117,7 @@ export default {
     },
     // add a player to the list
     addPlayer(player) {
-      console.log(this.playersList);
+      // console.log(this.playersList);
       if (+this.playersList.length == +this.$store.state.pending_tournament.count) {
         return;
       }
