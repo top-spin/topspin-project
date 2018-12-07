@@ -1,69 +1,63 @@
 <template>
-  <div class="following">
-    <v-list class="allfollowing">
-      <v-list-tile v-for="profile in profiles" :key="profile.name" router :to="profile.route" @click="viewProfile(profile)">
+  <div class="followers">
+    <h3 class="text-xs-center ma5" v-if="players.length === 0">Loading...</h3>
+    <div class="text-xs-center" v-for="player in players" :key="player.user_id">
+      <v-divider :inset="player.inset"></v-divider>
+      <v-subheader :key="player.username">{{ player.username }}</v-subheader>
+
+      <v-list-tile :key="player.title" avatar @click="viewProfile(player.username)">
         <v-list-tile-avatar>
-          <img :src="profile.avatar">
+          <img :src="player.avatar">
         </v-list-tile-avatar>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{profile.username}}</v-list-tile-title>
+          <v-list-tile-title v-html="player.name"></v-list-tile-title>
+          <v-list-tile-sub-title v-html="player.city"></v-list-tile-sub-title>
         </v-list-tile-content>
-                <v-list-tile-content>
-          <v-list-tile-title>Rating: {{profile.rating}}</v-list-tile-title>
-        </v-list-tile-content>
-        
-        <!-- <v-btn small fab dark color="orange" depressed>x</v-btn> -->
-      </v-list-tile>
-    </v-list>
 
-    <div class="conversation">
-      <!-- might want to move this to its own component -->
-      <!-- https://vuejsexamples.com/tag/chat/ -->
+        <v-list-tile-action>
+          <v-list-tile-sub-title v-if="player.rating">Rank: #{{player.rating}}</v-list-tile-sub-title>
+        </v-list-tile-action>
+      </v-list-tile>
     </div>
   </div>
 </template>
 
-<script> 
-import Axios from 'axios';
+<script>
+import Axios from "axios";
 export default {
-   data(){
-    return{
-      profiles:[]
-    }
+  data() {
+    return {
+      players: []
+    };
   },
   props: {
-    addPlayer:Function
+    addPlayer: Function
   },
-    methods:{
-    viewProfile(player){
-      if(this.addPlayer){
-        this.addPlayer(player)
-        return
+  methods: {
+    viewProfile(player) {
+      if (this.addPlayer) {
+        this.addPlayer(player);
+        return;
       }
-      this.$router.push("/profile/"+player.username)
+      this.$router.push("/profile/" + player.username);
     }
   },
-  mounted(){
-    Axios.get("/api/following/").then(res=>{
-      console.log(res.data)
-      this.profiles=res.data
-      // this.rank = res.data.rank,
-      // this.username = res.data.user.username,
-      // this.avatar = res.data.user.avatar
-    }).catch(err=>{console.log(err)})
+  mounted() {
+    Axios.get("/api/following/")
+      .then(res => {
+        console.log(res.data);
+        this.players = res.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
 
-
 <style>
 .followers {
-  display: flex;
-  /* border: 1px #424242 solid; */
-}
-.allfollowers {
-  width: 36%;
-  /* border: 1px #424242 solid; */
+  width: 90%;
 }
 </style>
