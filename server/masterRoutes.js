@@ -1,7 +1,7 @@
 const {checkStatus, addUser,getInfoForNavbar,logout} = require("./controllers/accountCtrl");
 const { profileInfo , searchPlayers , getAllPlayers} = require("./controllers/playerCtrl");
 const { pastTournament , upcomingTournament , tournamentMatches , addTournament} = require("./controllers/tournamentCtrl");
-const { getAllFollowers, getAllFollowing, addFollowing, deleteFollowing} = require("./controllers/friendCtrl")
+const { getAllFollowers, getAllFollowing, addFollowing, deleteFollowing, getFriendCount} = require("./controllers/friendCtrl")
 const { getMatchWinner, getMatchLoser,getMyMatches,getMyStats} = require("./controllers/matchCtrl")
 
 module.exports = app =>{
@@ -22,12 +22,13 @@ module.exports = app =>{
     app.get("/api/following",getAllFollowing)
     app.post("/api/friend/:id",addFollowing)
     app.delete("/api/deletefriend/:id",deleteFollowing)
-
+    app.get("/api/friendcount",getFriendCount)
     app.post("/api/tournament",addTournament)
     app.get("/api/winmatches",getMatchWinner)
     app.get("/api/losematches",getMatchLoser)
     app.get("/api/get-my-matches",getMyMatches)
     app.get("/api/get-my-stats",getMyStats)
- 
+    // app.get("/api/tournamentpending",getPendingCount)
+
 
 }
