@@ -35,10 +35,19 @@
         </v-btn>
 
         <v-list>
-          <v-list-tile v-for="(item, i) in notificationItems" :key="i" @click="notificationActions">
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            <v-btn small depressed @click="accept" color="light-green accent-3">accept &#10004;</v-btn>/
-            <v-btn small flat @click="decline" color="red darken-3">decline x</v-btn>
+          <v-list-tile
+            v-for="(pending, i) in pendingList"
+            :key="i"
+            @click="selectTournament(pending.tournament_id)"
+          >
+            <v-list-tile-title>{{ pending.name }}</v-list-tile-title>
+            <v-btn
+              small
+              depressed
+              @click="accept(pending.tournament_id)"
+              color="light-green accent-3"
+            >accept &#10004;</v-btn>/
+            <v-btn small flat @click="decline(pending.tournament_id)" color="red darken-3">decline x</v-btn>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -87,10 +96,9 @@ import axios from "axios";
 export default {
   data() {
     return {
+      drawer: true,
       pendingCount: "",
       pendingList: [],
-      // notificationItems: [{ title: "tournament name", tourney: 0 }],
-      drawer: true,
       avatar: [
         {
           // need to make image dynamic
@@ -136,11 +144,10 @@ export default {
       })
       .catch(err => console.log(err));
     axios
-      .get("/api/tournamentpendinglist/:user")
+      .get("/api/tournamentpendinglist/")
       .then(res => {
         console.log(res.data);
-        // let pcount = res.data;
-        // this.pendingCount = pcount;
+        this.pendingList = res.data;
       })
       .catch(err => console.log(err));
   },
@@ -154,16 +161,18 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    notificationActions() {
-      console.log(this.avatar);
-      // TODO: this should route to tournament, by tournament id
+    selectTournament(id) {
+      this.$router.push("/tournament/view/" + id);
     },
     accept(id) {
-      // axios.put(`/api/tournament/${id}`);
+      // Table: pending_users_in_tournament. Remove row by user_id?
+      // Table: users_in_tournament. Add tournament_id and user_id.
+      axios.put(`/api/accepttournament/${id}`);
       console.log("accepted", id);
     },
     decline(id) {
-      // axios.put(`/api/tournament/${id}`);
+      // Table: pending_users_in_tournament. Make rejected true (and remove row?)
+      axios.put(`/api/declinetournament/${id}`);
       console.log("declined", id);
     }
   }

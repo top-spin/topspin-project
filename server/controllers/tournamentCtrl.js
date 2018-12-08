@@ -196,18 +196,28 @@ function getPendingCount(req, res) {
     .catch(err => console.log(err));
 }
 function getPendingList(req, res) {
+  const db = req.app.get("db");
+  db.query(
+    `
+    select t.name,t.tournament_id FROM pending_users_in_tournament p
+    join tournament t
+    on p.tournament_id = t.tournament_id
+    where p.user_id = '${req.session.user.user_id}'
+    and p.rejected is false
+    group by t.name,t.tournament_id;
+    `
+  )
+    .then(pending => {
+      // console.log("pending:", pending);
+      res.status(200).json(pending);
+    })
+    .catch(err => console.log(err));
+}
+function acceptTournament(req, res) {
   // const db = req.app.get("db");
-  // db.query(
-  //   `
-  //   select count (user_id) from pending_users_in_tournament where (user_id, rejected) = ('${
-  //     req.session.user.user_id
-  //   }',false)
-  //         `
-  // )
-  //   .then(pending => {
-  //     res.status(200).json(+pending[0].count);
-  //   })
-  //   .catch(err => console.log(err));
+}
+function declineTournament(req, res) {
+  // const db = req.app.get("db");
 }
 function editPlayers(req, res) {
   console.log(req.body.players);
@@ -250,5 +260,7 @@ module.exports = {
   addTournament,
   editPlayers,
   getPendingCount,
-  getPendingList
+  getPendingList,
+  acceptTournament,
+  declineTournament
 };
