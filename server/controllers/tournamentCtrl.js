@@ -203,20 +203,132 @@ function editPlayers(req, res) {
     select * from pending_users_in_tournament p
         join topspin_user u
         on u.user_id = p.user_id
-        where p.tournament_id = '${req.body.players[0].tournament_id}';
+        where p.tournament_id = '${req.params.id}';
     `).then(pendingPlayers => {
       db.query(
         `
         select * from users_in_tournament p
             join topspin_user u
             on u.user_id = p.user_id
-            where p.tournament_id = '${req.body.players[0].tournament_id}';
+            where p.tournament_id = '${req.params.id}';
         `).then(acceptedPlayers => {
           // console.log(pendingPlayers.concat(acceptedPlayers))
-          res.status(200).json({
-            pendingPlayers,
-            acceptedPlayers
-          });
+          let oldPlayers = pendingPlayers.concat(acceptedPlayers);
+          let newPlayers = req.body.players;
+          function inPlayers(type,id){
+            if(type==="old"){
+                let existsArray = oldPlayers.filter(player=>{
+              return id === player.user_id;
+            })
+            return existsArray.length===0;
+            }
+            else if(type==="new"){
+              let existsArray = newPlayers.filter(player=>{
+              return id === player.user_id;
+              })
+              return existsArray.length===0;
+            }
+          }
+          
+          let playersToAdd = newPlayers.filter(player=>{
+            return inPlayers("old",player.user_id);
+          }).reduce((prev, player, i) => {
+            // console.log(player)
+                    if (i === 0) {
+                      return (
+                        prev +"('" +req.params.id +"','" +player.user_id +"')"
+                      );
+                    } else {
+                      return (
+                        prev +",('" +req.params.id +"','" +player.user_id +"')"
+                      );
+                    }
+                  }, "");
+          
+          let playersToRemove = oldPlayers.filter(player=>{
+            return inPlayers("new",player.user_id);
+          }).reduce((prev, player, i,array) => {
+            // console.log(player)
+                    if (i === 0) {
+                      if(array.length>1){
+                      return (
+                        prev +
+                        "user_id = '" +player.user_id +"' or "
+                      );
+                      }
+                      else{
+                        return (
+                          prev +
+                          "user_id = '" +player.user_id +"'"
+                        );
+          
+                      }
+                    } else {
+                     if((array.length-1) === i){
+                      return (
+                        prev +
+                        "user_id = '" +player.user_id +"'"
+                      );
+                      }
+                      else{
+                        return (
+                          prev +
+                          "user_id = '" +player.user_id +"' or "
+                        );
+          
+                      }
+                    }
+                  }, "");
+                  if(playersToAdd===""&&playersToRemove===""){
+                    db.query(`
+                      delete from pending_users_in_tournament
+                        where tournament_id = '${req.params.id}' and ${playersToRemove};
+                      delete from users_in_tournament
+                        where tournament_id = '${req.params.id}' and ${playersToRemove};
+                    `).then(deletedPlayers=>{
+                  
+                     db.query(
+                      `
+                      insert into pending_users_in_tournament(tournament_id,user_id)
+                          values ${playersToAdd};
+                      `
+                    ).then(newPlayersFromDB=>{
+                      res.status(200).json({
+                        playersToAdd,
+                        playersToRemove
+                      });
+                    }).catch(err => console.log(err));
+                    }).catch(err => console.log(err));
+                  }
+                  else if(playersToAdd===""){
+                    db.query(`
+                    delete from pending_users_in_tournament
+                      where tournament_id = '${req.params.id}' and ${playersToRemove};
+                    delete from users_in_tournament
+                      where tournament_id = '${req.params.id}' and ${playersToRemove};
+                  `).then(deletedPlayers=>{
+                    res.status(200).json({
+                              playersToAdd,
+                              playersToRemove
+                            });
+                  }).catch(err => console.log(err));
+                  }
+                  else if(playersToRemove===""){
+                    db.query(
+                      `
+                      insert into pending_users_in_tournament(tournament_id,user_id)
+                          values ${playersToAdd};
+                      `
+                    ).then(newPlayersFromDB=>{
+                      res.status(200).json({
+                        playersToAdd,
+                        playersToRemove
+                      });
+                    }).catch(err => console.log(err));
+                  }
+                  else{
+                    res.status(200).json("No changes needed.")
+                  }
         }).catch(err => console.log(err));
     }).catch(err => console.log(err));
 }

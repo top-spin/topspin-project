@@ -235,7 +235,7 @@ data() {
       this.playersList.splice(index, 1);
     },
     editTournament() {
-      axios.put("/api/edit-tournament",{
+      axios.put("/api/edit-tournament/"+this.tournament.tournament_id,{
         players:this.playersList
       }).then(res=>{
         console.log(res.data)
