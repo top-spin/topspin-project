@@ -214,10 +214,37 @@ function getPendingList(req, res) {
     .catch(err => console.log(err));
 }
 function acceptTournament(req, res) {
-  // const db = req.app.get("db");
+  const db = req.app.get("db");
+  db.query(
+    `
+    insert into users_in_tournament (user_id, tournament_id)
+    values ('${req.session.user.user_id}', '${req.params.id}');
+    
+    delete from pending_users_in_tournament
+    where user_id = '${req.session.user.user_id}' 
+      and tournament_id = '${req.params.id}';
+    `
+  )
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(err => console.log(err));
 }
 function declineTournament(req, res) {
-  // const db = req.app.get("db");
+  const db = req.app.get("db");
+  db.query(
+    `
+    update pending_users_in_tournament
+    set rejected = true
+    where user_id = '${req.session.user.user_id}' and tournament_id = '${
+      req.params.id
+    }'
+    `
+  )
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(err => console.log(err));
 }
 function editPlayers(req, res) {
   //console.log(req.body.players);
@@ -228,136 +255,145 @@ function editPlayers(req, res) {
         join topspin_user u
         on u.user_id = p.user_id
         where p.tournament_id = '${req.params.id}';
-    `).then(pendingPlayers => {
+    `
+  )
+    .then(pendingPlayers => {
       db.query(
         `
         select * from users_in_tournament p
             join topspin_user u
             on u.user_id = p.user_id
             where p.tournament_id = '${req.params.id}';
-        `).then(acceptedPlayers => {
+        `
+      )
+        .then(acceptedPlayers => {
           // console.log(pendingPlayers.concat(acceptedPlayers))
           let oldPlayers = pendingPlayers.concat(acceptedPlayers);
           let newPlayers = req.body.players;
           // console.log(newPlayers)
-          function inPlayers(type,id){
-            if(type==="old"){
-                let existsArray = oldPlayers.filter(player=>{
-              return id === player.user_id;
-            })
-            return existsArray.length===0;
-            }
-            else if(type==="new"){
-              let existsArray = newPlayers.filter(player=>{
-              return id === player.user_id;
-              })
-              return existsArray.length===0;
+          function inPlayers(type, id) {
+            if (type === "old") {
+              let existsArray = oldPlayers.filter(player => {
+                return id === player.user_id;
+              });
+              return existsArray.length === 0;
+            } else if (type === "new") {
+              let existsArray = newPlayers.filter(player => {
+                return id === player.user_id;
+              });
+              return existsArray.length === 0;
             }
           }
-          
-          let playersToAdd = newPlayers.filter(player=>{
-            // console.log("to add",(inPlayers("old",player.user_id)))
-            return inPlayers("old",player.user_id);
-          }).reduce((prev, player, i) => {
-                    if (i === 0) {
-                      return (
-                        prev +"('" +req.params.id +"','" +player.user_id +"')"
-                      );
-                    } else {
-                      return (
-                        prev +",('" +req.params.id +"','" +player.user_id +"')"
-                      );
-                    }
-                  }, "");
+
+          let playersToAdd = newPlayers
+            .filter(player => {
+              // console.log("to add",(inPlayers("old",player.user_id)))
+              return inPlayers("old", player.user_id);
+            })
+            .reduce((prev, player, i) => {
+              if (i === 0) {
+                return (
+                  prev + "('" + req.params.id + "','" + player.user_id + "')"
+                );
+              } else {
+                return (
+                  prev + ",('" + req.params.id + "','" + player.user_id + "')"
+                );
+              }
+            }, "");
           // console.log(playersToAdd)
-          let playersToRemove = oldPlayers.filter(player=>{
-            // console.log("to remove",(inPlayers("new",player.user_id)))
-            return inPlayers("new",player.user_id);
-          }).reduce((prev, player, i,array) => {
-                    if (i === 0) {
-                      if(array.length>1){
-                      return (
-                        prev +
-                        "user_id = '" +player.user_id +"' or "
-                      );
-                      }
-                      else{
-                        return (
-                          prev +
-                          "user_id = '" +player.user_id +"'"
-                        );
-          
-                      }
-                    } else {
-                     if((array.length-1) === i){
-                      return (
-                        prev +
-                        "user_id = '" +player.user_id +"'"
-                      );
-                      }
-                      else{
-                        return (
-                          prev +
-                          "user_id = '" +player.user_id +"' or "
-                        );
-          
-                      }
-                    }
-                  }, "");
-                  // console.log(playersToAdd)
-                  // console.log(playersToRemove)
-                  if(playersToAdd!==""&&playersToRemove!==""){
-                    db.query(`
+          let playersToRemove = oldPlayers
+            .filter(player => {
+              // console.log("to remove",(inPlayers("new",player.user_id)))
+              return inPlayers("new", player.user_id);
+            })
+            .reduce((prev, player, i, array) => {
+              if (i === 0) {
+                if (array.length > 1) {
+                  return prev + "user_id = '" + player.user_id + "' or ";
+                } else {
+                  return prev + "user_id = '" + player.user_id + "'";
+                }
+              } else {
+                if (array.length - 1 === i) {
+                  return prev + "user_id = '" + player.user_id + "'";
+                } else {
+                  return prev + "user_id = '" + player.user_id + "' or ";
+                }
+              }
+            }, "");
+          // console.log(playersToAdd)
+          // console.log(playersToRemove)
+          if (playersToAdd !== "" && playersToRemove !== "") {
+            db.query(
+              `
                       delete from pending_users_in_tournament
-                        where tournament_id = '${req.params.id}' and ${playersToRemove};
+                        where tournament_id = '${
+                          req.params.id
+                        }' and ${playersToRemove};
                       delete from users_in_tournament
-                        where tournament_id = '${req.params.id}' and ${playersToRemove};
-                    `).then(deletedPlayers=>{
-                  
-                     db.query(
-                      `
+                        where tournament_id = '${
+                          req.params.id
+                        }' and ${playersToRemove};
+                    `
+            )
+              .then(deletedPlayers => {
+                db.query(
+                  `
                       insert into pending_users_in_tournament(tournament_id,user_id)
                           values ${playersToAdd};
                       `
-                    ).then(newPlayersFromDB=>{
-                      res.status(200).json({
-                        playersToAdd,
-                        playersToRemove
-                      });
-                    }).catch(err => console.log(err));
-                    }).catch(err => console.log(err));
-                  }
-                  else if(playersToAdd===""&&playersToRemove===""){
-                    res.status(200).json("No changes needed.")
-                  }
-                  else if(playersToAdd===""){
-                    db.query(`
-                    delete from pending_users_in_tournament
-                      where tournament_id = '${req.params.id}' and ${playersToRemove};
-                    delete from users_in_tournament
-                      where tournament_id = '${req.params.id}' and ${playersToRemove};
-                  `).then(deletedPlayers=>{
+                )
+                  .then(newPlayersFromDB => {
                     res.status(200).json({
-                              playersToAdd,
-                              playersToRemove
-                            });
-                  }).catch(err => console.log(err));
-                  }
-                  else if(playersToRemove===""){
-                    db.query(
-                      `
+                      playersToAdd,
+                      playersToRemove
+                    });
+                  })
+                  .catch(err => console.log(err));
+              })
+              .catch(err => console.log(err));
+          } else if (playersToAdd === "" && playersToRemove === "") {
+            res.status(200).json("No changes needed.");
+          } else if (playersToAdd === "") {
+            db.query(
+              `
+                    delete from pending_users_in_tournament
+                      where tournament_id = '${
+                        req.params.id
+                      }' and ${playersToRemove};
+                    delete from users_in_tournament
+                      where tournament_id = '${
+                        req.params.id
+                      }' and ${playersToRemove};
+                  `
+            )
+              .then(deletedPlayers => {
+                res.status(200).json({
+                  playersToAdd,
+                  playersToRemove
+                });
+              })
+              .catch(err => console.log(err));
+          } else if (playersToRemove === "") {
+            db.query(
+              `
                       insert into pending_users_in_tournament(tournament_id,user_id)
                           values ${playersToAdd};
                       `
-                    ).then(newPlayersFromDB=>{
-                      res.status(200).json({
-                        playersToAdd,
-                        playersToRemove
-                      });
-                    }).catch(err => console.log(err));
-                  }
-        }).catch(err => console.log(err));
-    }).catch(err => console.log(err));
+            )
+              .then(newPlayersFromDB => {
+                res.status(200).json({
+                  playersToAdd,
+                  playersToRemove
+                });
+              })
+              .catch(err => console.log(err));
+          }
+        })
+        .catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
 }
 
 module.exports = {
