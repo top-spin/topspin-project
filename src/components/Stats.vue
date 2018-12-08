@@ -16,7 +16,7 @@
 
     <!-- horizontal-bars for smaller screen size -->
     <!-- TODO: Note. NOGO: datalabel -->
-    <span class="hidden-md-and-up">
+    <span v-if="datasets[0].data.length!==0" class="hidden-md-and-up">
       <chartjs-horizontal-bar
         class="barchart"
         :labels="labels"

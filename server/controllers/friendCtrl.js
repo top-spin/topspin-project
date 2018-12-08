@@ -4,7 +4,7 @@ function getAllFollowing(req,res){
     select * from friend f 
     join topspin_user u 
     on  f.friend = u.user_id
-    where f.user_id='${req.session.user.user_id}'   
+    where f.user_id='${req.session.user.user_id}'; 
     `).then(results=>{
         res.status(200).json(results)
     }).catch(err=>(console.log(err)))
@@ -32,7 +32,9 @@ function addFollowing(req,res){
     db.query(`
     insert into friend (user_id, friend)
 
-    values ('${req.session.user.user_id}', '${req.params.id}')  `)
+    values ('${req.session.user.user_id}', '${req.params.id}')  `).then(response=>{
+        res.status(200).json("added friend.")
+    })
     .catch(console.log)
 }
 function getFriendCount(req,res){
