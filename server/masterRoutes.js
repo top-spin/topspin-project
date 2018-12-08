@@ -55,6 +55,7 @@ module.exports = app => {
   app.get("/api/get-my-matches", getMyMatches);
   app.get("/api/get-my-stats", getMyStats);
   app.get("/api/tournamentpending", getPendingCount);
+  app.get("/api/tournamentpendinglist", getPendingList);
   //   app.put("/api/accepttournament/:id", acceptTournament);
   //   app.put("/api/accepttournament/:id", declineTournament);
 };

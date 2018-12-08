@@ -195,6 +195,20 @@ function getPendingCount(req, res) {
     })
     .catch(err => console.log(err));
 }
+function getPendingList(req, res) {
+  // const db = req.app.get("db");
+  // db.query(
+  //   `
+  //   select count (user_id) from pending_users_in_tournament where (user_id, rejected) = ('${
+  //     req.session.user.user_id
+  //   }',false)
+  //         `
+  // )
+  //   .then(pending => {
+  //     res.status(200).json(+pending[0].count);
+  //   })
+  //   .catch(err => console.log(err));
+}
 function editPlayers(req, res) {
   console.log(req.body.players);
   const db = req.app.get("db");
@@ -235,5 +249,6 @@ module.exports = {
   tournamentMatches,
   addTournament,
   editPlayers,
-  getPendingCount
+  getPendingCount,
+  getPendingList
 };

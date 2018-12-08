@@ -88,7 +88,8 @@ export default {
   data() {
     return {
       pendingCount: "",
-      notificationItems: [{ title: "tournament name", tourney: 0 }],
+      pendingList: [],
+      // notificationItems: [{ title: "tournament name", tourney: 0 }],
       drawer: true,
       avatar: [
         {
@@ -126,9 +127,7 @@ export default {
         ];
       })
       .catch(err => console.log(err));
-
     this.$store.dispatch("getUser");
-
     axios
       .get("/api/tournamentpending")
       .then(res => {
@@ -136,8 +135,15 @@ export default {
         this.pendingCount = pcount;
       })
       .catch(err => console.log(err));
+    axios
+      .get("/api/tournamentpendinglist/:user")
+      .then(res => {
+        console.log(res.data);
+        // let pcount = res.data;
+        // this.pendingCount = pcount;
+      })
+      .catch(err => console.log(err));
   },
-
   methods: {
     logout() {
       // console.log(this.$store.state.status)
@@ -153,12 +159,12 @@ export default {
       // TODO: this should route to tournament, by tournament id
     },
     accept(id) {
-      axios.put(`/api/tournament/${id}`);
-      console.log("accepted");
+      // axios.put(`/api/tournament/${id}`);
+      console.log("accepted", id);
     },
     decline(id) {
-      axios.put(`/api/tournament/${id}`);
-      console.log("declined");
+      // axios.put(`/api/tournament/${id}`);
+      console.log("declined", id);
     }
   }
 };
