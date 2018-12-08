@@ -29,12 +29,12 @@
         <v-btn slot="activator" dark icon>
           <!-- <span class="orange--text">accept tournaments</span> -->
           <v-badge overlap color="orange">
-            <span slot="badge">{{pendingCount}}</span>
+            <span slot="badge" v-if="pendingCount">{{pendingCount}}</span>
             <v-icon large color="grey">notifications</v-icon>
           </v-badge>
         </v-btn>
 
-        <v-list>
+        <v-list v-if="pendingList.length">
           <v-list-tile
             v-for="(pending, i) in pendingList"
             :key="i"
@@ -49,6 +49,9 @@
             >accept &#10004;</v-btn>/
             <v-btn small flat @click="decline(pending.tournament_id)" color="red darken-3">decline x</v-btn>
           </v-list-tile>
+        </v-list>
+        <v-list v-if="!pendingList.length">
+          <v-list-tile>No pending tournaments</v-list-tile>
         </v-list>
       </v-menu>
 
@@ -136,20 +139,8 @@ export default {
       })
       .catch(err => console.log(err));
     this.$store.dispatch("getUser");
-    axios
-      .get("/api/tournamentpending")
-      .then(res => {
-        let pcount = res.data;
-        this.pendingCount = pcount;
-      })
-      .catch(err => console.log(err));
-    axios
-      .get("/api/tournamentpendinglist/")
-      .then(res => {
-        console.log(res.data);
-        this.pendingList = res.data;
-      })
-      .catch(err => console.log(err));
+    this.getpendingcount();
+    this.getpendinglist();
   },
   methods: {
     logout() {
@@ -164,16 +155,39 @@ export default {
     selectTournament(id) {
       this.$router.push("/tournament/view/" + id);
     },
+    getpendingcount() {
+      axios
+        .get("/api/tournamentpending")
+        .then(res => {
+          let pcount = res.data;
+          this.pendingCount = pcount;
+        })
+        .catch(err => console.log(err));
+    },
+    getpendinglist() {
+      axios
+        .get("/api/tournamentpendinglist/")
+        .then(res => {
+          console.log(res.data);
+          this.pendingList = res.data;
+        })
+        .catch(err => console.log(err));
+    },
     accept(id) {
-      // Table: pending_users_in_tournament. Remove row by user_id?
-      // Table: users_in_tournament. Add tournament_id and user_id.
-      axios.put(`/api/accepttournament/${id}`);
-      console.log("accepted", id);
+      // Table: users_in_tournament. insert by tournament_id and user_id.
+      // Table: pending_users_in_tournament. Remove row by tournament_id and user_id.
+      axios.put(`/api/accepttournament/${id}`).then(res => {
+        this.getpendingcount();
+        this.getpendinglist();
+      });
+      // console.log("accepted", id);
     },
     decline(id) {
-      // Table: pending_users_in_tournament. Make rejected true (and remove row?)
-      axios.put(`/api/declinetournament/${id}`);
-      console.log("declined", id);
+      axios.put(`/api/declinetournament/${id}`).then(res => {
+        this.getpendingcount();
+        this.getpendinglist();
+      });
+      // console.log("declined", id);
     }
   }
 };
