@@ -91,6 +91,13 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/EditTournament.vue")
+    },
+    {
+      path: "/tournament/started/:id",
+      name: "startedTournament",
+
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/StartedTournament.vue")
     }
   ]
 });
