@@ -68,7 +68,7 @@
       </v-list>
       <div>
         <div class="text-xs-center">
-          <v-btn @click="editTournament" color="success">Submit Tournament Players</v-btn>
+          <v-btn @click="editTournament" :disabled="playersList.length<tournament.size" color="success">Submit Tournament Players</v-btn>
         </div>
       </div>
       <!-- suggested players pulled from friends list -->
@@ -207,9 +207,6 @@ data() {
   },
 
   methods:{
-    toEdit(){
-      this.$router.push("/tournament/edit/"+this.tournament.tournament_id)
-    },
     searchPlayers() {
       this.loading = true;
       axios.get("/api/players?value=" + this.search_value)
@@ -226,19 +223,27 @@ data() {
       if (+this.playersList.length == this.tournament.size) {
         return;
       }
-      if (this.playersList.includes(player)) return;
+      if (this.playersList.some(user=>{
+        return player.user_id === user.user_id
+      })){
+        console.log("Already exists.")
+         return
+      };
       this.playersList.push(player);
-      console.log(this.playersList);
+      this.search_value = "";
+      // console.log(this.playersList);
     },
     // remove a player from the list
     removePlayer(player, index) {
+      if(player.user_id === this.$store.state.user.user_id) return
       this.playersList.splice(index, 1);
     },
     editTournament() {
       axios.put("/api/edit-tournament/"+this.tournament.tournament_id,{
         players:this.playersList
       }).then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
+        this.$router.push("/tournament/view/"+this.tournament.tournament_id)
       }).catch(err=>console.log(err))
     }
   }

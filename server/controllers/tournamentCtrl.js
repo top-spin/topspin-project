@@ -215,6 +215,7 @@ function editPlayers(req, res) {
           // console.log(pendingPlayers.concat(acceptedPlayers))
           let oldPlayers = pendingPlayers.concat(acceptedPlayers);
           let newPlayers = req.body.players;
+          // console.log(newPlayers)
           function inPlayers(type,id){
             if(type==="old"){
                 let existsArray = oldPlayers.filter(player=>{
@@ -231,9 +232,9 @@ function editPlayers(req, res) {
           }
           
           let playersToAdd = newPlayers.filter(player=>{
+            // console.log("to add",(inPlayers("old",player.user_id)))
             return inPlayers("old",player.user_id);
           }).reduce((prev, player, i) => {
-            // console.log(player)
                     if (i === 0) {
                       return (
                         prev +"('" +req.params.id +"','" +player.user_id +"')"
@@ -244,11 +245,11 @@ function editPlayers(req, res) {
                       );
                     }
                   }, "");
-          
+          // console.log(playersToAdd)
           let playersToRemove = oldPlayers.filter(player=>{
+            // console.log("to remove",(inPlayers("new",player.user_id)))
             return inPlayers("new",player.user_id);
           }).reduce((prev, player, i,array) => {
-            // console.log(player)
                     if (i === 0) {
                       if(array.length>1){
                       return (
@@ -279,7 +280,9 @@ function editPlayers(req, res) {
                       }
                     }
                   }, "");
-                  if(playersToAdd===""&&playersToRemove===""){
+                  // console.log(playersToAdd)
+                  // console.log(playersToRemove)
+                  if(playersToAdd!==""&&playersToRemove!==""){
                     db.query(`
                       delete from pending_users_in_tournament
                         where tournament_id = '${req.params.id}' and ${playersToRemove};
@@ -299,6 +302,9 @@ function editPlayers(req, res) {
                       });
                     }).catch(err => console.log(err));
                     }).catch(err => console.log(err));
+                  }
+                  else if(playersToAdd===""&&playersToRemove===""){
+                    res.status(200).json("No changes needed.")
                   }
                   else if(playersToAdd===""){
                     db.query(`
@@ -325,9 +331,6 @@ function editPlayers(req, res) {
                         playersToRemove
                       });
                     }).catch(err => console.log(err));
-                  }
-                  else{
-                    res.status(200).json("No changes needed.")
                   }
         }).catch(err => console.log(err));
     }).catch(err => console.log(err));

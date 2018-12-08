@@ -32,7 +32,9 @@ function addFollowing(req,res){
     db.query(`
     insert into friend (user_id, friend)
 
-    values ('${req.session.user.user_id}', '${req.params.id}')  `)
+    values ('${req.session.user.user_id}', '${req.params.id}')  `).then(response=>{
+        res.status(200).json("added friend.")
+    })
     .catch(console.log)
 }
 function getFriendCount(req,res){
