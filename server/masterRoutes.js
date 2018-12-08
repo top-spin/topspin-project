@@ -14,7 +14,10 @@ const {
   upcomingTournament,
   tournamentMatches,
   addTournament,
-  getPendingCount
+  getPendingCount,
+  getPendingList,
+  acceptTournament,
+  declineTournament
 } = require("./controllers/tournamentCtrl");
 const {
   getAllFollowers,
@@ -55,6 +58,7 @@ module.exports = app => {
   app.get("/api/get-my-matches", getMyMatches);
   app.get("/api/get-my-stats", getMyStats);
   app.get("/api/tournamentpending", getPendingCount);
-  //   app.put("/api/accepttournament/:id", acceptTournament);
-  //   app.put("/api/accepttournament/:id", declineTournament);
+  app.get("/api/tournamentpendinglist", getPendingList);
+  // app.put("/api/accepttournament/:id", acceptTournament);
+  // app.put("/api/declinetournament/:id", declineTournament);
 };
