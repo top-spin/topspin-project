@@ -29,7 +29,7 @@
         <v-btn slot="activator" dark icon>
           <!-- <span class="orange--text">accept tournaments</span> -->
           <v-badge overlap color="orange">
-            <span slot="badge">5</span>
+            <span slot="badge">{{pendingCount}}</span>
             <v-icon large color="grey">notifications</v-icon>
           </v-badge>
         </v-btn>
@@ -37,7 +37,7 @@
         <v-list>
           <v-list-tile v-for="(item, i) in notificationItems" :key="i" @click="notificationActions">
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            <v-btn small depressed @click="accept" color="light-green accent-3">accept &#10004</v-btn>/
+            <v-btn small depressed @click="accept" color="light-green accent-3">accept &#10004;</v-btn>/
             <v-btn small flat @click="decline" color="red darken-3">decline x</v-btn>
           </v-list-tile>
         </v-list>
@@ -87,12 +87,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      notificationItems: [
-        { title: "Pending Acceptance on Tournament FlipFlop" },
-        { title: "Click Me" },
-        { title: "Click Me" },
-        { title: "Click Me 2" }
-      ],
+      pendingCount: "",
+      notificationItems: [{ title: "tournament name", tourney: 0 }],
       drawer: true,
       avatar: [
         {
@@ -130,8 +126,18 @@ export default {
         ];
       })
       .catch(err => console.log(err));
+
     this.$store.dispatch("getUser");
+
+    axios
+      .get("/api/tournamentpending")
+      .then(res => {
+        let pcount = res.data;
+        this.pendingCount = pcount;
+      })
+      .catch(err => console.log(err));
   },
+
   methods: {
     logout() {
       // console.log(this.$store.state.status)
@@ -146,11 +152,13 @@ export default {
       console.log(this.avatar);
       // TODO: this should route to tournament, by tournament id
     },
-    accept() {
-      axios.get();
+    accept(id) {
+      axios.put(`/api/tournament/${id}`);
+      console.log("accepted");
     },
-    decline() {
-      axios.get();
+    decline(id) {
+      axios.put(`/api/tournament/${id}`);
+      console.log("declined");
     }
   }
 };
