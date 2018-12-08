@@ -57,7 +57,7 @@
           <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Round</v-btn>
           <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
           <v-layout class="vertical_align">
-            <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
+            <StartedMatch v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
         </v-flex>
         <v-flex xs2 ml-2>
@@ -72,10 +72,10 @@
     <v-container v-if="!finished">
       <v-layout column wrap>
         <v-flex xs3>
-          <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
+          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
           <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
           <v-layout class="vertical_align">
-            <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
+            <StartedMatch v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
         </v-flex>
         <!-- <v-flex xs3 ml-2>
@@ -104,16 +104,16 @@
 
 <script>
 import MatchBox from "@/components/MatchBox.vue";
-import PreMatchBox from "@/components/PreMatchBox.vue";
+import StartedMatch from "@/components/StartedMatch.vue";
 import WinnerBox from "@/components/WinnerBox.vue";
 import axios from "axios";
 
 export default {
-  name: "TournamentView",
+  name: "StartedTournament",
   components: {
     MatchBox,
     WinnerBox,
-    PreMatchBox
+    StartedMatch
   },
   data() {
     return {
@@ -128,7 +128,6 @@ export default {
   },
   mounted(){
     axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
-      // console.log("pending players ===>",res.data.pendingPlayers)
       if(res.data.acceptedPlayers){
         this.tournament = res.data.tournament
         this.pendingPlayers = res.data.pendingPlayers
@@ -150,67 +149,17 @@ export default {
         })
         let allPlayers = accepted.concat(pending)
         let newArray = []
-        // console.log("testing",res.data.tournament.size/2)
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
           newArray.push({
             player1:allPlayers[i],
-            player2:allPlayers[i+1]
+            player2:allPlayers[i+1],
+            score1:0,
+            score2:0
           })
         }
         this.tournamentArray = newArray
-        console.log(this.tournamentArray)
-      }
-      else{
-        if(res.data.matches.length === 15){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,8)
-            },
-            {
-              matches:res.data.matches.slice(8,12)
-            },
-            {
-              matches:res.data.matches.slice(12,14)
-            },
-            {
-              matches:res.data.matches.slice(14)
-            }
-          ]
-        }
-        else if(res.data.matches.length === 7){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,4)
-            },
-            {
-              matches:res.data.matches.slice(4,6)
-            },
-            {
-              matches:res.data.matches.slice(6)
-            }
-          ]
-        }
-        if(res.data.matches.length === 3){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,3)
-            },
-            {
-              matches:res.data.matches.slice(3)
-            }
-          ]
-        }
-        if(res.data.matches.length === 1){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,1)
-            }
-          ]
-        }
-        // console.log(this.rounds)
-        this.matches = res.data.matches
-        this.tournament = res.data.tournament
+        // console.log(this.tournamentArray)
       }
     }).catch(err=>console.log(err))
   },
@@ -225,10 +174,7 @@ export default {
   },
   methods:{
     toEdit(){
-      this.$router.push("/tournament/edit/"+this.tournament.tournament_id)
-    },
-    toStart(){
-      this.$router.push("/tournament/started/"+this.tournament.tournament_id)
+      console.log(this.tournamentArray)
     }
   }
 }
