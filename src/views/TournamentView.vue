@@ -72,7 +72,7 @@
     <v-container v-if="!finished">
       <v-layout column wrap>
         <v-flex xs3>
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
+          <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
           <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
           <v-layout class="vertical_align">
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
@@ -128,7 +128,7 @@ export default {
   },
   mounted(){
     axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
-      console.log("pending players ===>",res.data.pendingPlayers)
+      // console.log("pending players ===>",res.data.pendingPlayers)
       if(res.data.acceptedPlayers){
         this.tournament = res.data.tournament
         this.pendingPlayers = res.data.pendingPlayers
@@ -150,7 +150,7 @@ export default {
         })
         let allPlayers = accepted.concat(pending)
         let newArray = []
-        console.log("testing",res.data.tournament.size/2)
+        // console.log("testing",res.data.tournament.size/2)
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
           newArray.push({
@@ -226,6 +226,9 @@ export default {
   methods:{
     toEdit(){
       this.$router.push("/tournament/edit/"+this.tournament.tournament_id)
+    },
+    toStart(){
+      this.$router.push("/tournament/started/"+this.tournament.tournament_id)
     }
   }
 }
