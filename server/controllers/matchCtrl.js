@@ -148,10 +148,102 @@ function submitRound(req,res){
     }).catch(console.log)
 
 }
+function getMatchesForTournament(req,res){
+    const db = req.app.get("db");
+    db.query(
+      `
+      select * from tournament
+          where tournament_id = ${req.params.id};
+      `
+    )
+      .then(tournament => {
+        db.query(
+          `
+          select * from match m
+              where m.tournament_id = ${req.params.id}
+              order by m.round;
+          `
+        )
+          .then(matches => {
+            db.query(
+              `
+              select * from topspin_user
+              `
+            )
+              .then(players => {
+                let response = matches.map((obj, i) => {
+                  return {
+                    match_id: obj.match_id,
+                    tournament_id: obj.tournament_id,
+                    winning_score: obj.winning_score,
+                    losing_score: obj.losing_score,
+                    match_winner: players.filter(e => {
+                      // console.log(e)
+                      if (e.user_id === obj.match_winner) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    })[0],
+                    match_loser: players.filter(e => {
+                      // console.log(e)
+                      if (e.user_id === obj.match_loser) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    })[0],
+                    round: obj.round
+                  };
+                });
+                // console.log(tournament)
+                if (tournament[0].date_finished === null) {
+                  db.query(
+                    `
+                          select * from pending_users_in_tournament p
+                              join topspin_user u
+                              on u.user_id = p.user_id
+                              where p.tournament_id = '${req.params.id}';
+                          `
+                  )
+                    .then(pendingPlayers => {
+                      db.query(
+                        `
+                              select * from users_in_tournament p
+                                  join topspin_user u
+                                  on u.user_id = p.user_id
+                                  where p.tournament_id = '${req.params.id}';
+                              `
+                      )
+                        .then(acceptedPlayers => {
+                          res.status(200).json({
+                            tournament: tournament[0],
+                            pendingPlayers,
+                            acceptedPlayers,
+                            finished: false
+                          });
+                        })
+                        .catch(err => console.log(err));
+                    })
+                    .catch(err => console.log(err));
+                } else {
+                  res.status(200).json({
+                    matches: response,
+                    tournamet: tournament[0]
+                  });
+                }
+              })
+              .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+}
 module.exports = {
     getMatchLoser,
     getMatchWinner,
     getMyMatches,
     getMyStats,
-    submitRound
+    submitRound,
+    getMatchesForTournament
 }
