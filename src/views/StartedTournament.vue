@@ -50,7 +50,7 @@ export default {
     };
   },
   mounted(){
-    axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
+    axios.get("/api/started-matches/"+this.$route.params.id).then(res=>{
       if(res.data.acceptedPlayers){
         this.tournament = res.data.tournament
         this.pendingPlayers = res.data.pendingPlayers
