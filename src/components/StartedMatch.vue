@@ -71,7 +71,7 @@ export default {
   border: #424242 3px solid;
 }
 .score1 {
-  width: 25%;
+  width: 40%;
   border-left: #999 2px solid;
   padding-left: 5px;
 }
