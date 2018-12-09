@@ -1,21 +1,31 @@
 <template>
-
   <div class="profile">
     <h1>{{username}}</h1>
 
-    <v-container     >
-      <!-- pic and add friend button -->
-      <v-layout row wrap >
+    <v-container>
+      <!-- pic -->
+      <v-layout row wrap>
         <v-flex xs12 sm3 md3>
-          <img height="128" width="128" :src="avatar" >
+          <img height="128" width="128" :src="avatar">
         </v-flex>
-          
-        <v-flex xs6 sm3 md3>
-          <v-btn flat class="success" @click="addFriend( user_id)">Add Friend </v-btn>
+
+        <!--  -->
+        <v-flex xs6 sm3 md3 v-if="user_id == this.$store.state.user.user_id">
+          <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn>
         </v-flex>
-        <v-flex xs6 sm3 md3>
-          <v-btn flat class="success" @click="deleteFriend( user_id)">Remove Friend </v-btn>
-        </v-flex>
+
+        <div v-else>
+          <!-- Buttons conditional render: add, remove, edit -->
+          <!-- do a get call to grab a list of the users friends. -->
+          <!-- v-if="!friendlist.include(user_id) -->
+          <v-flex xs6 sm3 md3>
+            <v-btn flat class="success" @click="addFriend(user_id)">Add Friend</v-btn>
+          </v-flex>
+          <!-- v-if="frindlist.include(user_id)" -->
+          <v-flex xs6 sm3 md3>
+            <v-btn flat class="success" @click="deleteFriend(user_id)">Remove Friend</v-btn>
+          </v-flex>
+        </div>
       </v-layout>
 
       <!-- ranking and win count -->
@@ -62,48 +72,57 @@
 </template>
 
 <script>
-import Axios from 'axios';
+import Axios from "axios";
 export default {
-  name:"Profile",
-  data(){
-    return{
-      rank:"",
-      name:"",
-      username:"",
-      organization:"",
-      city:"",
-      state:"",
-      dominantHand:"",
-      winCount:"",
-      winPercent:"",
-      avatar:"",
-      user_id:""
-    }
+  name: "Profile",
+  data() {
+    return {
+      rank: "",
+      name: "",
+      username: "",
+      organization: "",
+      city: "",
+      state: "",
+      dominantHand: "",
+      winCount: "",
+      winPercent: "",
+      avatar: "",
+      user_id: "",
+      friendList: []
+    };
   },
-  mounted(){
-    Axios.get("/api/profile/"+this.$route.params.username).then(res=>{
-      console.log(res.data)
-      this.rank = res.data.rank,
-      this.name = res.data.user.name,
-      this.username = res.data.user.username,
-      this.organization = res.data.user.organization,
-      this.city = res.data.user.city,
-      this.state = res.data.user.state,
-      this.dominantHand = res.data.user.dominant_hand,
-      this.winCount = res.data.winCount,
-      this.winPercent = res.data.winPercent,
-      this.avatar = res.data.user.avatar,
-      this.user_id = res.data.user.user_id
-    }).catch(err=>{console.log(err)})
-    
+  mounted() {
+    Axios.get("/api/profile/" + this.$route.params.username)
+      .then(res => {
+        console.log(res.data);
+        (this.rank = res.data.rank),
+          (this.name = res.data.user.name),
+          (this.username = res.data.user.username),
+          (this.organization = res.data.user.organization),
+          (this.city = res.data.user.city),
+          (this.state = res.data.user.state),
+          (this.dominantHand = res.data.user.dominant_hand),
+          (this.winCount = res.data.winCount),
+          (this.winPercent = res.data.winPercent),
+          (this.avatar = res.data.user.avatar),
+          (this.user_id = res.data.user.user_id);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
-  methods:{
-    addFriend(id){
-      Axios.post(`/api/friend/${id}`)
-      console.log(id)
+  methods: {
+    addFriend(id) {
+      Axios.post(`/api/friend/${id}`);
+      // .then getfriends list again
     },
-    deleteFriend(id){
-      Axios.delete(`/api/deletefriend/${id}`)
+    deleteFriend(id) {
+      Axios.delete(`/api/deletefriend/${id}`);
+      // .then getfriends list again
+    },
+    editProfile() {
+      console.log("editProfile Hit");
+      // Axios.put(){}
     }
   }
 };
