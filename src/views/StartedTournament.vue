@@ -1,102 +1,25 @@
 <template>
   <div>
     <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
+    <p v-if="tournament" class="text-xs-center">{{tournament.description}}</p>
+    <p v-if="tournament" class="text-xs-center">{{tournament.size/2-1}} Rounds</p>
     <h1 v-else class="text-xs-center">Tournament</h1>
 
-   <v-container v-if="finished" class="hidden-sm-and-down">
-      <v-layout row wrap>
-        <v-flex v-bind:class="classObject" v-for="(round,i) in rounds" :key="i">
-          <!-- <v-btn class="success">Start Round</v-btn> -->
-          <v-layout class="vertical_align">
-            <MatchBox v-for="(matches,index) in round.matches" :key="index" :match="matches"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 ml-2>
-          <!-- <v-btn>Round 3 Done</v-btn> -->
-          <v-layout class="vertical_align">
-            <WinnerBox :match="matches[matches.length-1]"/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container>
-
-
-    <v-container v-if="finished"  class="hidden-md-and-up">
-      <v-layout column wrap>
-        <v-flex v-for="(round,i) in rounds" :key="i" xs3>
-          <!-- <v-btn class="success">Start Round</v-btn> -->
-          <v-layout class="vertical_align">
-            <MatchBox v-for="(matches,index) in round.matches" :key="index" :match="matches"/>
-          </v-layout>
-        </v-flex>
-        <!-- <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[4]"/>
-            <MatchBox :match="matches[5]"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[6]"/>
-          </v-layout>
-        </v-flex> -->
-        <v-flex xs2 ml-2>
-          <!-- <v-btn>Round 3 Done</v-btn> -->
-          <v-layout class="vertical_align">
-            <WinnerBox :match="matches[matches.length-1]"/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container>
-    
-       <!-- <v-container v-if="!finished" class="hidden-sm-and-down">
-      <v-layout row wrap>
-        <v-flex v-bind:class="classObject">
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Round</v-btn>
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
-          <v-layout class="vertical_align">
-            <StartedMatch v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 ml-2>
-          <v-btn>Round 3 Done</v-btn>
-          <v-layout class="vertical_align">
-            <WinnerBox :match="matches[matches.length-1]"/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container> -->
 
     <v-container v-if="!finished">
       <v-layout column wrap>
         <v-flex xs3>
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
-          <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
+          <v-btn @click="submitRound" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Submit Round</v-btn>
+          <!-- <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn> -->
           <v-layout class="vertical_align">
             <StartedMatch v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
         </v-flex>
-        <!-- <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[4]"/>
-            <MatchBox :match="matches[5]"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[6]"/>
-          </v-layout>
-        </v-flex> -->
-        <v-flex xs2 ml-2>
-          <!-- <v-btn>Round 3 Done</v-btn> -->
+        <!-- <v-flex xs2 ml-2>
           <v-layout class="vertical_align">
             <WinnerBox :match="matches[matches.length-1]"/>
           </v-layout>
-        </v-flex>
+        </v-flex> -->
       </v-layout>
     </v-container>
   </div>
@@ -163,18 +86,35 @@ export default {
       }
     }).catch(err=>console.log(err))
   },
-  computed: {
-    classObject: function () {
-      return {
-        'ml-2':true,
-        'xs2':(this.matches.length===15),
-        'xs3':(this.matches.length!==15)
-      }
-    }
-  },
   methods:{
-    toEdit(){
-      console.log(this.tournamentArray)
+    submitRound(){
+    //   console.log(this.tournamentArray)
+        axios.post("/api/submit-round",{
+            matchesToBe:this.tournamentArray,
+            tournament:this.tournament
+        }).then(res=>{
+        //     let count = this.tournament.size
+        // if(res.data.length===(this.tournament.size/2)){
+        //     count = 
+        // }
+        // else if(+matchCount===(this.tournament.size/4)){
+        //     return rounds3[i]
+        // }
+        // else if(+matchCount===(req.body.tournament.size/8)){
+        //     return rounds4[i]
+        // }
+        let newArray = []
+        for(let i = 0;(res.data.length)>i;i=i+2){
+          // debugger
+          newArray.push({
+            player1:res.data[i],
+            player2:res.data[i+1],
+            score1:0,
+            score2:0
+          })
+        }
+        this.tournamentArray = newArray
+        }).catch(err=>console.log(err))
     }
   }
 }
