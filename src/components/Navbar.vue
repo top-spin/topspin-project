@@ -174,20 +174,16 @@ export default {
         .catch(err => console.log(err));
     },
     accept(id) {
-      // Table: users_in_tournament. insert by tournament_id and user_id.
-      // Table: pending_users_in_tournament. Remove row by tournament_id and user_id.
       axios.put(`/api/accepttournament/${id}`).then(res => {
         this.getpendingcount();
         this.getpendinglist();
       });
-      // console.log("accepted", id);
     },
     decline(id) {
       axios.put(`/api/declinetournament/${id}`).then(res => {
         this.getpendingcount();
         this.getpendinglist();
       });
-      // console.log("declined", id);
     }
   }
 };
