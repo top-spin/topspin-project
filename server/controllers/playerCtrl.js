@@ -1,6 +1,12 @@
 function profileInfo(req,res){
     const db = req.app.get('db')
-    db.topspin_user.find({username:req.params.username}).then(user=>{
+    db.query(`
+    select * from (
+        select row_number() over(order by rating desc) as rank,  * from topspin_user 
+        order by rating desc
+        ) as ur
+        where ur.username = '${req.params.username}';
+    `).then(user=>{
         // res.status(200).json(user)
         
         db.query(`
@@ -20,7 +26,7 @@ function profileInfo(req,res){
                     user:user[0],
                     winCount:winCount[0].count,
                     winPercent:winCount[0].count*100/(+winCount[0].count+(+lossCount[0].count)),
-                    rank:user[0].rating
+                    rank:user[0].rank
                 })
                 
             }).catch(console.log())
@@ -30,10 +36,13 @@ function profileInfo(req,res){
 function searchPlayers(req,res){
     const db = req.app.get('db')
     db.query(`
-    select * from topspin_user
-        where upper(username) like '%${req.query.value.toUpperCase()}%' or
-        upper(name) like '%${req.query.value.toUpperCase()}%' or upper(email) like '%${req.query.value.toUpperCase()}%' or
-        upper(organization) like '%${req.query.value.toUpperCase()}%';
+    select * from (
+        select row_number() over(order by rating desc) as rank,  * from topspin_user 
+        order by rating desc
+        ) as ur
+        where upper(ur.username) like '%${req.query.value.toUpperCase()}%' or
+        upper(ur.name) like '%${req.query.value.toUpperCase()}%' or upper(email) like '%${req.query.value.toUpperCase()}%' or
+        upper(ur.organization) like '%${req.query.value.toUpperCase()}%';
     `).then(results=>{
         res.status(200).json(results)
     }).catch(err=>(console.log(err)))
@@ -41,7 +50,8 @@ function searchPlayers(req,res){
 function getAllPlayers(req,res){
     const db = req.app.get('db')
     db.query(`
-        select * from topspin_user
+    select row_number() over(order by rating desc) as rank,  * from 
+        topspin_user order by rating desc;
     `).then(results=>{
         res.status(200).json(results)
     }).catch(err=>(console.log(err)))

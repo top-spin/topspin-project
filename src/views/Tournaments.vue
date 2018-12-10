@@ -1,16 +1,16 @@
 <template>
   <div>
+    <router-link to="/newtournament">
+      <div class="text-xs-center mt-5">
+        <v-btn large color="success">Create New Tournament</v-btn>
+      </div>
+    </router-link>
     <div class="tournaments_container">
       <UpcomingTourney/>
     </div>
     <div class="tournaments_container">
       <PastTourney/>
     </div>
-    <router-link to="/newtournament">
-      <div class="text-xs-center mt-5">
-        <v-btn large color="success">Create New Tournament</v-btn>
-      </div>
-    </router-link>
   </div>
 </template>
 
