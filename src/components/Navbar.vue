@@ -70,7 +70,7 @@
         <!-- // avatar tile on top -->
         <v-list-tile v-for="av in avatar" :key="av.name" router :to="av.route">
           <v-list-tile-avatar>
-            <img height="128" width="auto" :src="av.image">
+            <img style =  "height:40px; width:40px" :src="av.image">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
