@@ -9,24 +9,59 @@
           <img height="128" width="128" :src="avatar">
         </v-flex>
 
-        <!--  -->
+        <!-- edit button -->
         <v-flex xs6 sm3 md3 v-if="user_id == this.$store.state.user.user_id">
           <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn>
         </v-flex>
 
         <div v-else>
-          <!-- Buttons conditional render: add, remove, edit -->
-          <!-- do a get call to grab a list of the users friends. -->
-          <!-- v-if="!friendlist.include(user_id) -->
-          <v-flex xs6 sm3 md3>
-            <v-btn flat class="success" @click="addFriend(user_id)">Add Friend</v-btn>
+          <!-- add button -->
+          <v-flex xs6 sm3 md3 v-if="!friendList.includes(user_id)">
+            <v-btn flat class="success" @click="addFriend(user_id),snackbaradd = true">Add Friend</v-btn>
           </v-flex>
-          <!-- v-if="frindlist.include(user_id)" -->
-          <v-flex xs6 sm3 md3>
-            <v-btn flat class="success" @click="deleteFriend(user_id)">Remove Friend</v-btn>
+ 
+   
+   
+    <v-snackbar
+      v-model="snackbaradd" 
+      :multi-line="mode === 'multi-line'"
+      :timeout="1200"
+      :vertical="mode === 'vertical'"
+    >
+     Friend Added
+      <v-btn
+        dark
+        flat
+        @click="snackbaradd = false"
+      >
+        Close
+      </v-btn>
+          </v-snackbar>
+
+          <!-- delete button -->
+          <v-flex xs6 sm3 md3 v-if="friendList.includes(user_id)">
+            <v-btn flat class="success" @click="deleteFriend(user_id),snackbardel = true">Remove Friend</v-btn>
           </v-flex>
         </div>
       </v-layout>
+
+
+
+       <v-snackbar
+      v-model="snackbardel" 
+      :multi-line="mode === 'multi-line'"
+      :timeout="1200"
+      :vertical="mode === 'vertical'"
+    >
+     Friend Removed
+      <v-btn
+        dark
+        flat
+        @click="snackbardel = false"
+      >
+        Close
+      </v-btn>
+          </v-snackbar>
 
       <!-- ranking and win count -->
       <v-layout row wrap>
@@ -92,33 +127,51 @@ export default {
     };
   },
   mounted() {
-    Axios.get("/api/profile/" + this.$route.params.username)
-      .then(res => {
-        console.log(res.data);
-        (this.rank = res.data.rank),
-          (this.name = res.data.user.name),
-          (this.username = res.data.user.username),
-          (this.organization = res.data.user.organization),
-          (this.city = res.data.user.city),
-          (this.state = res.data.user.state),
-          (this.dominantHand = res.data.user.dominant_hand),
-          (this.winCount = res.data.winCount),
-          (this.winPercent = res.data.winPercent),
-          (this.avatar = res.data.user.avatar),
-          (this.user_id = res.data.user.user_id);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getProfile();
+    this.getFriendList();
   },
   methods: {
+    getProfile() {
+      Axios.get("/api/profile/" + this.$route.params.username)
+        .then(res => {
+          console.log(res.data);
+          (this.rank = res.data.rank),
+            (this.name = res.data.user.name),
+            (this.username = res.data.user.username),
+            (this.organization = res.data.user.organization),
+            (this.city = res.data.user.city),
+            (this.state = res.data.user.state),
+            (this.dominantHand = res.data.user.dominant_hand),
+            (this.winCount = res.data.winCount),
+            (this.winPercent = res.data.winPercent.toFixed(1)),
+            (this.avatar = res.data.user.avatar),
+            (this.user_id = res.data.user.user_id);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getFriendList() {
+      Axios.get("/api/following/")
+        .then(res => {
+          // console.log(res.data);
+          this.friendList = res.data.map(e => e.user_id);
+          // console.log("friendList:", this.friendList);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     addFriend(id) {
       Axios.post(`/api/friend/${id}`);
-      // .then getfriends list again
+      // alert("Friend added!");
+      this.getFriendList();
     },
     deleteFriend(id) {
       Axios.delete(`/api/deletefriend/${id}`);
-      // .then getfriends list again
+      // add alert
+      // alert("Friend removed.");
+      this.getFriendList();
     },
     editProfile() {
       console.log("editProfile Hit");
