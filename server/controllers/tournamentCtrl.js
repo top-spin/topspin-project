@@ -58,6 +58,7 @@ function tournamentMatches(req, res) {
           )
             .then(players => {
               // console.log("id==>",req.params.id)
+              // console.log(players)
               let response = matches.map((obj, i) => {
                 return {
                   match_id: obj.match_id,

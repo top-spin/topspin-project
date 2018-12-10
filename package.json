@@ -18,6 +18,7 @@
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
     "dropzone": "^5.5.1",
+    "elo-rating": "^1.0.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "hchs-vue-charts": "^1.2.8",

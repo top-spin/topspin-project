@@ -1,3 +1,4 @@
+const elo_rating = require("elo-rating");
 function getMatchWinner(req,res){
     const db = req.app.get('db')
     db.query(`
@@ -135,28 +136,76 @@ function submitRound(req,res){
                     })()
                 }
             })
+            // console.log(matches)
             db.match.insert(matches).then(matchesAdded=>{
-                let matchWinners = matchesAdded.map(match=>{
-                    return "'"+match.match_winner+"'"
-                })
-                db.query(`
-                    select * from topspin_user
-                    where user_id in (${matchWinners.join(",")});
-                `).then(arrayOfWinners=>{
-                    console.log("array of winners",arrayOfWinners)
-                    if(arrayOfWinners.length===1){
-                        db.query(`
-                        update tournament
-                            set date_finished = now(),
-                                tournament_winner = '${arrayOfWinners[0].user_id}'
-                            where tournament_id = '${req.body.tournament.tournament_id}';
-                        `).then(updatedTournament=>{
-                            res.status(200).json(updatedTournament);
-                        }).catch(console.log)
-                    }
-                    else{
-                        res.status(200).json(arrayOfWinners);
-                    }
+                db.topspin_user.find().then(players=>{
+                    // console.log(players)
+                    let response = matchesAdded.map((obj, i) => {
+                        return {
+                          match_id: obj.match_id,
+                          tournament_id: obj.tournament_id,
+                          winning_score: obj.winning_score,
+                          losing_score: obj.losing_score,
+                          match_winner: players.filter(e => {
+                            // console.log(e)
+                            if (e.user_id === obj.match_winner) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          })[0],
+                          match_loser: players.filter(e => {
+                            // console.log(e)
+                            if (e.user_id === obj.match_loser) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          })[0],
+                          round: obj.round
+                        };
+                      });
+                      let playersToUpdate = []
+                      response.map(player=>{
+                          let result = elo_rating.calculate(player.match_winner.rating,player.match_loser.rating,true)
+                          playersToUpdate.push(`('${player.match_winner.user_id}',${result.playerRating})`)
+                          playersToUpdate.push(`('${player.match_loser.user_id}',${result.opponentRating})`)
+                      })
+                      console.log(playersToUpdate)
+                      db.query(`
+                        update topspin_user as u 
+                        set 
+                            rating = u2.rating
+                        from(
+                            values
+                            ${playersToUpdate.join(",")}
+                        ) as u2(user_id,rating)
+                        where u2.user_id = u.user_id;
+                      `).then(updatedPlayers=>{
+                          let matchWinners = matchesAdded.map(match=>{
+                              return "'"+match.match_winner+"'"
+                          })
+                          db.query(`
+                              select * from topspin_user
+                              where user_id in (${matchWinners.join(",")});
+                          `).then(arrayOfWinners=>{
+                              // console.log("array of winners",arrayOfWinners)
+                              if(arrayOfWinners.length===1){
+                                  db.query(`
+                                  update tournament
+                                      set date_finished = now(),
+                                          tournament_winner = '${arrayOfWinners[0].user_id}'
+                                      where tournament_id = '${req.body.tournament.tournament_id}';
+                                  `).then(updatedTournament=>{
+                                      res.status(200).json(updatedTournament);
+                                  }).catch(console.log)
+                              }
+                              else{
+                                  res.status(200).json(arrayOfWinners);
+                              }
+                          }).catch(console.log)
+
+                      }).catch(console.log)
                 }).catch(console.log)
             }).catch(console.log)
     }).catch(console.log)
@@ -247,7 +296,7 @@ function getMatchesForTournament(req,res){
                 else if((matches.length+1)<tournament[0].size) {
                     let numberOfTournaments
                     // console.log(tournament[0].size);
-                    console.log("in else if statement")
+                    // console.log("in else if statement")
                     if((tournament[0].size)===((tournament[0].size/2)+(matches.length))){
                         numberOfTournaments = "1"
                     }
