@@ -6,7 +6,25 @@
       <!-- pic -->
       <v-layout row wrap>
         <v-flex xs12 sm3 md3>
-          <img height="128" width="128" :src="avatar">
+          <!-- <img height="128" width="128" :src="avatar"> -->
+          <v-dialog v-model="dialog" width="500">
+            <!-- <v-btn  color="red lighten-2" dark>Click Me</v-btn> -->
+            <img height="128" width="128" :src="avatar" slot="activator">
+
+            <v-card>
+              <v-card-title class="headline grey lighten-2" primary-title>Privacy Policy</v-card-title>
+
+              <v-card-text>Lorem</v-card-text>
+              <img height="128" width="128" :src="avatar">
+
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" flat @click="dialog = false">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-flex>
 
         <!-- edit button -->
@@ -19,23 +37,14 @@
           <v-flex xs6 sm3 md3 v-if="!friendList.includes(user_id)">
             <v-btn flat class="success" @click="addFriend(user_id)">Add Friend</v-btn>
           </v-flex>
- 
-   
-   
-    <v-snackbar
-      v-model="snackbaradd" 
-      :timeout="1500"
-      :right="true"
-      :bottom="true"
-    >
-     Friend Added
-      <v-btn
-        dark
-        flat
-        @click="snackbaradd = false"
-      >
-        Close
-      </v-btn>
+
+          <v-snackbar
+            v-model="snackbaradd"
+            :timeout="1500"
+            :right="true"
+            :bottom="true"
+          >Friend Added
+            <v-btn dark flat @click="snackbaradd = false">Close</v-btn>
           </v-snackbar>
 
           <!-- delete button -->
@@ -45,23 +54,9 @@
         </div>
       </v-layout>
 
-
-
-       <v-snackbar
-      v-model="snackbardel" 
-      :timeout="1500"
-      :right="true"
-      :bottom="true"
-    >
-     Friend Removed
-      <v-btn
-        dark
-        flat
-        @click="snackbardel = false"
-      >
-        Close
-      </v-btn>
-          </v-snackbar>
+      <v-snackbar v-model="snackbardel" :timeout="1500" :right="true" :bottom="true">Friend Removed
+        <v-btn dark flat @click="snackbardel = false">Close</v-btn>
+      </v-snackbar>
 
       <!-- ranking and win count -->
       <v-layout row wrap>
@@ -124,8 +119,9 @@ export default {
       avatar: "",
       user_id: "",
       friendList: [],
-      snackbardel:false,
-      snackbaradd:false
+      snackbardel: false,
+      snackbaradd: false,
+      dialog: false
     };
   },
   mounted() {
@@ -167,14 +163,14 @@ export default {
     addFriend(id) {
       Axios.post(`/api/friend/${id}`);
       // alert("Friend added!");
-      this.snackbaradd = true
+      this.snackbaradd = true;
       this.getFriendList();
     },
     deleteFriend(id) {
       Axios.delete(`/api/deletefriend/${id}`);
       // add alert
       // alert("Friend removed.");
-      this.snackbardel = true
+      this.snackbardel = true;
       this.getFriendList();
     },
     editProfile() {

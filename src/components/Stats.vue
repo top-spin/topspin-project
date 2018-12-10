@@ -21,7 +21,7 @@
         class="barchart"
         :labels="labels"
         :datasets="datasets"
-        :datalabel="datalabel"
+        :datalabel="label"
         :option="option"
       ></chartjs-horizontal-bar>
     </span>
@@ -35,9 +35,9 @@ export default {
   data() {
     return {
       labels: ["Tournament Wins", "Wins", "Losses"],
-      datalabel: "Games Played",
       datasets: [
         {
+          label: "Games Played",
           backgroundColor: ["#D32F2F", "#F57C00", "#FFD54F"],
           data: []
         }
