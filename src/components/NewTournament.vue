@@ -45,11 +45,9 @@
         </v-layout>
 
         <!-- Button for the next page -->
-        <router-link to="/addtournamentplayers">
           <div class="text-xs-center">
             <v-btn @click="createTournament" color="success">Next</v-btn>
           </div>
-        </router-link>
       </div>
     </v-container>
   </div>
@@ -72,7 +70,7 @@ export default {
     tournamentname: "",
     description: "",
     playercount: ["2", "4", "8", "16"],
-    count:["2", "4", "8", "16"],
+    count:"",
     picker: new Date().toISOString().substr(0, 10),
     tournamentnameRules: [
       v => !!v || "Name is required",
@@ -87,12 +85,18 @@ export default {
   }),
   methods: {
     createTournament() {
+      if(this.tournamentname==="" || this.description==="" || this.count===""){
+        //TODO: jerry add modal
+        alert("Must specify tournament name, description, and number of players!")
+        return
+      }
       this.$store.commit("SET_TOURNAMENT",{
         name:this.tournamentname,
         description:this.description,
         count:+this.count,
         date:moment(this.picker).format("MM-DD-YYYY")
       })
+      this.$router.push("/addtournamentplayers")
       // console.log(this.$store.state)
     }
   }
