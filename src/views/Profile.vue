@@ -1,24 +1,24 @@
 <template>
   <div class="profile">
-    <h1>{{username}}</h1>
 
     <v-container>
+          <h1  >{{username}}</h1>
+
       <!-- pic -->
       <v-layout row wrap>
-        <v-flex xs12 sm3 md3>
+        <v-flex xs12 sm4 md3>
           <!-- <img height="128" width="128" :src="avatar"> -->
-          <v-dialog v-model="dialog" width="500">
+          <v-dialog v-model="dialog" width="900">
             <!-- <v-btn  color="red lighten-2" dark>Click Me</v-btn> -->
-            <img height="128" width="128" :src="avatar" slot="activator">
+            <img height="128" width="auto" :src="avatar" slot="activator">
 
             <v-card>
-              <v-card-title class="headline grey lighten-2" primary-title>Privacy Policy</v-card-title>
+               
 
-              <v-card-text>Lorem</v-card-text>
-              <img height="128" width="128" :src="avatar">
+              <!-- <v-card-text>Lorem</v-card-text> -->
+              <img height="600" width="auto" :src="avatar">
 
-              <v-divider></v-divider>
-
+ 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click="dialog = false">Close</v-btn>
@@ -182,4 +182,5 @@ export default {
 </script>
 
 <style>
+
 </style>
