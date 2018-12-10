@@ -22,11 +22,8 @@
  
    
    
-    <v-snackbar
-      v-model="snackbaradd" 
-      :multi-line="mode === 'multi-line'"
+    <v-snackbar 
       :timeout="1200"
-      :vertical="mode === 'vertical'"
     >
      Friend Added
       <v-btn
@@ -48,10 +45,7 @@
 
 
        <v-snackbar
-      v-model="snackbardel" 
-      :multi-line="mode === 'multi-line'"
       :timeout="1200"
-      :vertical="mode === 'vertical'"
     >
      Friend Removed
       <v-btn
