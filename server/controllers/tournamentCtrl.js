@@ -45,9 +45,9 @@ function tournamentMatches(req, res) {
     .then(tournament => {
       db.query(
         `
-        select * from match m
-            where m.tournament_id = ${req.params.id}
-            order by m.round;
+        select * from match
+            where tournament_id = '${req.params.id}'
+            order by round;
         `
       )
         .then(matches => {
@@ -57,6 +57,7 @@ function tournamentMatches(req, res) {
             `
           )
             .then(players => {
+              // console.log("id==>",req.params.id)
               let response = matches.map((obj, i) => {
                 return {
                   match_id: obj.match_id,
@@ -82,7 +83,7 @@ function tournamentMatches(req, res) {
                   round: obj.round
                 };
               });
-              // console.log(tournament)
+              // console.log(response)
               if (tournament[0].date_finished === null) {
                 db.query(
                   `
@@ -115,7 +116,7 @@ function tournamentMatches(req, res) {
               } else {
                 res.status(200).json({
                   matches: response,
-                  tournamet: tournament[0]
+                  tournament: tournament[0]
                 });
               }
             })

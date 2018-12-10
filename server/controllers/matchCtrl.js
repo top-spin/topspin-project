@@ -119,16 +119,17 @@ function submitRound(req,res){
                         }
                     })(),
                     round:(()=>{
+                        let {tournament} = req.body
                         if(+matchCount===0){
                             return rounds1[i]
                         }
-                        else if(+matchCount===(req.body.tournament.size/2)){
+                        else if((tournament.size)===((tournament.size/2)+(+matchCount))){
                             return rounds2[i]
                         }
-                        else if(+matchCount===(req.body.tournament.size/4)){
+                        else if((tournament.size)===((tournament.size/4)+(+matchCount))){
                             return rounds3[i]
                         }
-                        else if(+matchCount===(req.body.tournament.size/8)){
+                        else if((tournament.size)===((tournament.size/8)+(+matchCount))){
                             return rounds4[i]
                         }
                     })()
@@ -142,7 +143,20 @@ function submitRound(req,res){
                     select * from topspin_user
                     where user_id in (${matchWinners.join(",")});
                 `).then(arrayOfWinners=>{
-                    res.status(200).json(arrayOfWinners);
+                    console.log("array of winners",arrayOfWinners)
+                    if(arrayOfWinners.length===1){
+                        db.query(`
+                        update tournament
+                            set date_finished = now(),
+                                tournament_winner = '${arrayOfWinners[0].user_id}'
+                            where tournament_id = '${req.body.tournament.tournament_id}';
+                        `).then(updatedTournament=>{
+                            res.status(200).json(updatedTournament);
+                        }).catch(console.log)
+                    }
+                    else{
+                        res.status(200).json(arrayOfWinners);
+                    }
                 }).catch(console.log)
             }).catch(console.log)
     }).catch(console.log)
@@ -171,6 +185,9 @@ function getMatchesForTournament(req,res){
               `
             )
               .then(players => {
+                //   console.log(matches.length)
+                //   console.log(tournament[0].size)
+                //   console.log(matches.length<tournament[0].size || matches.length===0)
                 let response = matches.map((obj, i) => {
                   return {
                     match_id: obj.match_id,
@@ -197,7 +214,7 @@ function getMatchesForTournament(req,res){
                   };
                 });
                 // console.log(tournament)
-                if (tournament[0].date_finished === null) {
+                if (tournament[0].date_finished === null && matches.length === 0) {
                   db.query(
                     `
                           select * from pending_users_in_tournament p
@@ -226,10 +243,43 @@ function getMatchesForTournament(req,res){
                         .catch(err => console.log(err));
                     })
                     .catch(err => console.log(err));
-                } else {
+                }
+                else if((matches.length+1)<tournament[0].size) {
+                    let numberOfTournaments
+                    // console.log(tournament[0].size);
+                    console.log("in else if statement")
+                    if((tournament[0].size)===((tournament[0].size/2)+(matches.length))){
+                        numberOfTournaments = "1"
+                    }
+                    else if((tournament[0].size)===((tournament[0].size/4)+(matches.length))){
+                        numberOfTournaments = "2"
+                    }
+                    else if((tournament[0].size)===((tournament[0].size/8)+(matches.length))){
+                        numberOfTournaments = "3"
+                    }
+                    // console.log(numberOfTournaments)
+                    let matchesAdded = matches.filter(match=>{return match.round.includes(numberOfTournaments)})
+                    // console.log(matches)
+                    // console.log(matchesAdded)
+                    let matchWinners = matchesAdded.map(match=>{
+                        return "'"+match.match_winner+"'"
+                    })
+                    db.query(`
+                        select * from topspin_user
+                        where user_id in (${matchWinners.join(",")});
+                    `).then(arrayOfWinners=>{
+                        res.status(200).json({
+                            winners:arrayOfWinners,
+                            notFinished: true,
+                            tournament:tournament[0],
+                            finished:false
+                        });
+                    }).catch(console.log)
+                }
+                else {
                   res.status(200).json({
                     matches: response,
-                    tournamet: tournament[0]
+                    tournament: tournament[0]
                   });
                 }
               })

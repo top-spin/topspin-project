@@ -128,7 +128,7 @@ export default {
   },
   mounted(){
     axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
-      // console.log("pending players ===>",res.data.pendingPlayers)
+      console.log(res.data)
       if(res.data.acceptedPlayers){
         this.tournament = res.data.tournament
         this.pendingPlayers = res.data.pendingPlayers

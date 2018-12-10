@@ -2,7 +2,7 @@
   <div>
     <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
     <p v-if="tournament" class="text-xs-center">{{tournament.description}}</p>
-    <p v-if="tournament" class="text-xs-center">{{tournament.size/2-1}} Rounds</p>
+    <p v-if="tournament" class="text-xs-center">{{numberOfRounds()}} Round(s)</p>
     <h1 v-else class="text-xs-center">Tournament</h1>
 
 
@@ -50,7 +50,58 @@ export default {
     };
   },
   mounted(){
-    axios.get("/api/started-matches/"+this.$route.params.id).then(res=>{
+    this.getRounds();
+  },
+  methods:{
+    submitRound(){
+    //   console.log(this.tournamentArray)
+        axios.post("/api/submit-round",{
+            matchesToBe:this.tournamentArray,
+            tournament:this.tournament
+        }).then(res=>{
+            console.log("response of tournament",res.data)
+        //     let count = this.tournament.size
+        // if(res.data.length===(this.tournament.size/2)){
+        //     count = 
+        // }
+        // else if(+matchCount===(this.tournament.size/4)){
+        //     return rounds3[i]
+        // }
+        // else if(+matchCount===(req.body.tournament.size/8)){
+        //     return rounds4[i]
+        // }
+        // console.log(res.data)
+        // let newArray = []
+        // for(let i = 0;(res.data.length)>i;i=i+2){
+        //   // debugger
+        //   newArray.push({
+        //     player1:res.data[i],
+        //     player2:res.data[i+1],
+        //     score1:0,
+        //     score2:0
+        //   })
+        // }
+        // this.tournamentArray = newArray
+        // console.log(this.tournamentArray)
+        this.getRounds();
+        }).catch(err=>console.log(err))
+    },
+    numberOfRounds(){
+        let size = this.tournament.size
+        let count = 0
+        let currentRound = 0;
+        let numberOfMatches = this.matches.length
+        if(this.tournament.size){
+            while(size!==1){
+                size = size/2;
+                count++;
+            }
+        }
+        return count;
+    },
+    getRounds(){
+        axios.get("/api/started-matches/"+this.$route.params.id).then(res=>{
+        console.log(res.data)
       if(res.data.acceptedPlayers){
         this.tournament = res.data.tournament
         this.pendingPlayers = res.data.pendingPlayers
@@ -82,39 +133,29 @@ export default {
           })
         }
         this.tournamentArray = newArray
-        // console.log(this.tournamentArray)
+        console.log(this.tournamentArray)
       }
-    }).catch(err=>console.log(err))
-  },
-  methods:{
-    submitRound(){
-    //   console.log(this.tournamentArray)
-        axios.post("/api/submit-round",{
-            matchesToBe:this.tournamentArray,
-            tournament:this.tournament
-        }).then(res=>{
-        //     let count = this.tournament.size
-        // if(res.data.length===(this.tournament.size/2)){
-        //     count = 
-        // }
-        // else if(+matchCount===(this.tournament.size/4)){
-        //     return rounds3[i]
-        // }
-        // else if(+matchCount===(req.body.tournament.size/8)){
-        //     return rounds4[i]
-        // }
+      else if(res.data.notFinished){
+        //   console.log("hello")
         let newArray = []
-        for(let i = 0;(res.data.length)>i;i=i+2){
+        for(let i = 0;(res.data.winners.length)>i;i=i+2){
           // debugger
           newArray.push({
-            player1:res.data[i],
-            player2:res.data[i+1],
+            player1:res.data.winners[i],
+            player2:res.data.winners[i+1],
             score1:0,
             score2:0
           })
         }
         this.tournamentArray = newArray
-        }).catch(err=>console.log(err))
+        this.tournament = res.data.tournament,
+        this.finished = res.data.finished
+        // console.log(this.tournamentArray)
+      }
+      else if(res.data.matches.length === (res.data.tournament.size)-1){
+          this.$router.push("/tournament/view/"+res.data.tournament.tournament_id)
+      }
+    }).catch(err=>console.log(err))
     }
   }
 }
