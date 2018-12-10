@@ -45,9 +45,18 @@
         </v-layout>
 
         <!-- Button for the next page -->
-          <div class="text-xs-center">
-            <v-btn @click="createTournament" color="success">Next</v-btn>
-          </div>
+        <div class="text-xs-center">
+          <v-btn @click="createTournament" color="success">Next</v-btn>
+        </div>
+
+        <v-snackbar
+          v-model="snackbarcompleteform"
+          :timeout="3000"
+          :right="true"
+          :bottom="true"
+        >Must specify tournament name, description, and number of players!
+          <v-btn dark flat @click="snackbarcompleteform=false">Close</v-btn>
+        </v-snackbar>
       </div>
     </v-container>
   </div>
@@ -70,7 +79,7 @@ export default {
     tournamentname: "",
     description: "",
     playercount: ["2", "4", "8", "16"],
-    count:"",
+    count: "",
     picker: new Date().toISOString().substr(0, 10),
     tournamentnameRules: [
       v => !!v || "Name is required",
@@ -81,22 +90,26 @@ export default {
       v => v.length <= 100 || "Name must be less than 100 characters"
     ],
     playercountRules: [v => !!v || "Player count is required"],
-    stateRules: [v => !!v || "Start date is required"]
+    stateRules: [v => !!v || "Start date is required"],
+    snackbarcompleteform: false
   }),
   methods: {
     createTournament() {
-      if(this.tournamentname==="" || this.description==="" || this.count===""){
-        //TODO: jerry add modal
-        alert("Must specify tournament name, description, and number of players!")
-        return
+      if (
+        this.tournamentname === "" ||
+        this.description === "" ||
+        this.count === ""
+      ) {
+        this.snackbarcompleteform = true;
+        return;
       }
-      this.$store.commit("SET_TOURNAMENT",{
-        name:this.tournamentname,
-        description:this.description,
-        count:+this.count,
-        date:moment(this.picker).format("MM-DD-YYYY")
-      })
-      this.$router.push("/addtournamentplayers")
+      this.$store.commit("SET_TOURNAMENT", {
+        name: this.tournamentname,
+        description: this.description,
+        count: +this.count,
+        date: moment(this.picker).format("MM-DD-YYYY")
+      });
+      this.$router.push("/addtournamentplayers");
       // console.log(this.$store.state)
     }
   }

@@ -49,6 +49,7 @@
         </v-list-tile>
       </div>
 
+      <!-- players in tournament -->
       <h2 class="playerslist">Tournament Players ({{tournament.size}})</h2>
 
       <v-list>
@@ -63,12 +64,17 @@
             <v-list-tile-title v-else>{{player.username}}</v-list-tile-title>
           </v-list-tile-content>
 
+          <!-- submit button -->
           <v-btn @click="removePlayer(player, i)" flat color="primary">x</v-btn>
         </v-list-tile>
       </v-list>
       <div>
         <div class="text-xs-center">
-          <v-btn @click="editTournament" :disabled="playersList.length<tournament.size" color="success">Submit Tournament Players</v-btn>
+          <v-btn
+            @click="editTournament"
+            :disabled="playersList.length<tournament.size"
+            color="success"
+          >Submit Tournament Players</v-btn>
         </div>
       </div>
       <!-- suggested players pulled from friends list -->
@@ -76,11 +82,25 @@
         <h2>Suggested Players to Add</h2>
         <Followinglist :addPlayer="addPlayer"/>
       </div>
-
-      <!-- players in tournament -->
-
-      <!-- submit button -->
     </v-container>
+
+    <v-snackbar
+      v-model="snackbarduplicate"
+      :timeout="2000"
+      :right="true"
+      :bottom="true"
+    >Player has already been added to tournament
+      <v-btn dark flat @click="snackbarduplicate=false">Close</v-btn>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="snackbarmax"
+      :timeout="1500"
+      :right="true"
+      :bottom="true"
+    >Tournament is full
+      <v-btn dark flat @click="snackbarmax=false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -99,117 +119,120 @@ export default {
     PreMatchBox,
     Followinglist
   },
-data() {
+  data() {
     return {
-      matches:[],
-      rounds:[],
-      tournament:{},
-      pendingPlayers:[],
-      acceptedPlayers:[],
-      finished:true,
-      tournamentArray:[],
+      matches: [],
+      rounds: [],
+      tournament: {},
+      pendingPlayers: [],
+      acceptedPlayers: [],
+      finished: true,
+      tournamentArray: [],
       playersList: [],
       loading: false,
       search_value: "",
       players: [],
-      allPlayers:[]
+      allPlayers: [],
+      snackbarduplicate: false,
+      snackbarmax: false
     };
   },
-  mounted(){
-    axios.get("/api/tournament-matches/"+this.$route.params.id).then(res=>{
-      console.log("pending players ===>",res.data.pendingPlayers)
-      if(res.data.acceptedPlayers){
-        this.tournament = res.data.tournament
-        this.pendingPlayers = res.data.pendingPlayers
-        this.acceptedPlayers = res.data.acceptedPlayers
-        this.finished = res.data.finished
-        // debugger;
-        let pending = this.pendingPlayers.map(player=>{
-          if(player.rejected){
-            player.type = "rejected"
+  mounted() {
+    axios
+      .get("/api/tournament-matches/" + this.$route.params.id)
+      .then(res => {
+        console.log("pending players ===>", res.data.pendingPlayers);
+        if (res.data.acceptedPlayers) {
+          this.tournament = res.data.tournament;
+          this.pendingPlayers = res.data.pendingPlayers;
+          this.acceptedPlayers = res.data.acceptedPlayers;
+          this.finished = res.data.finished;
+          // debugger;
+          let pending = this.pendingPlayers.map(player => {
+            if (player.rejected) {
+              player.type = "rejected";
+            } else {
+              player.type = "pending";
+            }
+            return player;
+          });
+          let accepted = this.acceptedPlayers.map(player => {
+            player.type = "accepted";
+            return player;
+          });
+          let allPlayers = accepted.concat(pending);
+          this.allPlayers = allPlayers;
+          this.playersList = allPlayers;
+          let newArray = [];
+          console.log("testing", res.data.tournament.size / 2);
+          for (let i = 0; res.data.tournament.size > i; i = i + 2) {
+            // debugger
+            newArray.push({
+              player1: allPlayers[i],
+              player2: allPlayers[i + 1]
+            });
           }
-          else{
-            player.type = "pending"
+          this.tournamentArray = newArray;
+          console.log(this.tournamentArray);
+        } else {
+          if (res.data.matches.length === 15) {
+            this.rounds = [
+              {
+                matches: res.data.matches.slice(0, 8)
+              },
+              {
+                matches: res.data.matches.slice(8, 12)
+              },
+              {
+                matches: res.data.matches.slice(12, 14)
+              },
+              {
+                matches: res.data.matches.slice(14)
+              }
+            ];
+          } else if (res.data.matches.length === 7) {
+            this.rounds = [
+              {
+                matches: res.data.matches.slice(0, 4)
+              },
+              {
+                matches: res.data.matches.slice(4, 6)
+              },
+              {
+                matches: res.data.matches.slice(6)
+              }
+            ];
           }
-          return player
-        })
-        let accepted = this.acceptedPlayers.map(player=>{
-          player.type = "accepted"
-          return player
-        })
-        let allPlayers = accepted.concat(pending)
-        this.allPlayers = allPlayers
-        this.playersList = allPlayers
-        let newArray = []
-        console.log("testing",res.data.tournament.size/2)
-        for(let i = 0;(res.data.tournament.size)>i;i=i+2){
-          // debugger
-          newArray.push({
-            player1:allPlayers[i],
-            player2:allPlayers[i+1]
-          })
+          if (res.data.matches.length === 3) {
+            this.rounds = [
+              {
+                matches: res.data.matches.slice(0, 3)
+              },
+              {
+                matches: res.data.matches.slice(3)
+              }
+            ];
+          }
+          if (res.data.matches.length === 1) {
+            this.rounds = [
+              {
+                matches: res.data.matches.slice(0, 1)
+              }
+            ];
+          }
+          // console.log(this.rounds)
+          this.matches = res.data.matches;
+          this.tournament = res.data.tournament;
         }
-        this.tournamentArray = newArray
-        console.log(this.tournamentArray)
-      }
-      else{
-        if(res.data.matches.length === 15){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,8)
-            },
-            {
-              matches:res.data.matches.slice(8,12)
-            },
-            {
-              matches:res.data.matches.slice(12,14)
-            },
-            {
-              matches:res.data.matches.slice(14)
-            }
-          ]
-        }
-        else if(res.data.matches.length === 7){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,4)
-            },
-            {
-              matches:res.data.matches.slice(4,6)
-            },
-            {
-              matches:res.data.matches.slice(6)
-            }
-          ]
-        }
-        if(res.data.matches.length === 3){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,3)
-            },
-            {
-              matches:res.data.matches.slice(3)
-            }
-          ]
-        }
-        if(res.data.matches.length === 1){
-          this.rounds = [
-            {
-              matches:res.data.matches.slice(0,1)
-            }
-          ]
-        }
-        // console.log(this.rounds)
-        this.matches = res.data.matches
-        this.tournament = res.data.tournament
-      }
-    }).catch(err=>console.log(err))
+      })
+      .catch(err => console.log(err));
   },
 
-  methods:{
+  methods: {
     searchPlayers() {
       this.loading = true;
-      axios.get("/api/players?value=" + this.search_value)
+      axios
+        .get("/api/players?value=" + this.search_value)
         .then(res => {
           this.loading = false;
           // console.log(res.data);
@@ -221,33 +244,42 @@ data() {
     addPlayer(player) {
       // console.log(this.playersList);
       if (+this.playersList.length == this.tournament.size) {
+        this.snackbarmax = true;
         return;
       }
-      if (this.playersList.some(user=>{
-        return player.user_id === user.user_id
-      })){
-        console.log("Already exists.")
-         return
-      };
+      if (
+        this.playersList.some(user => {
+          return player.user_id === user.user_id;
+        })
+      ) {
+        console.log("Already exists.");
+        this.snackbarduplicate = true;
+        return;
+      }
       this.playersList.push(player);
       this.search_value = "";
       // console.log(this.playersList);
     },
     // remove a player from the list
     removePlayer(player, index) {
-      if(player.user_id === this.$store.state.user.user_id) return
+      if (player.user_id === this.$store.state.user.user_id) return;
       this.playersList.splice(index, 1);
     },
     editTournament() {
-      axios.put("/api/edit-tournament/"+this.tournament.tournament_id,{
-        players:this.playersList
-      }).then(res=>{
-        // console.log(res.data)
-        this.$router.push("/tournament/view/"+this.tournament.tournament_id)
-      }).catch(err=>console.log(err))
+      axios
+        .put("/api/edit-tournament/" + this.tournament.tournament_id, {
+          players: this.playersList
+        })
+        .then(res => {
+          // console.log(res.data)
+          this.$router.push(
+            "/tournament/view/" + this.tournament.tournament_id
+          );
+        })
+        .catch(err => console.log(err));
     }
   }
-}
+};
 </script>
 
 <style>
