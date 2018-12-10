@@ -14,7 +14,7 @@
           <v-chip small>{{followingCount}}</v-chip>
         </v-btn>
         <v-btn @click="followersbutton" large color="grey white--text">Followers
-          <v-chip small>{{followersCount}}</v-chip>
+          <v-chip small class="friendsChip">{{followersCount}}</v-chip>
         </v-btn>
       </v-flex>
       <Followinglist/>
@@ -61,16 +61,19 @@ export default {
   data() {
     return {
       showfollowing: true,
-      followingCount: "" ,
+      followingCount: "",
       followersCount: ""
     };
   },
   mounted() {
-          axios.get("/api/friendcount").then(res=>{
-            let counts=res.data 
-            this.followingCount = counts[0]
-            this.followersCount = counts[1]
-         }).catch(err=>console.log(err))
+    axios
+      .get("/api/friendcount")
+      .then(res => {
+        let counts = res.data;
+        this.followingCount = counts[0];
+        this.followersCount = counts[1];
+      })
+      .catch(err => console.log(err));
   },
   methods: {
     followingbutton() {
@@ -84,7 +87,6 @@ export default {
 </script>
 
 <style>
-/* .players */
 </style>
 
  
