@@ -42,7 +42,7 @@ export default {
     mounted(){
         axios.get("/api/get-my-matches").then(res=>{
           console.log(res.data)
-          this.matches = res.data.slice(0,3)
+          this.matches = res.data.slice(0,10)
         }).catch(err=>console.log(err))
 
     } 

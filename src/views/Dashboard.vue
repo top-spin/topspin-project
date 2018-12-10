@@ -9,7 +9,7 @@
       </v-layout>
 
       <v-layout row wrap class="bottomrow">
-        <Standings class="stand"/>
+        <TopPlayers class="stand"/>
         <RecentMatches class="rm"/>
       </v-layout>
     </v-container>
@@ -18,7 +18,7 @@
       <v-layout column wrap>
         <Stats class="smallcontainers"/>
         <UpcomingTourney class="smallcontainers"/>
-        <Standings class="smallcontainers"/>
+        <TopPlayers class="smallcontainers"/>
         <RecentMatches class="smallcontainers"/>
       </v-layout>
     </v-container>
@@ -28,14 +28,14 @@
 <script>
 import Stats from "@/components/Stats.vue";
 import UpcomingTourney from "@/components/UpcomingTourney.vue";
-import Standings from "@/components/Standings.vue";
+import TopPlayers from "@/components/TopPlayers.vue";
 import RecentMatches from "@/components/RecentMatches.vue";
 
 export default {
   components: {
     Stats,
     UpcomingTourney,
-    Standings,
+    TopPlayers,
     RecentMatches
   },
   data() {
