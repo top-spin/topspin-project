@@ -56,7 +56,7 @@
                 <v-list-tile-sub-title v-html="player.email"></v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
-              <v-list-tile-sub-title v-if="player.rating">Rank: #{{player.rating}}</v-list-tile-sub-title>
+              <v-list-tile-sub-title v-if="player.rating">Rank: #{{player.rank}}</v-list-tile-sub-title>
               </v-list-tile-action>
               </v-list-tile>
     </div>

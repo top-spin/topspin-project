@@ -35,25 +35,26 @@
         <div v-else>
           <!-- add button -->
           <v-flex xs6 sm3 md3 v-if="!friendList.includes(user_id)">
-            <v-btn flat class="success" @click="addFriend(user_id),snackbaradd = true">Add Friend</v-btn>
+            <v-btn flat class="success" @click="addFriend(user_id)">Add Friend</v-btn>
           </v-flex>
 
-          <v-snackbar :timeout="1200">Friend Added
+          <v-snackbar
+            v-model="snackbaradd"
+            :timeout="1500"
+            :right="true"
+            :bottom="true"
+          >Friend Added
             <v-btn dark flat @click="snackbaradd = false">Close</v-btn>
           </v-snackbar>
 
           <!-- delete button -->
           <v-flex xs6 sm3 md3 v-if="friendList.includes(user_id)">
-            <v-btn
-              flat
-              class="success"
-              @click="deleteFriend(user_id),snackbardel = true"
-            >Remove Friend</v-btn>
+            <v-btn flat class="success" @click="deleteFriend(user_id)">Remove Friend</v-btn>
           </v-flex>
         </div>
       </v-layout>
 
-      <v-snackbar :timeout="1200">Friend Removed
+      <v-snackbar v-model="snackbardel" :timeout="1500" :right="true" :bottom="true">Friend Removed
         <v-btn dark flat @click="snackbardel = false">Close</v-btn>
       </v-snackbar>
 
@@ -118,6 +119,8 @@ export default {
       avatar: "",
       user_id: "",
       friendList: [],
+      snackbardel: false,
+      snackbaradd: false,
       dialog: false
     };
   },
@@ -160,12 +163,14 @@ export default {
     addFriend(id) {
       Axios.post(`/api/friend/${id}`);
       // alert("Friend added!");
+      this.snackbaradd = true;
       this.getFriendList();
     },
     deleteFriend(id) {
       Axios.delete(`/api/deletefriend/${id}`);
       // add alert
       // alert("Friend removed.");
+      this.snackbardel = true;
       this.getFriendList();
     },
     editProfile() {
