@@ -17,15 +17,51 @@
         <div v-else>
           <!-- add button -->
           <v-flex xs6 sm3 md3 v-if="!friendList.includes(user_id)">
-            <v-btn flat class="success" @click="addFriend(user_id)">Add Friend</v-btn>
+            <v-btn flat class="success" @click="addFriend(user_id),snackbaradd = true">Add Friend</v-btn>
           </v-flex>
+ 
+   
+   
+    <v-snackbar
+      v-model="snackbaradd" 
+      :multi-line="mode === 'multi-line'"
+      :timeout="1200"
+      :vertical="mode === 'vertical'"
+    >
+     Friend Added
+      <v-btn
+        dark
+        flat
+        @click="snackbaradd = false"
+      >
+        Close
+      </v-btn>
+          </v-snackbar>
 
           <!-- delete button -->
           <v-flex xs6 sm3 md3 v-if="friendList.includes(user_id)">
-            <v-btn flat class="success" @click="deleteFriend(user_id)">Remove Friend</v-btn>
+            <v-btn flat class="success" @click="deleteFriend(user_id),snackbardel = true">Remove Friend</v-btn>
           </v-flex>
         </div>
       </v-layout>
+
+
+
+       <v-snackbar
+      v-model="snackbardel" 
+      :multi-line="mode === 'multi-line'"
+      :timeout="1200"
+      :vertical="mode === 'vertical'"
+    >
+     Friend Removed
+      <v-btn
+        dark
+        flat
+        @click="snackbardel = false"
+      >
+        Close
+      </v-btn>
+          </v-snackbar>
 
       <!-- ranking and win count -->
       <v-layout row wrap>
@@ -128,13 +164,13 @@ export default {
     },
     addFriend(id) {
       Axios.post(`/api/friend/${id}`);
-      alert("Friend added!");
+      // alert("Friend added!");
       this.getFriendList();
     },
     deleteFriend(id) {
       Axios.delete(`/api/deletefriend/${id}`);
       // add alert
-      alert("Friend removed.");
+      // alert("Friend removed.");
       this.getFriendList();
     },
     editProfile() {
