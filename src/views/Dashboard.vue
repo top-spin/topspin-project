@@ -50,36 +50,38 @@ export default {
 <style>
 .toprow {
   height: 60%;
-  /* border: 1px red solid; */
 }
 .bottomrow {
   height: 40%;
-  /* border: 1px red solid; */
 }
 .stat {
-  width: 50%;
+  width: 48%;
+  margin-right: 2%;
   margin-bottom: 2%;
+  /* margin-bottom: 2%; */
   border: 3px #424242 solid;
-  /* border: 1px red solid; */
 }
 .ut {
-  width: 40%;
-  margin-left: 5%;
-  margin-top: 3%;
+  width: 48%;
+  /* width: 40%; */
+  margin-bottom: 2%;
+  /* margin-left: 5%; */
+  /* margin-top: 3%; */
   border: 3px #424242 solid;
-  /* border: 1px green solid; */
 }
 .stand {
-  width: 45%;
-  margin-right: 5%;
+  width: 48%;
+  margin-right: 2%;
+
+  /* width: 45%; */
+  /* margin-right: 5%; */
   border: 3px #424242 solid;
-  /* border: 1px blue solid; */
 }
 .rm {
-  width: 45%;
-  margin-top: 2%;
+  width: 48%;
+  /* width: 45%; */
+  /* margin-top: 2%; */
   border: 3px #424242 solid;
-  /* border: 1px purple solid; */
 }
 .smallcontainers {
   border: 2px #424242 solid;
