@@ -24,7 +24,6 @@
         </v-flex>
       </v-layout>
 
-      <!-- display searched players -->
       <div
         class="text-xs-center"
         v-if="search_value === null || search_value.length!==0"
@@ -48,15 +47,8 @@
           </v-list-tile-action>
         </v-list-tile>
       </div>
-
-      <!-- suggested players pulled from friends list -->
-      <div>
-        <h2>Suggested Players to Add</h2>
-        <Followinglist :addPlayer="addPlayer"/>
-      </div>
-
       <!-- players in tournament -->
-      <h2 class="playerslist">Tournament Players ({{this.$store.state.pending_tournament.count}})</h2>
+      <h2 class="playerslist">Tournament Players ({{playersList.length}} of {{this.$store.state.pending_tournament.count}})</h2>
 
       <v-list>
         <v-list-tile v-for="(player, i) in playersList" :key="player.username">
@@ -75,9 +67,17 @@
       <!-- submit button -->
       <div>
         <div class="text-xs-center">
-          <v-btn @click="submitTournament" color="success">Submit Tournament Players</v-btn>
+          <v-btn @click="submitTournament" :disabled="+playersList.length<+this.$store.state.pending_tournament.count" color="success">Submit Tournament Players</v-btn>
         </div>
       </div>
+      <!-- display searched players -->
+
+      <!-- suggested players pulled from friends list -->
+      <div>
+        <h2>Suggested Players to Add</h2>
+        <Followinglist :addPlayer="addPlayer"/>
+      </div>
+
     </v-container>
   </div>
 </template>
@@ -104,6 +104,9 @@ export default {
     search_value: "",
     players: []
   }),
+  mounted(){
+    this.playersList.push(this.$store.state.user);
+  },
   methods: {
     searchPlayers() {
       this.loading = true;
@@ -121,12 +124,21 @@ export default {
       if (+this.playersList.length == +this.$store.state.pending_tournament.count) {
         return;
       }
+      if (this.playersList.some(user=>{
+        return player.user_id === user.user_id
+      })){
+        console.log("Already exists.")
+         return
+      };
+      this.playersList.push(player);
+      this.search_value = "";
       if (this.playersList.includes(player)) return;
       this.playersList.push(player);
       console.log(this.playersList);
     },
     // remove a player from the list
     removePlayer(player, index) {
+      if(player.user_id === this.$store.state.user.user_id) return
       this.playersList.splice(index, 1);
     },
     submitTournament() {
@@ -135,6 +147,7 @@ export default {
         tournament:this.$store.state.pending_tournament
       }).then(res=>{
         console.log(res.data)
+        this.$router.push("/tournament/view/"+res.data.newTournament.tournament_id)
       }).catch(err=>console.log(err))
     }
   }

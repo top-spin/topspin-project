@@ -324,8 +324,8 @@ function editPlayers(req, res) {
                 }
               }
             }, "");
-          // console.log(playersToAdd)
-          // console.log(playersToRemove)
+          console.log(playersToAdd)
+          console.log(playersToRemove)
           if (playersToAdd !== "" && playersToRemove !== "") {
             db.query(
               `
