@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-xs-center">Chat (might change to Messages)</h1>
+    <h1 class="text-xs-center">Chat</h1>
     <!-- <v-container> -->
     <MessageList class="messagelist"/>
     <!-- </v-container> -->
