@@ -8,7 +8,7 @@
     <div class="tournaments_container">
       <UpcomingTourney/>
     </div>
-    <div class="tournaments_container">
+    <div class="tournaments_container" style= "margin-bottom:10vh;">
       <PastTourney/>
     </div>
   </div>

@@ -9,13 +9,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/account",
-      name: "account",
-
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Account.vue")
-    },
-    {
       path: "/chat",
       name: "chat",
 
