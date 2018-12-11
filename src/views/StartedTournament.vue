@@ -121,13 +121,32 @@ export default {
           player.type = "accepted"
           return player
         })
-        let allPlayers = accepted.concat(pending)
+            let semiSorted = accepted.concat(pending).sort((a,b)=>{
+              return +a.rank - +b.rank
+            })
+            let allPlayers = []
+            for(let i = semiSorted.length/2; i>allPlayers.length; i=i){
+                allPlayers.push([semiSorted.splice(0,1)[0],semiSorted.splice(semiSorted.length-1,1)[0]])
+    
+            }
+            let finalSorted = []
+            allPlayers.map((array,i,currentArray)=>{
+            if(i%2!==0){
+                finalSorted.push(array[0])
+                finalSorted.push(array[1])
+            }
+            else{
+                finalSorted.splice((currentArray/2),0,array[0])
+                finalSorted.splice((currentArray/2),0,array[1])
+            }
+            })
+            // console.log("final sort", finalSorted)
         let newArray = []
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
           newArray.push({
-            player1:allPlayers[i],
-            player2:allPlayers[i+1],
+            player1:finalSorted[i],
+            player2:finalSorted[i+1],
             score1:0,
             score2:0
           })
@@ -136,17 +155,25 @@ export default {
         console.log(this.tournamentArray)
       }
       else if(res.data.notFinished){
-        //   console.log("hello")
+          console.log(res.data.winners)
+          let finalSorted = res.data.winners.sort((a,b)=>{
+              console.log(a.round.slice(1,2))
+              let aVar = a.round.slice(1,2);
+              let bVar = b.round.slice(1,2);
+              return (aVar < bVar) ? -1 : (aVar > bVar) ? 1 : 0;
+            })
+        console.log("round",finalSorted)
         let newArray = []
         for(let i = 0;(res.data.winners.length)>i;i=i+2){
-          // debugger
+            // debugger
           newArray.push({
-            player1:res.data.winners[i],
-            player2:res.data.winners[i+1],
+            player1:finalSorted[i],
+            player2:finalSorted[i+1],
             score1:0,
             score2:0
           })
         }
+          console.log(finalSorted)
         this.tournamentArray = newArray
         this.tournament = res.data.tournament,
         this.finished = res.data.finished

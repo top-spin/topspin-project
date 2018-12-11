@@ -33,8 +33,12 @@ function logout(req,res){
     res.status(200).json("OK")
 }
 function getCurrentUser(req,res){
+    const db = req.app.get("db");
     if(req.session.user){
-        res.status(200).json(req.session.user);
+        db.topspin_user.find({user_id:req.session.user.user_id}).then(user=>{
+            req.session.user = user[0]
+            res.status(200).json(user[0]);
+        })
     }
     else{
         res.status(200).json("No User Logged In!")

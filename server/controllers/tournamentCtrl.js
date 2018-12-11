@@ -89,8 +89,11 @@ function tournamentMatches(req, res) {
                 db.query(
                   `
                         select * from pending_users_in_tournament p
-                            join topspin_user u
-                            on u.user_id = p.user_id
+                          join(
+                            select row_number() over(order by rating desc) as rank,  * from topspin_user 
+                            order by rating desc
+                            ) ur
+                            on ur.user_id = p.user_id
                             where p.tournament_id = '${req.params.id}';
                         `
                 )
@@ -98,12 +101,18 @@ function tournamentMatches(req, res) {
                     db.query(
                       `
                             select * from users_in_tournament p
-                                join topspin_user u
-                                on u.user_id = p.user_id
+                              join(
+                                select row_number() over(order by rating desc) as rank,  * from topspin_user 
+                                order by rating desc
+                                ) ur
+                                on ur.user_id = p.user_id
                                 where p.tournament_id = '${req.params.id}';
                             `
                     )
                       .then(acceptedPlayers => {
+                        console.log(acceptedPlayers.concat(pendingPlayers).sort((a,b)=>{
+                          return +a.rank - +b.rank
+                        }))                        
                         res.status(200).json({
                           tournament: tournament[0],
                           pendingPlayers,

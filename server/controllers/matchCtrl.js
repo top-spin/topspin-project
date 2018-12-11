@@ -197,11 +197,12 @@ function submitRound(req,res){
                                           tournament_winner = '${arrayOfWinners[0].user_id}'
                                       where tournament_id = '${req.body.tournament.tournament_id}';
                                   `).then(updatedTournament=>{
+                                   
                                       res.status(200).json(updatedTournament);
                                   }).catch(console.log)
                               }
                               else{
-                                  res.status(200).json(arrayOfWinners);
+                                   res.status(200).json(arrayOfWinners);
                               }
                           }).catch(console.log)
 
@@ -267,8 +268,11 @@ function getMatchesForTournament(req,res){
                   db.query(
                     `
                           select * from pending_users_in_tournament p
-                              join topspin_user u
-                              on u.user_id = p.user_id
+                              join(
+                                select row_number() over(order by rating desc) as rank,  * from topspin_user 
+                                order by rating desc
+                                ) ur
+                              on ur.user_id = p.user_id
                               where p.tournament_id = '${req.params.id}';
                           `
                   )
@@ -276,8 +280,11 @@ function getMatchesForTournament(req,res){
                       db.query(
                         `
                               select * from users_in_tournament p
-                                  join topspin_user u
-                                  on u.user_id = p.user_id
+                              join(
+                                select row_number() over(order by rating desc) as rank,  * from topspin_user 
+                                order by rating desc
+                                ) ur
+                                  on ur.user_id = p.user_id
                                   where p.tournament_id = '${req.params.id}';
                               `
                       )
@@ -317,12 +324,24 @@ function getMatchesForTournament(req,res){
                         select * from topspin_user
                         where user_id in (${matchWinners.join(",")});
                     `).then(arrayOfWinners=>{
-                        res.status(200).json({
-                            winners:arrayOfWinners,
-                            notFinished: true,
-                            tournament:tournament[0],
-                            finished:false
-                        });
+                        db.match.find({tournament_id:tournament[0].tournament_id}).then(allMatches=>{
+                              arrayOfWinners = arrayOfWinners.map(player=>{
+                                  allMatches.map(match=>{
+                                      if(player.user_id===match.match_winner){
+                                          player.round = match.round
+                                      }
+                                  })
+                                  return player
+                              })
+                            console.log(allMatches)
+                               res.status(200).json({
+                                   winners:arrayOfWinners,
+                                   notFinished: true,
+                                   tournament:tournament[0],
+                                   finished:false
+                               });
+                               console.log(arrayOfWinners)
+                            }).catch(console.log)
                     }).catch(console.log)
                 }
                 else {

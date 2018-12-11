@@ -29,19 +29,6 @@
             <MatchBox v-for="(matches,index) in round.matches" :key="index" :match="matches"/>
           </v-layout>
         </v-flex>
-        <!-- <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[4]"/>
-            <MatchBox :match="matches[5]"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[6]"/>
-          </v-layout>
-        </v-flex> -->
         <v-flex xs2 ml-2>
           <!-- <v-btn>Round 3 Done</v-btn> -->
           <v-layout class="vertical_align">
@@ -50,24 +37,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    
-       <!-- <v-container v-if="!finished" class="hidden-sm-and-down">
-      <v-layout row wrap>
-        <v-flex v-bind:class="classObject">
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Round</v-btn>
-          <v-btn v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
-          <v-layout class="vertical_align">
-            <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 ml-2>
-          <v-btn>Round 3 Done</v-btn>
-          <v-layout class="vertical_align">
-            <WinnerBox :match="matches[matches.length-1]"/>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container> -->
+  
 
     <v-container v-if="!finished">
       <v-layout column wrap>
@@ -78,19 +48,7 @@
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
         </v-flex>
-        <!-- <v-flex xs3 ml-2>
-          <v-btn depressed color="#f57c00">Round 1 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[4]"/>
-            <MatchBox :match="matches[5]"/>
-          </v-layout>
-        </v-flex>
-        <v-flex xs3 ml-2>
-          <v-btn flat color="success">Round 2 Done</v-btn>
-          <v-layout class="vertical_align">
-            <MatchBox :match="matches[6]"/>
-          </v-layout>
-        </v-flex> -->
+
         <v-flex xs2 ml-2>
           <!-- <v-btn>Round 3 Done</v-btn> -->
           <v-layout class="vertical_align">
@@ -148,14 +106,34 @@ export default {
           player.type = "accepted"
           return player
         })
-        let allPlayers = accepted.concat(pending)
+            let semiSorted = accepted.concat(pending).sort((a,b)=>{
+              return +a.rank - +b.rank
+            })
+            let allPlayers = []
+            for(let i = semiSorted.length/2; i>allPlayers.length; i=i){
+                allPlayers.push([semiSorted.splice(0,1)[0],semiSorted.splice(semiSorted.length-1,1)[0]])
+    
+            }
+            let finalSorted = []
+            allPlayers.map((array,i,currentArray)=>{
+            if(i%2!==0){
+                finalSorted.push(array[0])
+                finalSorted.push(array[1])
+            }
+            else{
+                finalSorted.splice((currentArray/2),0,array[0])
+                finalSorted.splice((currentArray/2),0,array[1])
+            }
+            })
+            // console.log("final sort", finalSorted)
         let newArray = []
-        // console.log("testing",res.data.tournament.size/2)
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
           newArray.push({
-            player1:allPlayers[i],
-            player2:allPlayers[i+1]
+            player1:finalSorted[i],
+            player2:finalSorted[i+1],
+            score1:0,
+            score2:0
           })
         }
         this.tournamentArray = newArray
@@ -194,10 +172,10 @@ export default {
         if(res.data.matches.length === 3){
           this.rounds = [
             {
-              matches:res.data.matches.slice(0,3)
+              matches:res.data.matches.slice(0,2)
             },
             {
-              matches:res.data.matches.slice(3)
+              matches:res.data.matches.slice(2)
             }
           ]
         }
