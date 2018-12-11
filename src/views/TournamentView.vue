@@ -148,7 +148,9 @@ export default {
           player.type = "accepted"
           return player
         })
-        let allPlayers = accepted.concat(pending)
+        let allPlayers = accepted.concat(pending).sort((a,b)=>{
+          return +a.rank - +b.rank
+        })
         let newArray = []
         // console.log("testing",res.data.tournament.size/2)
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
