@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
-    <p v-if="tournament" class="text-xs-center">{{tournament.description}}</p>
-    <p v-if="tournament" class="text-xs-center">{{numberOfRounds()}} Round(s)</p>
+    <h3 v-if="tournament" class="text-xs-center">{{tournament.description}}</h3>
+    <h2 v-if="tournament" class="text-xs-center">{{numberOfRounds()}} Round(s)</h2>
     <h1 v-else class="text-xs-center">Tournament</h1>
 
 
