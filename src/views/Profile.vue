@@ -286,7 +286,6 @@ export default {
               (this.dialogeditprofile = false);
             this.getProfile();
             this.$store.dispatch("getUser");
-            //TODO: get user from session to update navbar avatar.
           })
           .catch(err => console.log(err));
       });
