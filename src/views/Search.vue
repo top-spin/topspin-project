@@ -26,7 +26,7 @@
             <div class="text-xs-center">
               Search by: name, email, city, organization
             </div>
-          <h3 class="text-xs-center mt-5" v-if="search_value === null || search_value.length===0">Players from around the world...</h3>
+          <h3 class="text-xs-center mt-5" v-if="search_value === null || search_value.length===0" style="font-size:2em;">Players from around the world...</h3>
           </v-flex>
         </v-layout>
       </v-container>

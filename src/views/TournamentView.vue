@@ -2,6 +2,7 @@
   <div>
     <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
     <h1 v-else class="text-xs-center">Tournament</h1>
+    <h3 v-if="tournament" class="text-xs-center">{{tournament.description}}</h3>
 
    <v-container v-if="finished" class="hidden-sm-and-down">
       <v-layout row wrap>
@@ -43,7 +44,7 @@
       <v-layout column wrap>
         <v-flex xs3>
           <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
-          <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn>
+          <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit Players</v-btn>
           <v-layout class="vertical_align">
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
