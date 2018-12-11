@@ -20,7 +20,6 @@
         class="barchart"
         :labels="labels"
         :datasets="datasets"
-        :datalabel="label"
         :options="options"
       ></chartjs-horizontal-bar>
     </span>

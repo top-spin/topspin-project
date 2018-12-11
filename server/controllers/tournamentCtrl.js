@@ -20,7 +20,7 @@ function upcomingTournament(req, res) {
   const db = req.app.get("db");
   db.query(
     `
-        select t.tournament_id as tournament_id, t.name as tournament_name, u.username as creator from users_in_tournament ut
+        select t.start_date as start_date,t.tournament_id as tournament_id, t.name as tournament_name, u.username as creator from users_in_tournament ut
         join tournament t
         on t.tournament_id = ut.tournament_id
         join topspin_user u
