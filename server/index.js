@@ -8,6 +8,7 @@ const ethanRoutes = require("./ethanRoutes");
 const session = require('express-session');
 const authCtrl = require("./controllers/authCtrl");
 const path = require("path");
+const sockets = require("./services/sockets_server");
 
 var app = express();
 
@@ -25,6 +26,7 @@ massive(process.env.CONNECTION_STRING).then(dbInstance=>{
     app.set("db",dbInstance)
 }).catch(err=>console.log(err));
 
+sockets(app);
 masterRoutes(app);
 ethanRoutes(app);
 authCtrl(app);

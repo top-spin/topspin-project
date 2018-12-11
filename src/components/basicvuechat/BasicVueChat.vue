@@ -73,6 +73,14 @@ export default {
     getMessages:{
       type:Function,
       required:false
+    },
+    players:{
+      type:Array,
+      required:false
+    },
+    updateFeed:{
+      type:Function,
+      required:false
     }
   },
   data: function() {
@@ -99,27 +107,70 @@ export default {
           console.error("Failed to load mock data from file. ", error);
         });
     } else {
-      // this.feed = this.initialFeed;
+      this.feed = this.initialFeed;
       this.authorId = this.initialAuthorId;
       console.log(this.feed)
     }
   },
+  sockets: {
+        connect: function () {
+            console.log('socket connected')
+        },
+        updateMessage: function (data) {
+          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+          console.log("data ",data)
+        //   this.updateFeed(data.messages.map(message=>{
+        //   return{
+        //     id:message.from_user,
+        //     author:(()=>{
+        //        return this.players.filter(player=>player.user_id===message.from_user)[0].username
+        //     })(),
+        //     contents:message.body,
+        //     date:message.date_sent
+        //   }
+        // }))
+        // console.log(data)
+        // console.log(this.$store.state.user.user_id)
+        // console.log(this.player.user_id)
+        // console.log(data.player_sending.user_id)
+        if(this.$store.state.user.user_id === data.player_receiving.user_id&&
+          this.player.user_id===data.player_sending.user_id){
+          console.log("same user")
+       this.getMessages(data.player_sending,)
+        scrollToBottom();
+        }
+        else{
+          return
+        }
+        }
+    },
   methods: {
     pushToFeed(element) {
-      // this.feed.push(element);
-      console.log(element)
-      if(element.contents !== ""){
-        axios.post("/api/add-message",{
+      this.$socket.emit("saveMessage",{
           from_user:element.id,
           body:element.contents,
           to_user:this.player.user_id
-        }).then(res=>{
-          this.getMessages(this.player);
-        })
-      }
-      else{
-        return
-      }
+        },this.$store.state.user,this.player)
+    this.getMessages(this.player)
+      // const {contents,id} = element
+      // this.initialFeed.push({
+      //   contents,
+      //   id,
+      //   date:"will be date"
+      // });
+      // console.log(element)
+      // if(element.contents !== ""){
+      //   axios.post("/api/add-message",{
+      //     from_user:element.id,
+      //     body:element.contents,
+      //     to_user:this.player.user_id
+      //   }).then(res=>{
+      //     this.getMessages(this.player);
+      //   })
+      // }
+      // else{
+      //   return
+      // }
     },
     onNewOwnMessage(message) {
       const newOwnMessage = {

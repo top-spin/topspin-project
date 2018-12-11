@@ -3,6 +3,7 @@ import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import VueSocketIO from "vue-socket.io";
 
 // Maps
 import * as VueGoogleMaps from "vue2-google-maps";
@@ -30,6 +31,11 @@ Vue.use(VueGoogleMaps, {
   //// then disable the following:
   // installComponents: true,
 });
+
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:3100',
+}))
 
 // Charts
 import "chart.js";
