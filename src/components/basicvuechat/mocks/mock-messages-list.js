@@ -1,7 +1,7 @@
 //Remove mock file after chat feature is done.
 
 export default {
-  authorId: 1,
+  authorId: 0,
   feed: [
     {
       id: 0,
