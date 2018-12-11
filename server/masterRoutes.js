@@ -6,6 +6,7 @@ const {
 } = require("./controllers/accountCtrl");
 const {
   profileInfo,
+  updateProfile,
   searchPlayers,
   getAllPlayers
 } = require("./controllers/playerCtrl");
@@ -42,6 +43,7 @@ module.exports = app => {
   app.get("/api/navbar-info", getInfoForNavbar);
   app.delete("/api/logout", logout);
   app.get("/api/profile/:username", profileInfo);
+  app.put("/api/profile/", updateProfile);
   app.get("/api/players", searchPlayers);
   app.get("/api/all-players", getAllPlayers);
   app.get("/api/past-tournaments", pastTournament);

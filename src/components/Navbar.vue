@@ -68,13 +68,13 @@
       <!-- LIST tiles, good for sidenav and pages -->
       <v-list>
         <!-- // avatar tile on top -->
-        <v-list-tile v-for="av in avatar" :key="av.name" router :to="av.route">
+        <v-list-tile @click="viewProfile">
           <v-list-tile-avatar>
-            <img style =  "height:40px; width:40px" :src="av.image">
+            <img style="height:40px; width:40px" :src="this.$store.state.user.avatar">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title class="white--text">{{av.username}}</v-list-tile-title>
+            <v-list-tile-title class="white--text">{{this.$store.state.user.username}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -184,6 +184,9 @@ export default {
         this.getpendingcount();
         this.getpendinglist();
       });
+    },
+    viewProfile() {
+      this.$router.push("/profile/" + this.$store.state.user.username);
     }
   }
 };

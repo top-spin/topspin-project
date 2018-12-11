@@ -22,8 +22,52 @@
         </v-flex>
         <!-- edit button -->
         <v-flex xs6 sm3 md3 v-if="user_id == this.$store.state.user.user_id">
-          <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn>
+          <!-- <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn> -->
+          <!-- edit pop up modal -->
+          <v-dialog v-model="dialogeditprofile" persistent max-width="600px">
+            <v-btn slot="activator" color="success" dark>Edit Profile</v-btn>
+            <!-- <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn> -->
+            <v-card>
+              <v-card-title>
+                <span class="headline">Edit Profile</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout column wrap>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field label="Name*" v-model="name_edit" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field label="Username*" v-model="username_edit" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field label="E-mail*" v-model="email_edit" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field label="Organization" v-model="organization_edit"></v-text-field>
+                    </v-flex>
+                    <v-flex xs4 sm2 md2 row>
+                      <v-text-field label="City" v-model="city_edit"></v-text-field>
+                      <v-text-field label="State" v-model="state_edit"></v-text-field>
+                    </v-flex>
+                    <v-radio-group light v-model="dominantHand_edit" :mandatory="false">
+                      <v-radio color="primary" label="Right handed player" value="Right"></v-radio>
+                      <v-radio color="primary" label="Left handed player" value="Left"></v-radio>
+                    </v-radio-group>
+                    <dropzone></dropzone>
+                  </v-layout>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="orange darken-2" flat @click="cancelChanges">Cancel</v-btn>
+                <v-btn color="orange darken-2" flat @click="saveChanges">Save Changes</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-flex>
+
         <div v-else>
           <!-- add button -->
           <v-flex xs6 sm3 md3 v-if="!friendList.includes(user_id)">
@@ -87,15 +131,24 @@
     </v-container>
   </div>
 </template>
+
 <script>
+import Vue from "vue";
 import Axios from "axios";
+import Geocoder from "@pderas/vue2-geocoder";
+import dropzone from "../components/Dropzone";
+
 export default {
   name: "Profile",
+  components: {
+    dropzone
+  },
   data() {
     return {
       rank: "",
       name: "",
       username: "",
+      email: "",
       organization: "",
       city: "",
       state: "",
@@ -104,10 +157,21 @@ export default {
       winPercent: "",
       avatar: "",
       user_id: "",
+      lat: "",
+      lng: "",
       friendList: [],
       snackbardel: false,
       snackbaradd: false,
-      dialog: false
+      dialog: false,
+      dialogeditprofile: false,
+      name_edit: "",
+      username_edit: "",
+      email_edit: "",
+      organization_edit: "",
+      city_edit: "",
+      state_edit: "",
+      dominantHand_edit: "",
+      avatar_edit: ""
     };
   },
   mounted() {
@@ -122,6 +186,7 @@ export default {
           (this.rank = res.data.rank),
             (this.name = res.data.user.name),
             (this.username = res.data.user.username),
+            (this.email = res.data.user.email),
             (this.organization = res.data.user.organization),
             (this.city = res.data.user.city),
             (this.state = res.data.user.state),
@@ -129,7 +194,15 @@ export default {
             (this.winCount = res.data.winCount),
             (this.winPercent = res.data.winPercent.toFixed(1)),
             (this.avatar = res.data.user.avatar),
-            (this.user_id = res.data.user.user_id);
+            (this.user_id = res.data.user.user_id),
+            (this.name_edit = this.name),
+            (this.username_edit = this.username),
+            (this.email_edit = this.email),
+            (this.organization_edit = this.organization),
+            (this.city_edit = this.city),
+            (this.state_edit = this.state),
+            (this.dominantHand_edit = this.dominantHand),
+            (this.dialogeditprofile = false);
         })
         .catch(err => {
           console.log(err);
@@ -159,9 +232,64 @@ export default {
       this.snackbardel = true;
       this.getFriendList();
     },
-    editProfile() {
-      console.log("editProfile Hit");
-      // Axios.put(){}
+    // editProfile() {
+    // this.$router.push("/profile/edit/" + this.username);
+    // console.log("editProfile Hit");
+    // Axios.put(){}
+    // }
+    cancelChanges() {
+      (this.name_edit = this.name),
+        (this.username_edit = this.username),
+        (this.email_edit = this.email),
+        (this.organization_edit = this.organization),
+        (this.city_edit = this.city),
+        (this.state_edit = this.state),
+        (this.dominantHand_edit = this.dominantHand),
+        (this.dialogeditprofile = false);
+    },
+    saveChanges() {
+      Vue.use(Geocoder, {
+        googleMapsApiKey: process.env.VUE_APP_GOOGLE_MAPS_API_KEY
+      });
+      Vue.$geocoder.setDefaultMode("address");
+      var addressObj = {
+        city: this.city_edit,
+        state: this.state_edit
+      };
+      Vue.$geocoder.send(addressObj, response => {
+        this.lat = response.results[0].geometry.location.lat;
+        this.lng = response.results[0].geometry.location.lng;
+        console.log(this.lat, this.lng);
+
+        Axios.put("/api/profile/", {
+          user_id: this.user_id,
+          name: this.name_edit,
+          username: this.username_edit,
+          email: this.email_edit,
+          organization: this.organization_edit,
+          city: this.city_edit,
+          state: this.state_edit,
+          dominant_hand: this.dominantHand_edit,
+          avatar: this.$store.state.avatar,
+          lat: this.lat,
+          lng: this.lng
+        })
+          .then(res => {
+            console.log(res.data);
+            (this.name = res.data.name),
+              (this.username = res.data.username),
+              (this.email = res.data.email),
+              (this.organization = res.data.organization),
+              (this.city = res.data.city),
+              (this.state = res.data.state),
+              (this.dominantHand = res.data.dominant_hand),
+              (this.dialogeditprofile = false);
+            this.getProfile();
+            this.$store.dispatch("getUser");
+            //TODO: get user from session to update navbar avatar.
+          })
+          .catch(err => console.log(err));
+      });
     }
   }
 };
