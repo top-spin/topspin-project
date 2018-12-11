@@ -13,7 +13,7 @@
               
               <div class="recentmatchescontent"   >
               <div  class="name">Winner: {{match.match_winner.username}}</div>                  
-              <div class="score" >Score:{{match.winning_score}}  </div>
+              <div class="score" >Score:  {{match.winning_score}}  </div>
                </div>
               <div class = "recentmatchescontent">
               <div class="name" >Loser: {{match.match_loser.username}}</div>
