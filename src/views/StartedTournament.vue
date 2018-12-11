@@ -140,6 +140,7 @@ export default {
                 finalSorted.splice((currentArray/2),0,array[1])
             }
             })
+            // console.log("final sort", finalSorted)
         let newArray = []
         for(let i = 0;(res.data.tournament.size)>i;i=i+2){
           // debugger
