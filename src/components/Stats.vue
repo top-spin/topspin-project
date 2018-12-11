@@ -15,14 +15,13 @@
     </span>
 
     <!-- horizontal-bars for smaller screen size -->
-    <!-- TODO: Note. NOGO: datalabel -->
     <span v-if="datasets[0].data.length!==0" class="hidden-md-and-up">
       <chartjs-horizontal-bar
         class="barchart"
         :labels="labels"
         :datasets="datasets"
         :datalabel="label"
-        :option="option"
+        :options="options"
       ></chartjs-horizontal-bar>
     </span>
   </div>
@@ -46,7 +45,23 @@ export default {
         title: {
           display: false,
           position: "bottom",
-          text: "Wins to Losses"
+          text: "Games Played"
+        }
+      },
+      options: {
+        title: {
+          display: false,
+          position: "bottom",
+          text: "Games Played"
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
         }
       }
     };
