@@ -3,9 +3,9 @@
   <div class="convocontainer">
     <v-list class="allconversations">
       <v-list-tile
-        v-for="player in players"
+        v-for="player in filteredPlayers"
         :key="player.username"
-        @click="getConversationNames('Jery',  player.username)"
+        @click="getMessageFeed(player)"
       >
         <v-list-tile-avatar>
           <img :src="player.avatar">
@@ -18,7 +18,7 @@
     </v-list>
 
     <div class="conversation">
-      <BasicVueChat :new-message="message"/>
+      <BasicVueChat :getMessages="getMessageFeed" :player="selectedPlayer" :initialFeed="feed"/>
     </div>
   </div>
 </template>
@@ -33,21 +33,37 @@ export default {
   },
   data() {
     return {
-      players: []
+      players: [],
+      feed:[],
+      selectedPlayer:{},
+      filteredPlayers:[]
     };
   },
   mounted() {
     Axios.get("/api/all-players")
       .then(res => {
-        this.players = res.data;
-        console.log(this.players);
+        this.filteredPlayers = res.data.filter(player=>player.user_id!==this.$store.state.user.user_id);
+        this.players = res.data
+        this.selectedPlayer = this.filteredPlayers[0]
       })
       .catch(err => console.log(err));
   },
   methods: {
-    getConversationNames(currentUsername, clickedUsername) {
-      // get user endpoint
-      console.log(currentUsername, clickedUsername);
+    getMessageFeed(player) {
+      Axios.get("/api/messages/"+player.user_id).then(res=>{
+        this.feed = res.data.map(message=>{
+          return{
+            id:message.from_user,
+            author:(()=>{
+               return this.players.filter(player=>player.user_id===message.from_user)[0].username
+            })(),
+            contents:message.body,
+            date:message.date_sent
+          }
+        })
+        // console.log(this.feed)
+      })
+      this.selectedPlayer = player;
     }
   }
 };

@@ -2,7 +2,7 @@
   <transition-group name="messages-list" tag="div">
     <div v-for="message in feed" :key="messageKey(message)" class="messages-list-item">
       <message-own
-        v-if="message.id === authorId"
+        v-if="message.id === $store.state.user.user_id"
         :date="message.date"
         :image-url="message.imageUrl"
         :contents="message.contents"
@@ -34,11 +34,6 @@ export default {
       default: function() {
         return [];
       },
-      required: false
-    },
-    authorId: {
-      type: Number,
-      default: 0,
       required: false
     }
   },

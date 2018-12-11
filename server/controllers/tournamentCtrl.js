@@ -110,9 +110,9 @@ function tournamentMatches(req, res) {
                             `
                     )
                       .then(acceptedPlayers => {
-                        console.log(acceptedPlayers.concat(pendingPlayers).sort((a,b)=>{
-                          return +a.rank - +b.rank
-                        }))                        
+                        // console.log(acceptedPlayers.concat(pendingPlayers).sort((a,b)=>{
+                        //   return +a.rank - +b.rank
+                        // }))                        
                         res.status(200).json({
                           tournament: tournament[0],
                           pendingPlayers,

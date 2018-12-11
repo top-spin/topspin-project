@@ -171,7 +171,7 @@ function submitRound(req,res){
                           playersToUpdate.push(`('${player.match_winner.user_id}',${result.playerRating})`)
                           playersToUpdate.push(`('${player.match_loser.user_id}',${result.opponentRating})`)
                       })
-                      console.log(playersToUpdate)
+                    //   console.log(playersToUpdate)
                       db.query(`
                         update topspin_user as u 
                         set 
@@ -321,8 +321,11 @@ function getMatchesForTournament(req,res){
                         return "'"+match.match_winner+"'"
                     })
                     db.query(`
-                        select * from topspin_user
-                        where user_id in (${matchWinners.join(",")});
+                        select * from (
+                            select row_number() over(order by rating desc) as rank,  * from topspin_user 
+                            order by rating desc
+                            ) ur
+                        where ur.user_id in (${matchWinners.join(",")});
                     `).then(arrayOfWinners=>{
                         db.match.find({tournament_id:tournament[0].tournament_id}).then(allMatches=>{
                               arrayOfWinners = arrayOfWinners.map(player=>{
@@ -333,14 +336,14 @@ function getMatchesForTournament(req,res){
                                   })
                                   return player
                               })
-                            console.log(allMatches)
+                            // console.log(allMatches)
                                res.status(200).json({
                                    winners:arrayOfWinners,
                                    notFinished: true,
                                    tournament:tournament[0],
                                    finished:false
                                });
-                               console.log(arrayOfWinners)
+                            //    console.log(arrayOfWinners)
                             }).catch(console.log)
                     }).catch(console.log)
                 }
