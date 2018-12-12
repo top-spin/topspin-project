@@ -39,12 +39,12 @@ export default {
 
 <style>
 .message--foreign {
-  border: 1px solid black;
   border-radius: 12px;
-  background-color: pink;
-  color: white;
+  background-color: lightgrey;
+  color: black;
   padding: 3px 5px;
   width: 60%;
   float: left;
+  margin-bottom: 10px;
 }
 </style>

@@ -39,12 +39,13 @@ export default {
 
 <style>
 .message--own {
-  border: 1px solid black;
   border-radius: 12px;
   background-color: lightskyblue;
   color: white;
   padding: 3px 5px;
   width: 60%;
   float: right;
+  margin-bottom: 10px;
+  margin-right: 3px;
 }
 </style>
