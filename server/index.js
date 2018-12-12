@@ -20,7 +20,7 @@ app.use(session({
     resave:false
 }))
 
-// app.use( express.static( `${__dirname}/../build` ) );
+app.use( express.static( `${__dirname}/../dist/` ) );
 
 massive(process.env.CONNECTION_STRING).then(dbInstance=>{
     app.set("db",dbInstance)
@@ -32,9 +32,9 @@ ethanRoutes(app);
 authCtrl(app);
 
 // var port = process.env.PORT || 3999;
-    // app.get('*', (req, res)=>{
-    //     res.sendFile(path.join(__dirname, '../build/index.html'));
-    // });
+    app.get('*', (req, res)=>{
+        res.sendFile(path.join(__dirname, '../dist/index.html'));
+    });
 var port = 4000
 app.listen(port,()=>{
     console.log("Listening on port: "+port);
