@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-xs-center">Chat</h1>
+    <!-- <h1 class="text-xs-center">Chat</h1> -->
     <!-- <v-container> -->
     <MessageList class="messagelist"/>
     <!-- </v-container> -->
@@ -24,7 +24,7 @@ export default {
 
 <style>
 .messagelist {
-  height: 75vh;
+  height: calc(100vh - 15vh);
 }
 </style>
 

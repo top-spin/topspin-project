@@ -9,7 +9,11 @@
     <!-- show messages -->
     <section id="window__messages__container" class="window__messages__container">
       <slot>
-        <messages-list :feed="initialFeed" :author-id="$store.state.user.user_id" class="messages-list"/>
+        <messages-list
+          :feed="initialFeed"
+          :author-id="$store.state.user.user_id"
+          class="messages-list"
+        />
       </slot>
     </section>
 
@@ -66,21 +70,21 @@ export default {
       },
       required: false
     },
-    player:{
-      type:Object,
-      required:false
+    player: {
+      type: Object,
+      required: false
     },
-    getMessages:{
-      type:Function,
-      required:false
+    getMessages: {
+      type: Function,
+      required: false
     },
-    players:{
-      type:Array,
-      required:false
+    players: {
+      type: Array,
+      required: false
     },
-    updateFeed:{
-      type:Function,
-      required:false
+    updateFeed: {
+      type: Function,
+      required: false
     }
   },
   data: function() {
@@ -109,49 +113,57 @@ export default {
     } else {
       this.feed = this.initialFeed;
       this.authorId = this.initialAuthorId;
-      console.log(this.feed)
+      console.log(this.feed);
     }
   },
   sockets: {
-        connect: function () {
-            console.log('socket connected')
-        },
-        updateMessage: function (data) {
-          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-          console.log("data ",data)
-        //   this.updateFeed(data.messages.map(message=>{
-        //   return{
-        //     id:message.from_user,
-        //     author:(()=>{
-        //        return this.players.filter(player=>player.user_id===message.from_user)[0].username
-        //     })(),
-        //     contents:message.body,
-        //     date:message.date_sent
-        //   }
-        // }))
-        // console.log(data)
-        // console.log(this.$store.state.user.user_id)
-        // console.log(this.player.user_id)
-        // console.log(data.player_sending.user_id)
-        if(this.$store.state.user.user_id === data.player_receiving.user_id&&
-          this.player.user_id===data.player_sending.user_id){
-          console.log("same user")
-       this.getMessages(data.player_sending,)
-        scrollToBottom();
-        }
-        else{
-          return
-        }
-        }
+    connect: function() {
+      console.log("socket connected");
     },
+    updateMessage: function(data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+      );
+      console.log("data ", data);
+      //   this.updateFeed(data.messages.map(message=>{
+      //   return{
+      //     id:message.from_user,
+      //     author:(()=>{
+      //        return this.players.filter(player=>player.user_id===message.from_user)[0].username
+      //     })(),
+      //     contents:message.body,
+      //     date:message.date_sent
+      //   }
+      // }))
+      // console.log(data)
+      // console.log(this.$store.state.user.user_id)
+      // console.log(this.player.user_id)
+      // console.log(data.player_sending.user_id)
+      if (
+        this.$store.state.user.user_id === data.player_receiving.user_id &&
+        this.player.user_id === data.player_sending.user_id
+      ) {
+        console.log("same user");
+        this.getMessages(data.player_sending);
+        scrollToBottom();
+      } else {
+        return;
+      }
+    }
+  },
   methods: {
     pushToFeed(element) {
-      this.$socket.emit("saveMessage",{
-          from_user:element.id,
-          body:element.contents,
-          to_user:this.player.user_id
-        },this.$store.state.user,this.player)
-    this.getMessages(this.player)
+      this.$socket.emit(
+        "saveMessage",
+        {
+          from_user: element.id,
+          body: element.contents,
+          to_user: this.player.user_id
+        },
+        this.$store.state.user,
+        this.player
+      );
+      this.getMessages(this.player);
       // const {contents,id} = element
       // this.initialFeed.push({
       //   contents,
@@ -194,7 +206,7 @@ export default {
 
 <style>
 .basicvuechat {
-  height: 100%;
+  height: 99%;
 }
 /* .window { */
 /* height: 100%; */
@@ -202,17 +214,22 @@ export default {
 /* } */
 .window__header__container {
   /* border: 5px orange solid; */
-  background: linear-gradient(90deg, orange, seashell);
-  padding: 10px 5px;
+  /* background: linear-gradient(90deg, orange, orange); */
+  background: orange;
+  padding: 14px 5px;
   color: seashell;
   font-weight: bold;
   z-index: 1;
+  font-size: 1.5em;
+  text-align: center;
 }
 .window__messages__container {
   width: 100%;
   overflow: auto;
-  height: 420px;
+  /* height: 420px; */
+  height: 90%;
   /* border: 5px green solid; */
+  padding-top: 10px;
 }
 /* .messages-list {
   border: 5px blue solid;
