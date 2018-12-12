@@ -1,6 +1,6 @@
 <template>
   <div class="message--foreign">
-    <div class="message__author">{{ author }}</div>
+    <!-- <div class="message__author">{{ author }}</div> -->
     <div class="message__contents">
       <img v-if="imageUrl" :src="imageUrl" alt style="width: 100%">
       {{ contents }}

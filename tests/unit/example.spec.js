@@ -131,13 +131,6 @@ describe("Dashboard.vue", () => {
     expect(h1.text()).toBe("Dashboard");
   });
 });
-describe("Chat.vue", () => {
-  it("checking <h1> tag text", () => {
-    const wrapper = shallowMount(Chat);
-    const h1 = wrapper.find("h1");
-    expect(h1.text()).toBe("Chat");
-  });
-});
 // describe("Tournaments.vue", () => {
 //   it("checking create tournament button text", () => {
 //     const wrapper = shallowMount(Tournaments);

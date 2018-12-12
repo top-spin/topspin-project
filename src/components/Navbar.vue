@@ -102,14 +102,6 @@ export default {
       drawer: true,
       pendingCount: "",
       pendingList: [],
-      avatar: [
-        {
-          // need to make image dynamic
-          image: "https://randomuser.me/api/portraits/men/85.jpg",
-          username: "Jerry Berry",
-          route: "/profile"
-        }
-      ],
       // coding links so that I do not have to rewrite the list-tile action&content over and over again.
       // added v-for into v-list-tile
       // :key="link.text" does the binding gives vue a unique output for every for-loop.
@@ -126,18 +118,6 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get("/api/navbar-info")
-      .then(res => {
-        this.avatar = [
-          {
-            image: res.data.image,
-            username: res.data.username,
-            route: "/profile/" + res.data.username
-          }
-        ];
-      })
-      .catch(err => console.log(err));
     this.$store.dispatch("getUser");
     this.getpendingcount();
     this.getpendinglist();
