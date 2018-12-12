@@ -31,10 +31,9 @@ Vue.use(VueGoogleMaps, {
   //// then disable the following:
   // installComponents: true,
 });
-
+console.log(process.env.VUE_APP_SOCKET_SERVER)
 Vue.use(new VueSocketIO({
-  debug: true,
-  connection: 'http://localhost:3100',
+  connection: process.env.VUE_APP_SOCKET_SERVER,
 }))
 
 // Charts
