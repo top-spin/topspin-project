@@ -1,11 +1,11 @@
 <template>
   <div class="message--own">
     <div class="message__author">{{ author }}</div>
-    <div class="message__date">{{ date }}</div>
     <div class="message__contents">
       <img v-if="imageUrl" :src="imageUrl" alt style="width: 100%">
       {{ contents }}
     </div>
+    <div class="message__date">{{ date }}</div>
   </div>
 </template>
 
@@ -47,5 +47,12 @@ export default {
   float: right;
   margin-bottom: 10px;
   margin-right: 3px;
+}
+.message__date{
+  font-size: 12px;
+  float: right
+}
+.message__contents{
+  font-size: 15px;
 }
 </style>
