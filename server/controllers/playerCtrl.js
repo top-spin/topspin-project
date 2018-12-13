@@ -34,9 +34,16 @@ function profileInfo(req, res) {
               res.status(200).json({
                 user: user[0],
                 winCount: winCount[0].count,
-                winPercent:
-                  (winCount[0].count * 100) /
-                  (+winCount[0].count + +lossCount[0].count),
+                winPercent:(()=>{
+                  let percent = (winCount[0].count * 100) /(+winCount[0].count + +lossCount[0].count)
+                  if(typeof percent !== Number){
+                    return 0;
+                  }
+                  else{
+                    return percent.toFixed(1)
+                  }
+                  
+                })(),
                 rank: user[0].rank
               });
             })
