@@ -2,7 +2,7 @@
   <v-app v-if="this.$store.state.status === 'loggedIn'">
     <Navbar/>
     <v-content>
-      <router-view/>
+      <router-view :key="$route.fullPath"/>
     </v-content>
   </v-app>
 
