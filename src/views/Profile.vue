@@ -192,7 +192,7 @@ export default {
             (this.state = res.data.user.state),
             (this.dominantHand = res.data.user.dominant_hand),
             (this.winCount = res.data.winCount),
-            (this.winPercent = res.data.winPercent.toFixed(1)),
+            (this.winPercent = res.data.winPercent),
             (this.avatar = res.data.user.avatar),
             (this.user_id = res.data.user.user_id),
             (this.name_edit = this.name),
