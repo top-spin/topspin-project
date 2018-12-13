@@ -100,7 +100,14 @@ export default {
     .selfrank{
          width:95%;
          margin-left:3%;
-         background-color: rgb(198, 223, 255); 
+         background-color: rgb(216, 221, 228); 
     }
 }
+@media only screen and (max-width: 500px){
+ 
+    .selfrank{
+         background-color: rgb(216, 221, 228); 
+    }
+}
+
 </style>
