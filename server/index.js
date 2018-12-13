@@ -8,7 +8,7 @@ const ethanRoutes = require("./ethanRoutes");
 const session = require('express-session');
 const authCtrl = require("./controllers/authCtrl");
 const path = require("path");
-const sockets = require("./services/ssl_sockets_server");
+const sockets = require("./services/sockets_server");
 
 var app = express();
 
