@@ -83,7 +83,7 @@ export default {
               )[0].username;
             })(),
             contents: message.body,
-            date: moment(message.date_sent).format("h:MM A MM-DD")
+            date: moment(message.date_sent).format("h:mm A MM-DD")
           };
         });
         console.log(this.feed);
