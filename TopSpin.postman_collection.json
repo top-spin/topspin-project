@@ -1,0 +1,297 @@
+{
+	"info": {
+		"_postman_id": "b1077039-0503-4f91-ab95-a8e8825be466",
+		"name": "TopSpin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "All users returns array",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8b7765bb-1504-46e0-8f8a-38356456b57a",
+						"exec": [
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Returned data is an Array\", function() {",
+							" pm.expect(Array.isArray(responseJSON)).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/all-players",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"all-players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tournament matches is an obj",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9acf0c80-a425-40bc-99c2-2a2e49846cd9",
+						"exec": [
+							"",
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Returned data is an obj\", function() {",
+							" pm.expect(Object.isObject(responseJSON)).to.eql(true);",
+							"//   pm.expect(responseJSON.length).to.eql(19);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/tournament-matches/15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"tournament-matches",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2545d07-9ee7-462b-9ddd-ad71bdef89f8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Returned data is an obj\", function() {",
+							" pm.expect(responseJSON).to.eql(\"OK\");",
+							"//   pm.expect(responseJSON.length).to.eql(19);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search players",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "568b3b9a-6cf3-4422-9d5a-d4a782a70b3a",
+						"exec": [
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Checking search\", function() {",
+							" pm.expect(responseJSON[0].username).to.eql(\"ethanbud5\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/players?value=ethanbud5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"players"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "ethanbud5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting player profile by username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eee6c4e5-30ef-4bdc-aa72-038556a9d81b",
+						"exec": [
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"correct user\", function() {",
+							" pm.expect(responseJSON.user.username).to.eql(\"ethanbud5\");",
+							"});",
+							"pm.test(\"returns obj\", function() {",
+							" pm.expect(Object.isObject(responseJSON)).to.eql(true);",
+							"});",
+							"pm.test(\"winPercent is a number\", function() {",
+							" pm.expect((typeof responseJSON.winPercent)).to.eql(\"number\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/profile/ethanbud5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"profile",
+						"ethanbud5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get tournament started matches",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3dc39ef5-2d87-4d76-aa51-7446ade5e9aa",
+						"exec": [
+							"",
+							"pm.test(\"Status code is 200\", function() {",
+							" pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJSON = pm.response.json();",
+							"",
+							"pm.test(\"Returned data is an obj\", function() {",
+							" pm.expect(Object.isObject(responseJSON)).to.eql(true);",
+							"//   pm.expect(responseJSON.length).to.eql(19);",
+							"});",
+							"pm.test(\"getting correct tournament\", function() {",
+							" pm.expect(responseJSON.tournament.tournament_id).to.eql(15);",
+							"//   pm.expect(responseJSON.length).to.eql(19);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/started-matches/15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"started-matches",
+						"15"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
