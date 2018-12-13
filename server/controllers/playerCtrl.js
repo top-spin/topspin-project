@@ -36,7 +36,7 @@ function profileInfo(req, res) {
                 winCount: winCount[0].count,
                 winPercent:(()=>{
                   let percent = (winCount[0].count * 100) /(+winCount[0].count + +lossCount[0].count)
-                  if(typeof percent !== Number){
+                  if(!percent){
                     return 0;
                   }
                   else{
