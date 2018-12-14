@@ -5,12 +5,9 @@
       <!-- pic -->
       <v-layout row wrap>
         <v-flex xs12 sm4 md3>
-          <!-- <img height="128" width="128" :src="avatar"> -->
           <v-dialog v-model="dialog" width="900">
-            <!-- <v-btn  color="red lighten-2" dark>Click Me</v-btn> -->
             <img height="128" width="auto" :src="avatar" slot="activator">
             <v-card>
-              <!-- <v-card-text>Lorem</v-card-text> -->
               <img height="600" width="auto" :src="avatar">
 
               <v-card-actions>
@@ -22,11 +19,9 @@
         </v-flex>
         <!-- edit button -->
         <v-flex xs6 sm3 md3 v-if="user_id == this.$store.state.user.user_id">
-          <!-- <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn> -->
           <!-- edit pop up modal -->
           <v-dialog v-model="dialogeditprofile" persistent max-width="600px">
             <v-btn slot="activator" color="success" dark>Edit Profile</v-btn>
-            <!-- <v-btn flat class="success" @click="editProfile">Edit Profile</v-btn> -->
             <v-card>
               <v-card-title>
                 <span class="headline">Edit Profile</span>
@@ -99,7 +94,7 @@
           <h3 class="grey--text">#{{rank}}</h3>
         </v-flex>
       </v-layout>
-      <!-- using cards for players. padding of 3 -->
+      <!-- players cards. padding of 3 -->
       <v-card class="pa-3" flat>
         <v-layout row wrap>
           <v-flex xs12 sm4 md4 my-1>
@@ -182,7 +177,6 @@ export default {
     getProfile() {
       Axios.get("/api/profile/" + this.$route.params.username)
         .then(res => {
-          console.log(res.data);
           (this.rank = res.data.rank),
             (this.name = res.data.user.name),
             (this.username = res.data.user.username),
@@ -211,9 +205,7 @@ export default {
     getFriendList() {
       Axios.get("/api/following/")
         .then(res => {
-          // console.log(res.data);
           this.friendList = res.data.map(e => e.user_id);
-          // console.log("friendList:", this.friendList);
         })
         .catch(err => {
           console.log(err);
@@ -221,22 +213,14 @@ export default {
     },
     addFriend(id) {
       Axios.post(`/api/friend/${id}`);
-      // alert("Friend added!");
       this.snackbaradd = true;
       this.getFriendList();
     },
     deleteFriend(id) {
       Axios.delete(`/api/deletefriend/${id}`);
-      // add alert
-      // alert("Friend removed.");
       this.snackbardel = true;
       this.getFriendList();
     },
-    // editProfile() {
-    // this.$router.push("/profile/edit/" + this.username);
-    // console.log("editProfile Hit");
-    // Axios.put(){}
-    // }
     cancelChanges() {
       (this.name_edit = this.name),
         (this.username_edit = this.username),
@@ -259,7 +243,6 @@ export default {
       Vue.$geocoder.send(addressObj, response => {
         this.lat = response.results[0].geometry.location.lat;
         this.lng = response.results[0].geometry.location.lng;
-        console.log(this.lat, this.lng);
 
         Axios.put("/api/profile/", {
           user_id: this.user_id,
@@ -275,7 +258,6 @@ export default {
           lng: this.lng
         })
           .then(res => {
-            console.log(res.data);
             (this.name = res.data.name),
               (this.username = res.data.username),
               (this.email = res.data.email),

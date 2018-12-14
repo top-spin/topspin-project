@@ -19,7 +19,6 @@ export default {
   padding: 5px 10px;
   border-radius: 12px;
   background-color: orange;
-  /* color: light-text-color; */
   color: white;
   font-weight: bold;
   cursor: pointer;

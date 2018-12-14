@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     getMessageFeed(player) {
-      console.log("updating feed");
       Axios.get("/api/messages/" + player.user_id).then(res => {
         this.feed = res.data.map(message => {
           return {
@@ -101,19 +100,15 @@ export default {
 
 <style>
 .convocontainer {
-  /* height: 500px; */
   display: flex;
-  /* border: 1px #424242 solid; */
 }
 .allconversations {
   width: 35%;
   overflow: auto;
-  /* border: 1px #424242 solid; */
 }
 .conversation {
   width: 65%;
   height: 100%;
-  /* border: 1px pink solid; */
   margin-left: 3px;
 }
 </style>
