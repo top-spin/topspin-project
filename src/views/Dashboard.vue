@@ -58,29 +58,21 @@ export default {
   width: 48%;
   margin-right: 2%;
   margin-bottom: 2%;
-  /* margin-bottom: 2%; */
   border: 3px #424242 solid;
 }
 .ut {
   width: 48%;
-  /* width: 40%; */
   margin-bottom: 2%;
-  /* margin-left: 5%; */
-  /* margin-top: 3%; */
   border: 3px #424242 solid;
 }
 .stand {
   width: 48%;
   margin-right: 2%;
 
-  /* width: 45%; */
-  /* margin-right: 5%; */
   border: 3px #424242 solid;
 }
 .rm {
   width: 48%;
-  /* width: 45%; */
-  /* margin-top: 2%; */
   border: 3px #424242 solid;
 }
 .smallcontainers {
