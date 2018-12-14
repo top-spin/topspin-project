@@ -44,12 +44,12 @@
       <v-layout column wrap>
         <v-flex xs3>
           <div v-if="devMode" class="btn_container">
-            <v-switch style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-switch v-if="tournament.user_id === this.$store.state.user.user_id" style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
             <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
             <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit Players</v-btn>
           </div>
           <div v-else class="btn_container">
-            <v-switch style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-switch v-if="tournament.user_id === this.$store.state.user.user_id" style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
             <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="pendingPlayers.length!==0" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
             <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="started" class="success">Edit Players</v-btn>
           </div>

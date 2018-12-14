@@ -25,6 +25,14 @@
         </v-flex> -->
       </v-layout>
     </v-container>
+      <v-snackbar
+      v-model="showSnack"
+      :timeout="2000"
+      :right="true"
+      :bottom="true"
+    >Ties are not valid scores.
+      <v-btn dark flat @click="showSnack=false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -44,6 +52,7 @@ export default {
   data() {
     return {
       matches:[],
+      showSnack:false,
       rounds:[],
       tournament:{},
       pendingPlayers:[],
@@ -61,12 +70,24 @@ export default {
   },
   methods:{
     submitRound(){
-    //   console.log(this.tournamentArray)
+      console.log(this.tournamentArray)
+        let notValidScore = this.tournamentArray.find(match=>{
+          if(+match.score1 === +match.score2){
+            return match
+          }
+          else{
+            return null
+          }
+        })
+        if(notValidScore){
+          // alert("Ties are not valid scores.")
+          this.showSnack = true;
+          return
+        }
         axios.post("/api/submit-round",{
             matchesToBe:this.tournamentArray,
             tournament:this.tournament
         }).then(res=>{
-            console.log("response of tournament",res.data)
         //     let count = this.tournament.size
         // if(res.data.length===(this.tournament.size/2)){
         //     count = 
