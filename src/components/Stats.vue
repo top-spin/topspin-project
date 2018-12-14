@@ -69,9 +69,7 @@ export default {
     axios
       .get("/api/get-my-stats")
       .then(res => {
-        console.log("before==> ", this.datasets);
         this.datasets[0].data = res.data;
-        console.log("after==> ", this.datasets);
       })
       .catch(err => console.log(err));
   }
@@ -84,14 +82,11 @@ export default {
   margin-top: 5px;
   display: flex;
   justify-content: center;
-  /* border: blue 3px solid; */
 }
 .donutchart {
   height: 90%;
-  /* border: green 3px solid; */
 }
 .barchart {
   height: 80%;
-  /* border: red 3px solid; */
 }
 </style>

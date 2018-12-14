@@ -6,7 +6,6 @@ Vue.use(Vuetify, {
   iconfont: "md",
   //theme for material design
   theme: {
-    // purple, teal, orange, strawberry pink red
     primary: "#424242", // grey darken-3
     success: "#F57C00", // orange darken-2
     info: "#0D47A1", // blue darken-4

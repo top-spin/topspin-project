@@ -4,7 +4,6 @@
     <div class="transparent2">
       <v-container>
         <div>
-          <!-- <v-flex xs9 sm8 md6> -->
           <v-form v-model="valid">
             <v-text-field v-model="name" :rules="nameRules" :counter="20" label="Name" required box></v-text-field>
             <v-text-field
@@ -34,32 +33,28 @@
             </v-radio-group>
           </v-form>
 
+          <dropzone></dropzone>
 
-              <dropzone></dropzone>
-      
-          <!-- </v-flex> -->
           <div class="text-xs-center">
             <v-btn @click="createUser" color="success">Submit</v-btn>
-
           </div>
         </div>
       </v-container>
     </div>
   </div>
-  
 </template>
 
 <script>
 import axios from "axios";
 import Geocoder from "@pderas/vue2-geocoder";
 import Vue from "vue";
-import dropzone from '../components/Dropzone';
+import dropzone from "../components/Dropzone";
 
 export default {
-  name: 'NewUser',
+  name: "NewUser",
   components: {
     dropzone
-    },
+  },
   data: () => ({
     valid: false,
     name: "",
@@ -101,7 +96,6 @@ export default {
       Vue.$geocoder.send(addressObj, response => {
         this.lat = response.results[0].geometry.location.lat;
         this.lng = response.results[0].geometry.location.lng;
-        // console.log(this.lat,this.lng)
         axios
           .post("/api/user", {
             name: this.name,
@@ -116,15 +110,12 @@ export default {
             lng: this.lng
           })
           .then(res => {
-            // console.log(res.data)
             this.$store.dispatch("getStatus");
           });
       });
     }
   }
 };
-
-
 </script>
  <style>
 .enter_profile_background {

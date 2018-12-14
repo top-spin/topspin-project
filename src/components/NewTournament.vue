@@ -110,7 +110,6 @@ export default {
         date: moment(this.picker).format("MM-DD-YYYY")
       });
       this.$router.push("/addtournamentplayers");
-      // console.log(this.$store.state)
     }
   }
 };
