@@ -96,7 +96,6 @@ export default {
   watch: {
     newMessage: function(newValue, oldValue) {
       this.pushToFeed(newValue);
-      // console.log(newValue)
       scrollToBottom();
     }
   },
@@ -117,14 +116,8 @@ export default {
     }
   },
   sockets: {
-    connect: function() {
-      console.log("socket connected");
-    },
+    connect: function() {},
     updateMessage: function(data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      );
-      console.log("data ", data);
       //   this.updateFeed(data.messages.map(message=>{
       //   return{
       //     id:message.from_user,
@@ -198,23 +191,14 @@ export default {
     }
   }
 };
-
-// <style lang="scss">
-// @import "../../assets/scss/main.scss";
-// </style>
 </script>
 
 <style>
 .basicvuechat {
   height: 99%;
 }
-/* .window { */
-/* height: 100%; */
-/* border: 5px red solid; */
-/* } */
+
 .window__header__container {
-  /* border: 5px orange solid; */
-  /* background: linear-gradient(90deg, orange, orange); */
   background: orange;
   padding: 14px 5px;
   color: seashell;
@@ -226,16 +210,8 @@ export default {
 .window__messages__container {
   width: 100%;
   overflow: auto;
-  /* height: 420px; */
   height: 90%;
-  /* border: 5px green solid; */
   padding-top: 10px;
 }
-/* .messages-list {
-  border: 5px blue solid;
-}
-.window__input__container {
-  border: 1px purple solid;
-} */
 </style>
 

@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- Removed title for cleaner page -->
-    <!-- <h1 class="text-xs-center">Add Tournament Players</h1> -->
     <v-container class="addtournamentplayerscontainer">
       <!-- search players input -->
       <v-layout row wrap>
@@ -106,19 +104,14 @@
 
 <script>
 import Axios from "axios";
-// import Geocoder from "@pderas/vue2-geocoder";
-// import Vue from "vue";
-// import dropzone from "../components/Dropzone";
 import Followinglist from "./Followinglist";
 
 export default {
   name: "AddTournamentPlayers",
   components: {
-    // dropzone
     Followinglist
   },
   data: () => ({
-    // valid: false,
     playersList: [],
     loading: false,
     search_value: "",
@@ -135,14 +128,12 @@ export default {
       Axios.get("/api/players?value=" + this.search_value)
         .then(res => {
           this.loading = false;
-          // console.log(res.data);
           this.players = res.data;
         })
         .catch(err => console.log(err));
     },
     // add a player to the list
     addPlayer(player) {
-      // console.log(this.playersList);
       if (
         +this.playersList.length == +this.$store.state.pending_tournament.count
       ) {
@@ -154,7 +145,7 @@ export default {
           return player.user_id === user.user_id;
         })
       ) {
-        console.log("Already exists.");
+        // console.log("Already exists.");
         this.snackbarduplicate = true;
         return;
       }
@@ -162,7 +153,7 @@ export default {
       this.search_value = "";
       if (this.playersList.includes(player)) return;
       this.playersList.push(player);
-      console.log(this.playersList);
+      // console.log(this.playersList);
     },
     // remove a player from the list
     removePlayer(player, index) {
@@ -175,7 +166,6 @@ export default {
         tournament: this.$store.state.pending_tournament
       })
         .then(res => {
-          console.log(res.data);
           this.$router.push(
             "/tournament/view/" + res.data.newTournament.tournament_id
           );
