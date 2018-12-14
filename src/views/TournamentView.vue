@@ -43,8 +43,16 @@
     <v-container v-if="!finished">
       <v-layout column wrap>
         <v-flex xs3>
-          <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Start Tournament</v-btn>
-          <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit Players</v-btn>
+          <div v-if="devMode" class="btn_container">
+            <v-switch style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
+            <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit Players</v-btn>
+          </div>
+          <div v-else class="btn_container">
+            <v-switch style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="pendingPlayers.length!==0" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
+            <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="started" class="success">Edit Players</v-btn>
+          </div>
           <v-layout class="vertical_align">
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
           </v-layout>
@@ -82,7 +90,9 @@ export default {
       pendingPlayers:[],
       acceptedPlayers:[],
       finished:true,
-      tournamentArray:[]
+      tournamentArray:[],
+      started:false,
+      devMode:false
     };
   },
   mounted(){
@@ -93,6 +103,7 @@ export default {
         this.pendingPlayers = res.data.pendingPlayers
         this.acceptedPlayers = res.data.acceptedPlayers
         this.finished = res.data.finished
+        this.started = res.data.started
         // debugger;
         let pending = this.pendingPlayers.map(player=>{
           if(player.rejected){
@@ -224,5 +235,9 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-content: center;
+}
+.btn_container{
+  width: 100%;
+  text-align: center;
 }
 </style>
