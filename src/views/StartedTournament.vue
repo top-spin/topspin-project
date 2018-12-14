@@ -2,14 +2,17 @@
   <div>
     <h1 v-if="tournament" class="text-xs-center">{{tournament.name}}</h1>
     <h3 v-if="tournament" class="text-xs-center">{{tournament.description}}</h3>
-    <h2 v-if="tournament" class="text-xs-center">{{numberOfRounds()}} Round(s)</h2>
-    <h1 v-else class="text-xs-center">Tournament</h1>
+    <h2 v-if="tournament && tournamentArray[0].player1.round" class="text-xs-center">{{(+tournamentArray[0].player1.round.slice(0,1) + 1)+" of "+numberOfRounds()}} Round(s)</h2>
+    <h2 v-if="tournament && !tournamentArray[0].player1.round" class="text-xs-center">{{("1")+" of "+numberOfRounds()}} Round(s)</h2>
+    <!-- <h1 v-else class="text-xs-center">Tournament</h1> -->
 
 
     <v-container v-if="!finished">
       <v-layout column wrap>
         <v-flex xs3>
-          <v-btn @click="submitRound" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Submit Round</v-btn>
+          <div style="width:100%; text-align:center">
+            <v-btn @click="submitRound" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Submit Round</v-btn>
+          </div>
           <!-- <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit</v-btn> -->
           <v-layout class="vertical_align">
             <StartedMatch v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
@@ -46,7 +49,11 @@ export default {
       pendingPlayers:[],
       acceptedPlayers:[],
       finished:true,
-      tournamentArray:[]
+      tournamentArray:[{
+        player1:{
+          round:0
+        }
+      }]
     };
   },
   mounted(){

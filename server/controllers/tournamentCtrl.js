@@ -117,7 +117,15 @@ function tournamentMatches(req, res) {
                           tournament: tournament[0],
                           pendingPlayers,
                           acceptedPlayers,
-                          finished: false
+                          finished: false,
+                          started:(()=>{
+                            if(response.length!==0){
+                              return true;
+                            }
+                            else{
+                              return false;
+                            }
+                          })()
                         });
                       })
                       .catch(err => console.log(err));
