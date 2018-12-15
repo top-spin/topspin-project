@@ -59,7 +59,7 @@ export default {
     };
   },
   mounted() {
-    Axios.get("/api/all-players")
+    Axios.get("/api/chat-users")
       .then(res => {
         this.filteredPlayers = res.data.filter(
           player => player.user_id !== this.$store.state.user.user_id
