@@ -31,7 +31,7 @@ Vue.use(VueGoogleMaps, {
   //// then disable the following:
   // installComponents: true,
 });
-console.log(process.env.VUE_APP_SOCKET_SERVER)
+// console.log(process.env.VUE_APP_SOCKET_SERVER)
 Vue.use(new VueSocketIO({
   connection: process.env.VUE_APP_SOCKET_SERVER,
 }))

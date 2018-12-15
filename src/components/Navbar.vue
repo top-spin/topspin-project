@@ -17,11 +17,19 @@
       <v-menu bottom left>
         <v-btn slot="activator" dark icon>
           <v-badge overlap color="orange">
-            <span slot="badge" v-if="pendingCount">{{pendingCount}}</span>
+            <span slot="badge" v-if="messageCount || pendingCount">{{messageCount +pendingCount}}</span>
             <v-icon large color="grey">notifications</v-icon>
           </v-badge>
         </v-btn>
 
+        <v-list v-if="messageCount!==0">
+          <v-list-tile
+            @click="goToMessages"
+          >
+            <v-list-tile-title v-if="messageCount === 1">{{messageCount}} New Message!</v-list-tile-title>
+            <v-list-tile-title v-else>{{messageCount}} New Messages!</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
         <v-list v-if="pendingList.length">
           <v-list-tile
             v-for="(pending, i) in pendingList"
@@ -88,8 +96,9 @@ export default {
   data() {
     return {
       drawer: true,
-      pendingCount: "",
+      pendingCount: 0,
       pendingList: [],
+      messageCount: 0,
 
       links: [
         { icon: "dashboard", text: "Dashboard", route: "/" },
@@ -105,6 +114,34 @@ export default {
     this.$store.dispatch("getUser");
     this.getpendingcount();
     this.getpendinglist();
+  },
+    sockets: {
+    connect: function() {},
+    updateMessage: function(data) {
+      //   this.updateFeed(data.messages.map(message=>{
+      //   return{
+      //     id:message.from_user,
+      //     author:(()=>{
+      //        return this.players.filter(player=>player.user_id===message.from_user)[0].username
+      //     })(),
+      //     contents:message.body,
+      //     date:message.date_sent
+      //   }
+      // }))
+      // console.log(data)
+      // console.log(this.$store.state.user.user_id)
+      // console.log(this.player.user_id)
+      // console.log(data.player_sending.user_id)
+      if (
+        this.$store.state.user.user_id === data.player_receiving.user_id
+      ) {
+        // alert("got a notification!")
+        this.messageCount = this.messageCount+1
+        console.log(this.messageCount)
+      } else {
+        return;
+      }
+    }
   },
   methods: {
     logout() {
@@ -151,6 +188,10 @@ export default {
     },
     viewProfile() {
       this.$router.push("/profile/" + this.$store.state.user.username);
+    },
+    goToMessages(){
+      this.messageCount = 0;
+      this.$router.push("/chat");
     }
   }
 };

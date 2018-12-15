@@ -42,42 +42,14 @@
       <v-layout column wrap>
         <v-flex xs3>
           <div v-if="devMode" class="btn_container">
-            <v-switch
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              style="justify-content:center"
-              v-model="devMode"
-              :label="`Toggle Dev Mode`"
-            ></v-switch>
-            <v-btn
-              @click="toStart"
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              class="success"
-            >{{started?"Resume":"Start"}} Tournament</v-btn>
-            <v-btn
-              @click="toEdit"
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              class="success"
-            >Edit Players</v-btn>
+            <v-switch v-if="canUseDevMode()" style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
+            <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" class="success">Edit Players</v-btn>
           </div>
           <div v-else class="btn_container">
-            <v-switch
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              style="justify-content:center"
-              v-model="devMode"
-              :label="`Toggle Dev Mode`"
-            ></v-switch>
-            <v-btn
-              @click="toStart"
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              :disabled="pendingPlayers.length!==0"
-              class="success"
-            >{{started?"Resume":"Start"}} Tournament</v-btn>
-            <v-btn
-              @click="toEdit"
-              v-if="tournament.user_id === this.$store.state.user.user_id"
-              :disabled="started"
-              class="success"
-            >Edit Players</v-btn>
+            <v-switch v-if="canUseDevMode()" style="justify-content:center" v-model="devMode" :label="`Toggle Dev Mode`"></v-switch>
+            <v-btn @click="toStart" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="pendingPlayers.length!==0" class="success">{{started?"Resume":"Start"}} Tournament</v-btn>
+            <v-btn @click="toEdit" v-if="tournament.user_id === this.$store.state.user.user_id" :disabled="started" class="success">Edit Players</v-btn>
           </div>
           <v-layout class="vertical_align">
             <PreMatchBox v-for="(match,index) in tournamentArray" :key="index" :match="match"/>
@@ -242,8 +214,22 @@ export default {
     toEdit() {
       this.$router.push("/tournament/edit/" + this.tournament.tournament_id);
     },
-    toStart() {
-      this.$router.push("/tournament/started/" + this.tournament.tournament_id);
+    toStart(){
+      this.$router.push("/tournament/started/"+this.tournament.tournament_id)
+    },
+    canUseDevMode(){
+      if(this.tournament.user_id === this.$store.state.user.user_id && this.$store.state.user.user_id === 'google-oauth2|117566912095890883904'){
+        return true
+      }
+      else if(this.tournament.user_id === this.$store.state.user.user_id && this.$store.state.user.user_id === 'google-oauth2|107286519142944865068'){
+        return true
+      }
+      else if(this.tournament.user_id === this.$store.state.user.user_id && this.$store.state.user.user_id === 'google-oauth2|108374143480245744572'){
+        return true
+      }
+      else{
+        return false;
+      }
     }
   }
 };
