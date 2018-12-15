@@ -22,7 +22,7 @@ export default new Vuex.Store({
       state.pending_tournament = pending_tournament;
     },
     SET_USER(state, user) {
-      console.log(user);
+      // console.log(user);
       state.user = user;
     }
   },

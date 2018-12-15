@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- Removed title for cleaner page -->
-    <!-- <h1 class="text-xs-center">Add Tournament Players</h1> -->
     <v-container class="addtournamentplayerscontainer">
       <!-- search players input -->
       <v-layout row wrap>
@@ -77,6 +75,7 @@
           >Submit Tournament Players</v-btn>
         </div>
       </div>
+
       <!-- suggested players pulled from friends list -->
       <div>
         <h2>Suggested Players to Add</h2>
@@ -141,7 +140,6 @@ export default {
     axios
       .get("/api/tournament-matches/" + this.$route.params.id)
       .then(res => {
-        console.log("pending players ===>", res.data.pendingPlayers);
         if (res.data.acceptedPlayers) {
           this.tournament = res.data.tournament;
           this.pendingPlayers = res.data.pendingPlayers;
@@ -164,7 +162,7 @@ export default {
           this.allPlayers = allPlayers;
           this.playersList = allPlayers;
           let newArray = [];
-          console.log("testing", res.data.tournament.size / 2);
+          // console.log("testing", res.data.tournament.size / 2);
           for (let i = 0; res.data.tournament.size > i; i = i + 2) {
             // debugger
             newArray.push({
@@ -173,7 +171,7 @@ export default {
             });
           }
           this.tournamentArray = newArray;
-          console.log(this.tournamentArray);
+          // console.log(this.tournamentArray);
         } else {
           if (res.data.matches.length === 15) {
             this.rounds = [
@@ -235,14 +233,12 @@ export default {
         .get("/api/players?value=" + this.search_value)
         .then(res => {
           this.loading = false;
-          // console.log(res.data);
           this.players = res.data;
         })
         .catch(err => console.log(err));
     },
     // add a player to the list
     addPlayer(player) {
-      // console.log(this.playersList);
       if (+this.playersList.length == this.tournament.size) {
         this.snackbarmax = true;
         return;
@@ -258,7 +254,6 @@ export default {
       }
       this.playersList.push(player);
       this.search_value = "";
-      // console.log(this.playersList);
     },
     // remove a player from the list
     removePlayer(player, index) {
@@ -271,7 +266,6 @@ export default {
           players: this.playersList
         })
         .then(res => {
-          // console.log(res.data)
           this.$router.push(
             "/tournament/view/" + this.tournament.tournament_id
           );
@@ -283,9 +277,6 @@ export default {
 </script>
 
 <style>
-/* .horizonalalign{
-  
-} */
 .vertical_align {
   height: 100%;
   width: 100%;

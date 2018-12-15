@@ -34,15 +34,15 @@ function profileInfo(req, res) {
               res.status(200).json({
                 user: user[0],
                 winCount: winCount[0].count,
-                winPercent:(()=>{
-                  let percent = (winCount[0].count * 100) /(+winCount[0].count + +lossCount[0].count)
-                  if(!percent){
+                winPercent: (() => {
+                  let percent =
+                    (winCount[0].count * 100) /
+                    (+winCount[0].count + +lossCount[0].count);
+                  if (!percent) {
                     return 0;
+                  } else {
+                    return percent.toFixed(1);
                   }
-                  else{
-                    return percent.toFixed(1)
-                  }
-                  
                 })(),
                 rank: user[0].rank
               });
@@ -58,7 +58,7 @@ function updateProfile(req, res) {
   db.topspin_user
     .save(req.body)
     .then(result => {
-      console.log("upate profile HIT");
+      // console.log("upate profile HIT");
       res.status(200).json(result);
     })
     .catch(err => console.log(err));

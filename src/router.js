@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
@@ -12,85 +11,73 @@ export default new Router({
       path: "/chat",
       name: "chat",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Chat.vue")
+      component: () => import("./views/Chat.vue")
     },
     {
       path: "/",
       name: "dashboard",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Dashboard.vue")
+      component: () => import("./views/Dashboard.vue")
     },
     {
       path: "/friends",
       name: "friends",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Friends.vue")
+      component: () => import("./views/Friends.vue")
     },
     {
       path: "/tournaments",
       name: "tournaments",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Tournaments.vue")
+      component: () => import("./views/Tournaments.vue")
     },
     {
       path: "/search",
       name: "search",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Search.vue")
+      component: () => import("./views/Search.vue")
     },
     {
       path: "/profile/:username",
       name: "profile",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Profile.vue")
+      component: () => import("./views/Profile.vue")
     },
     {
       path: "/standings",
       name: "standings",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Standings.vue")
+      component: () => import("./views/Standings.vue")
     },
     {
       path: "/tournament/view/:id",
       name: "tournamentView",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/TournamentView.vue")
+      component: () => import("./views/TournamentView.vue")
     },
     {
       path: "/newtournament",
       name: "newtournament",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./components/NewTournament.vue")
+      component: () => import("./components/NewTournament.vue")
     },
     {
       path: "/addtournamentplayers",
       name: "addtournamentplayers",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./components/AddTournamentPlayers.vue")
+      component: () => import("./components/AddTournamentPlayers.vue")
     },
     {
       path: "/tournament/edit/:id",
       name: "tournamentEdit",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/EditTournament.vue")
+      component: () => import("./views/EditTournament.vue")
     },
     {
       path: "/tournament/started/:id",
       name: "startedTournament",
 
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/StartedTournament.vue")
+      component: () => import("./views/StartedTournament.vue")
     }
   ]
 });

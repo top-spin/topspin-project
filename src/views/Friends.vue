@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- added code -->
-    <!-- <v-btn dark>
-      <v-badge color="grey">
-        <span slot="badge">12</span>
-        <v-icon large color="grey">notifications</v-icon>
-      </v-badge>
-    </v-btn>-->
     <!-- Following Button Active -->
     <v-layout column align-center v-model="showfollowing" v-if="showfollowing">
       <v-flex>
@@ -32,18 +25,6 @@
       </v-flex>
       <Followerslist/>
     </v-layout>
-
-    <!-- previous code -->
-    <!-- <v-radio-group light v-model="showfollowing" :mandatory="false">
-      <v-radio color="primary" label="Following" :value="true"></v-radio>
-      <v-radio color="primary" label="Followers" :value="false"></v-radio>
-    </v-radio-group>
-    <h1 v-if="showfollowing" class="text-xs-left">Following</h1>
-    <Followinglist v-if="showfollowing"/>
-
-    <h1 v-if="!showfollowing" class="text-xs-left">Followers</h1>
-
-    <Followerslist v-if="!showfollowing"/>-->
   </div>
 </template>
 

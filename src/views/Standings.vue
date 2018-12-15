@@ -1,113 +1,96 @@
 <template>
-    <div>
-        <h1 class="text-xs-center ma5" v-if="players.length === 0">Loading Standings...</h1>
-        
-        <div class="text-xs-center" v-for="player in players" :key="player.user_id"   >
-    <!-- <div class="self">
-                    {{ $store.state.user.user_id}}
-     </div> -->
-            <div class="selfrank" v-if="player.user_id=== $store.state.user.user_id"  >
-               
-            <v-divider
-                :inset="player.inset"
-            ></v-divider>
-            <v-subheader
-                :key="player.username"
-            >
-                {{ player.username }}
-            </v-subheader>
+  <div>
+    <h1 class="text-xs-center ma5" v-if="players.length === 0">Loading Standings...</h1>
 
+    <div class="text-xs-center" v-for="player in players" :key="player.user_id">
+      <div class="selfrank" v-if="player.user_id=== $store.state.user.user_id">
+        <v-divider :inset="player.inset"></v-divider>
+        <v-subheader :key="player.username">{{ player.username }}</v-subheader>
 
-            <v-list-tile 
-                :key="player.title"
-                avatar
-                @click="viewProfile(player.username)"
-            >
-            <v-list-tile-avatar>
+        <v-list-tile :key="player.title" avatar @click="viewProfile(player.username)">
+          <v-list-tile-avatar>
             <img :src="player.avatar">
-            </v-list-tile-avatar>
+          </v-list-tile-avatar>
 
-            <v-list-tile-content>
+          <v-list-tile-content>
             <v-list-tile-title v-html="player.name" style="font-size:1.2em;"></v-list-tile-title>
-            <v-list-tile-sub-title v-html="player.city" ></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-            <v-list-tile-sub-title v-if="player.rank"  class="success--text" style="font-size:1.3em;">Rank: # {{player.rank}} </v-list-tile-sub-title>
-            </v-list-tile-action>
-            </v-list-tile>
-            </div>
+            <v-list-tile-sub-title v-html="player.city"></v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-list-tile-sub-title
+              v-if="player.rank"
+              class="success--text"
+              style="font-size:1.3em;"
+            >Rank: # {{player.rank}}</v-list-tile-sub-title>
+          </v-list-tile-action>
+        </v-list-tile>
+      </div>
 
-                        <div class="playerrank" v-else >
-               
-            <v-divider
-                :inset="player.inset"
-            ></v-divider>
-            <v-subheader
-                :key="player.username"
-            >
-                {{ player.username }}
-            </v-subheader>
+      <div class="playerrank" v-else>
+        <v-divider :inset="player.inset"></v-divider>
+        <v-subheader :key="player.username">{{ player.username }}</v-subheader>
 
-
-            <v-list-tile 
-                :key="player.title"
-                avatar
-                @click="viewProfile(player.username)"
-            >
-            <v-list-tile-avatar>
+        <v-list-tile :key="player.title" avatar @click="viewProfile(player.username)">
+          <v-list-tile-avatar>
             <img :src="player.avatar">
-            </v-list-tile-avatar>
+          </v-list-tile-avatar>
 
-            <v-list-tile-content>
+          <v-list-tile-content>
             <v-list-tile-title v-html="player.name" style="font-size:1.2em;"></v-list-tile-title>
-            <v-list-tile-sub-title v-html="player.city" ></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-            <v-list-tile-sub-title v-if="player.rank"  class="success--text" style="font-size:1.3em;">Rank: # {{player.rank}} </v-list-tile-sub-title>
-            </v-list-tile-action>
-            </v-list-tile>
-            </div>
-        </div>
+            <v-list-tile-sub-title v-html="player.city"></v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-list-tile-sub-title
+              v-if="player.rank"
+              class="success--text"
+              style="font-size:1.3em;"
+            >Rank: # {{player.rank}}</v-list-tile-sub-title>
+          </v-list-tile-action>
+        </v-list-tile>
+      </div>
     </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
 export default {
-    name:"Standings",
-    data(){
-        return{
-            players:[]
-        }
-    },
-        methods:{
-    viewProfile(username){
-      this.$router.push("/profile/"+username)
+  name: "Standings",
+  data() {
+    return {
+      players: []
+    };
+  },
+  methods: {
+    viewProfile(username) {
+      this.$router.push("/profile/" + username);
     }
   },
-    mounted(){
-        axios.get("/api/all-players").then(res=>{
-            this.players = res.data;
-        }).catch(err=>console.log(err))
-    }
-}
+  mounted() {
+    axios
+      .get("/api/all-players")
+      .then(res => {
+        this.players = res.data;
+      })
+      .catch(err => console.log(err));
+  }
+};
 </script>
-<style>
-@media only screen and (min-width: 500px){
-    .playerrank{
-        width:95%;
-        margin-left:3%        
-}
-    .selfrank{
-         width:95%;
-         margin-left:3%;
-         background-color: rgb(216, 221, 228); 
-    }
-}
-@media only screen and (max-width: 500px){
- 
-    .selfrank{
-         background-color: rgb(216, 221, 228); 
-    }
-}
 
+<style>
+@media only screen and (min-width: 500px) {
+  .playerrank {
+    width: 95%;
+    margin-left: 3%;
+  }
+  .selfrank {
+    width: 95%;
+    margin-left: 3%;
+    background-color: rgb(216, 221, 228);
+  }
+}
+@media only screen and (max-width: 500px) {
+  .selfrank {
+    background-color: rgb(216, 221, 228);
+  }
+}
 </style>
