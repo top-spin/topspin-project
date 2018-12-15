@@ -85,13 +85,11 @@ export default {
             date: moment(message.date_sent).format("h:mm A MM-DD")
           };
         });
-        console.log(this.feed);
         scrollToBottom();
       });
       this.selectedPlayer = player;
     },
     updateFeed(newFeed) {
-      console.log("updating feed");
       this.feed = newFeed;
     }
   }
