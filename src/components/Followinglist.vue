@@ -1,6 +1,6 @@
 <template>
   <div class="followers">
-    <h3 class="text-xs-center ma5" v-if="players.length === 0">Loading...</h3>
+    <h3 class="text-xs-center ma5" v-if="players.length === 0">Not following anyone yet.</h3>
     <div class="text-xs-center" v-for="player in players" :key="player.user_id">
       <v-divider :inset="player.inset"></v-divider>
       <v-subheader :key="player.username">{{ player.username }}</v-subheader>
