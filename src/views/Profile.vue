@@ -165,8 +165,7 @@ export default {
       organization_edit: "",
       city_edit: "",
       state_edit: "",
-      dominantHand_edit: "",
-      avatar_edit: ""
+      dominantHand_edit: ""
     };
   },
   mounted() {
@@ -243,7 +242,14 @@ export default {
       Vue.$geocoder.send(addressObj, response => {
         this.lat = response.results[0].geometry.location.lat;
         this.lng = response.results[0].geometry.location.lng;
-
+        console.log(this.$store.state.avatar)
+        let avatar_edit
+        if(this.$store.state.avatar === "https://www.w3schools.com/howto/img_avatar.png"){
+          avatar_edit = this.avatar
+        }
+        else{
+          avatar_edit = this.$store.state.avatar
+        }
         Axios.put("/api/profile/", {
           user_id: this.user_id,
           name: this.name_edit,
@@ -253,7 +259,7 @@ export default {
           city: this.city_edit,
           state: this.state_edit,
           dominant_hand: this.dominantHand_edit,
-          avatar: this.$store.state.avatar,
+          avatar: avatar_edit,
           lat: this.lat,
           lng: this.lng
         })
@@ -268,6 +274,7 @@ export default {
               (this.dialogeditprofile = false);
             this.getProfile();
             this.$store.dispatch("getUser");
+            this.$store.commit("SET_AVATAR","https://www.w3schools.com/howto/img_avatar.png")
           })
           .catch(err => console.log(err));
       });
