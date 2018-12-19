@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <span
+    class="title"
+  >
+    <span
+      class="font-weight-light"
+    >
+      My
+    </span>
+     
+    <span
+      class="orange--text"
+    >
+      Statistics
+    </span>
+  </span>
+   
+  <span
+    class="hidden-sm-and-down"
+  >
+    <!---->
+  </span>
+   
+  <!---->
+</div>
+`;
