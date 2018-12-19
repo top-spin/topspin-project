@@ -39,7 +39,7 @@ function profileInfo(req, res) {
                     (winCount[0].count * 100) /
                     (+winCount[0].count + +lossCount[0].count);
                   if (!percent) {
-                    return 0;
+                    return "0";
                   } else {
                     return percent.toFixed(1);
                   }

@@ -2,7 +2,10 @@
   import { shallowMount, createLocalVue} from '@vue/test-utils'
   import Navbar from "../../src/components/Navbar"
   import Vuex from "vuex";
-  import Profile from "../../src/views/Profile";
+  import Stats from "../../src/components/Stats";
+  import WinnerBox from "../../src/components/WinnerBox";
+  import Search from "../../src/views/Search"
+  import LandingPage from "../../src/views/LandingPage"
   import VueRouter from "vue-router";
 
 
@@ -36,9 +39,42 @@
             localVue
           });
           // console.log("wrapper ethan",cmp.vm)
-          expect(cmp.vm.pendingCount).toEqual("")
+          expect(cmp.vm.pendingCount).toEqual(0)
           expect(cmp.vm.drawer).toEqual(true)
           expect(cmp.vm.pendingList.length).toBe(0)
+        });
+  })
+  describe("testing stats data",()=>{
+
+      it('stats should mount with data', () => {
+          let cmp = shallowMount(Stats);
+          expect(cmp.vm.datasets[0].label).toEqual("Games Played")
+
+        });
+  })
+  describe("testing winnerbox data",()=>{
+
+      it('winnerbox should mount with data', () => {
+          let cmp = shallowMount(WinnerBox);
+          expect(cmp.vm.players[0].username).toEqual("James")
+
+        });
+  })
+  describe("testing Search instance",()=>{
+
+      it('winnerbox should mount with data', () => {
+          let cmp = shallowMount(Search);
+          expect(cmp.vm.loading).toEqual(false)
+          expect(cmp.isVueInstance()).toBeTruthy();
+
+        });
+  })
+  describe("testing LandingPage instance",()=>{
+
+      it('winnerbox should mount with data', () => {
+          let cmp = shallowMount(LandingPage);
+          expect(cmp.isVueInstance()).toBeTruthy();
+
         });
   })
   //COMMENTED OUT BECAUSE this.$route is not defined
