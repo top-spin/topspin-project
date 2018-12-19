@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "8b7765bb-1504-46e0-8f8a-38356456b57a",
+						"id": "73eb6882-3744-4d37-ada6-a72ef38c2561",
 						"exec": [
 							"const responseJSON = pm.response.json();",
 							"",
@@ -197,7 +197,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "eee6c4e5-30ef-4bdc-aa72-038556a9d81b",
+						"id": "385c4db9-6293-4afe-9843-07f1c9b5a8d5",
 						"exec": [
 							"const responseJSON = pm.response.json();",
 							"",
@@ -211,8 +211,11 @@
 							"pm.test(\"returns obj\", function() {",
 							" pm.expect(Object.isObject(responseJSON)).to.eql(true);",
 							"});",
-							"pm.test(\"winPercent is a number\", function() {",
-							" pm.expect((typeof responseJSON.winPercent)).to.eql(\"number\");",
+							"pm.test(\"winPercent is a string\", function() {",
+							" pm.expect((typeof responseJSON.winPercent)).to.eql(\"string\");",
+							"});",
+							"pm.test(\"rating is a number\", function() {",
+							" pm.expect((typeof responseJSON.user.rating)).to.eql(\"number\");",
 							"});"
 						],
 						"type": "text/javascript"
