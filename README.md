@@ -1,5 +1,7 @@
 # TopSpin
 
+[Live Demo](http://top-spin.pro)
+
 TopSpin is a table tennis tournament generator and social media website. This was a group project written in Vue using Vuetify. The database used was PostgreSQL and image upload/storage was handled with Amazon AWS S3, API Gateway, and Lambda products. It was designed to help keep track of play and make it easy for members of an organization to set up a tournament with 2, 4, 8, or 16 players.
 
 Features include a live chat using sockets, notifications of a new tournament, dynamic statistics and win rate, ELO ranking system for players, followers/ following, and a search including Google Maps to find other players near you. 
