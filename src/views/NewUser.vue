@@ -94,6 +94,10 @@ export default {
         state: this.state
       };
       Vue.$geocoder.send(addressObj, response => {
+        console.log(response)
+        if(response.status === "ZERO_RESULTS"){
+          alert("Invalid City")
+        }
         this.lat = response.results[0].geometry.location.lat;
         this.lng = response.results[0].geometry.location.lng;
         axios
